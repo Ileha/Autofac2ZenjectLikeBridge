@@ -11,4 +11,31 @@
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="DIExtensionsFactories.tt">
+        <Generator>TextTemplatingFileGenerator</Generator>
+        <LastGenOutput>DIExtensionsFactories.cs</LastGenOutput>
+      </None>
+      <None Update="Interfaces\IFactory.tt">
+        <Generator>TextTemplatingFileGenerator</Generator>
+        <LastGenOutput>IFactory.cs</LastGenOutput>
+      </None>
+      <None Update="PlaceholderFactory.tt">
+        <Generator>TextTemplatingFileGenerator</Generator>
+        <LastGenOutput>PlaceholderFactory.cs</LastGenOutput>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="DIExtensionsFactories.cs">
+        <DependentUpon>DIExtensionsFactories.tt</DependentUpon>
+      </Compile>
+      <Compile Update="Interfaces\IFactory.cs">
+        <DependentUpon>IFactory.tt</DependentUpon>
+      </Compile>
+      <Compile Update="PlaceholderFactory.cs">
+        <DependentUpon>PlaceholderFactory.tt</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>
