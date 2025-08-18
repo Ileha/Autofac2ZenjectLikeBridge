@@ -2,7 +2,7 @@
 <#@ assembly name="System.Core" #>
 <#@ output extension=".cs" #>
 <#@ import namespace="System.Linq" #>
-namespace TrueCloneNet.Tools.Extensions.DI.Interfaces
+namespace Autofac2ZenjectLikeBridge.Interfaces
 {
 <#
     for (var i = 0; i <= 10; i++)

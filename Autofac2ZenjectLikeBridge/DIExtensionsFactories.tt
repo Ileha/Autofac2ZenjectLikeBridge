@@ -4,8 +4,10 @@
 <#@ import namespace="System.Linq" #>
 using Autofac;
 using Autofac.Builder;
+using Autofac2ZenjectLikeBridge.Extensions;
+using Autofac2ZenjectLikeBridge.Interfaces;
 
-namespace TrueCloneNet.Tools.Extensions.DI
+namespace Autofac2ZenjectLikeBridge
 {
     public static partial class DIExtensions
     {

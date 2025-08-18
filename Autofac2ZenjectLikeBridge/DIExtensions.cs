@@ -9,19 +9,19 @@ namespace Autofac2ZenjectLikeBridge;
 
 public static partial class DIExtensions
 {
-    // public static IRegistrationBuilder<TLimit, TReflectionActivatorData, TStyle>
-    //     WithParameters<TLimit, TReflectionActivatorData, TStyle>(
-    //         this IRegistrationBuilder<TLimit, TReflectionActivatorData, TStyle> registration,
-    //         params Parameter[] parameters)
-    //     where TReflectionActivatorData : ReflectionActivatorData
-    // {
-    //     ArgumentNullException.ThrowIfNull(parameters);
-    //
-    //     ArgumentNullException.ThrowIfNull(registration);
-    //
-    //     return registration
-    //         .WithParameters(LinqExtensions.FromParams(parameters));
-    // }
+    public static IRegistrationBuilder<TLimit, TReflectionActivatorData, TStyle>
+        WithParameters<TLimit, TReflectionActivatorData, TStyle>(
+            this IRegistrationBuilder<TLimit, TReflectionActivatorData, TStyle> registration,
+            params Parameter[] parameters)
+        where TReflectionActivatorData : ReflectionActivatorData
+    {
+        ArgumentNullException.ThrowIfNull(parameters);
+
+        ArgumentNullException.ThrowIfNull(registration);
+
+        return registration
+            .WithParameters(parameters.AsEnumerable());
+    }
 
     public static T CreateInstance<T>(this IServiceProvider provider, params object[] parameters)
         where T : class
