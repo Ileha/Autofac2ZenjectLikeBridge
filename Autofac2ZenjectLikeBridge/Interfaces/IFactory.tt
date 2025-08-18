@@ -1,0 +1,21 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ output extension=".cs" #>
+<#@ import namespace="System.Linq" #>
+namespace TrueCloneNet.Tools.Extensions.DI.Interfaces
+{
+<#
+    for (var i = 0; i <= 10; i++)
+    {
+#>
+    public interface IFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"in P{j}")) #><#= i == 0 ? "" : ", " #>out T>
+    {
+        T Create(<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j} param{j}")) #>);
+    }
+
+<#
+    }
+#>
+}

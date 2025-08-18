@@ -1,0 +1,284 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ output extension=".cs" #>
+<#@ import namespace="System.Linq" #>
+using Autofac;
+using Autofac.Builder;
+
+namespace TrueCloneNet.Tools.Extensions.DI
+{
+    public static partial class DIExtensions
+    {
+<#
+    for (var i = 0; i <= 10; i++)
+    {
+#>
+        public static IRegistrationBuilder<
+            TFactory,
+            SimpleActivatorData,
+            SingleRegistrationStyle> RegisterFactoryFromFunction<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance, TFactory>(
+            this ContainerBuilder builder,
+            Func<ILifetimeScope, <#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance> func)
+            where TInstance : class
+            where TFactory : PlaceholderFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>, new()
+        {
+            return builder
+                .Register((IComponentContext _, ILifetimeScope scope) =>
+                {
+                    var subScope = scope
+                        .BeginLifetimeScope(subScopeBuilder =>
+                        {
+                            subScopeBuilder
+                                .RegisterFactoryFromFunction(func)
+                                .SingleInstance();
+
+                            subScopeBuilder
+                                .Register(context
+                                    => new TFactory
+                                    {
+                                        Nested = context.Resolve<IFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>()
+                                    })
+                                .SingleInstance();
+                        })
+                        .AddTo(scope.Disposer);
+
+                    return subScope.Resolve<TFactory>();
+                });
+        }
+
+        public static IRegistrationBuilder<
+            IFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>,
+            ConcreteReflectionActivatorData,
+            SingleRegistrationStyle> RegisterFactoryFromFunction<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>(
+                this ContainerBuilder builder,
+                Func<ILifetimeScope, <#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance> func)
+            where TInstance : class
+        {
+            return builder
+                .RegisterType<AutofacFunctionFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>()
+                .WithParameter(TypedParameter.From(func))
+                .As<IFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>();
+        }
+
+        private class AutofacFunctionFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance> : IFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>
+            where TInstance : class
+        {
+            private readonly ILifetimeScope _scope;
+            private readonly Func<ILifetimeScope, <#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance> _subScopeInstaller;
+
+            public AutofacFunctionFactory(
+                ILifetimeScope scope,
+                Func<ILifetimeScope, <#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance> subScopeInstaller)
+            {
+                _scope = scope ?? throw new ArgumentNullException(nameof(scope));
+                _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
+            }
+
+            public TInstance Create(<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j} param{j}")) #>)
+            {
+                return _subScopeInstaller(_scope<#= i == 0 ? "" : ", " #><#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"param{j}")) #>);
+            }
+        }
+
+        public static IRegistrationBuilder<
+            TFactory,
+            SimpleActivatorData,
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance, TFactory>(
+            this ContainerBuilder builder,
+            Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #>> subScopeInstaller
+        )
+            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TFactory : PlaceholderFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>, new()
+        {
+            return builder
+                .Register((IComponentContext _, ILifetimeScope scope) =>
+                {
+                    var subScope = scope
+                        .BeginLifetimeScope(subScopeBuilder =>
+                        {
+                            subScopeBuilder
+                                .RegisterFactoryFromSubScope<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>(subScopeInstaller)
+                                .SingleInstance();
+
+                            subScopeBuilder
+                                .Register(context
+                                    => new TFactory
+                                    {
+                                        Nested = context.Resolve<IFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>()
+                                    })
+                                .SingleInstance()
+                                .ExternallyOwned();
+                        })
+                        .AddTo(scope.Disposer);
+
+                    return subScope.Resolve<TFactory>();
+                });
+        }
+
+        public static IRegistrationBuilder<
+            IFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>,
+            ConcreteReflectionActivatorData,
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>(
+                this ContainerBuilder builder,
+                Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #>> subScopeInstaller
+                )
+            where TInstance : class, ICollection<IDisposable>, IDisposable
+        {
+            return builder
+                .RegisterType<AutofacSubScopeFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>()
+                .WithParameter(TypedParameter.From(subScopeInstaller))
+                .As<IFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>();
+        }
+
+        private class AutofacSubScopeFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance> : IFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>
+            where TInstance : class, ICollection<IDisposable>, IDisposable
+        {
+            private readonly ILifetimeScope _scope;
+            private readonly Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #>> _subScopeInstaller;
+
+            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #>> subScopeInstaller)
+            {
+                _scope = scope ?? throw new ArgumentNullException(nameof(scope));
+                _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
+            }
+
+            public TInstance Create(<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j} param{j}")) #>)
+            {
+                var guid = Guid.NewGuid();
+
+                var subScope = _scope
+                    .BeginLifetimeScope(guid, subScopeBuilder =>
+                    {
+                        subScopeBuilder.OverrideExternallyOwnedInScope<TInstance>(guid);
+                        _subScopeInstaller(subScopeBuilder<#= i == 0 ? "" : ", " #><#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"param{j}")) #>);
+                    });
+
+                var instance = subScope.Resolve<TInstance>();
+
+                subScope
+                    .AddTo(instance);
+
+                return instance;
+            }
+        }
+
+        public static IRegistrationBuilder<
+            TFactory,
+            SimpleActivatorData,
+            SingleRegistrationStyle> RegisterPlaceholderFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance, TFactory>(this ContainerBuilder builder)
+            where TInstance : class
+            where TFactory : PlaceholderFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>, new()
+        {
+            return builder
+                .Register((IComponentContext _, ILifetimeScope scope) =>
+                {
+                    var subScope = scope
+                        .BeginLifetimeScope(subScopeBuilder =>
+                        {
+                            subScopeBuilder
+                                .RegisterFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>()
+                                .SingleInstance();
+
+                            subScopeBuilder
+                                .Register(context
+                                    => new TFactory
+                                    {
+                                        Nested = context.Resolve<IFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>()
+                                    })
+                                .SingleInstance();
+                        })
+                        .AddTo(scope.Disposer);
+
+                    return subScope.Resolve<TFactory>();
+                });
+        }
+
+
+        public static IRegistrationBuilder<
+            IFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>,
+            ConcreteReflectionActivatorData,
+            SingleRegistrationStyle> RegisterFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>(this ContainerBuilder typeSourceSelector)
+            where TInstance : class
+        {
+            return typeSourceSelector
+                .RegisterType<AutofacResolveFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>()
+                .As<IFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>();
+        }
+
+        private class AutofacResolveFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance> : IFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>
+            where TInstance : class
+        {
+            private readonly ILifetimeScope _scope;
+
+            public AutofacResolveFactory(ILifetimeScope scope)
+            {
+                _scope = scope ?? throw new ArgumentNullException(nameof(scope));
+            }
+
+            public TInstance Create(<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j} param{j}")) #>)
+            {
+<#
+        if (i > 0)
+        {
+#>
+                return _scope.CreateInstance<TInstance>(parameters: [ <#=
+                string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"param{j}")) #> ]);
+<#
+        }
+        else
+        {
+#>
+                return _scope.CreateInstance<TInstance>();
+<#
+        }
+#>
+            }
+        }
+
+<#
+    }
+#>
+    }
+}

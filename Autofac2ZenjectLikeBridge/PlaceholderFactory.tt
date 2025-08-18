@@ -1,0 +1,29 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ output extension=".cs" #>
+<#@ import namespace="System.Linq" #>
+namespace Common.Extensions.DI
+{
+<#
+    for (var i = 0; i <= 10; i++)
+    {
+#>
+    public class PlaceholderFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance> : IFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>
+    {
+        internal IFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance> Nested { get; init; }
+
+        public virtual TInstance Create(<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j} param{j}")) #>)
+        {
+            return Nested.Create(<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"param{j}")) #>);
+        }
+    }
+
+<#
+    }
+#>
+}
