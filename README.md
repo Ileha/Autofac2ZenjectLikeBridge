@@ -26,13 +26,13 @@ This library is ideal for:
 Install the package from NuGet:
 
 ```bash
-#todo
+Install-Package Autofac2ZenjectLikeBridge
 ```
 
 Or via the .NET CLI:
 
 ```bash
-#todo
+dotnet add package Autofac2ZenjectLikeBridge
 ```
 
 ## 🛠️ Quick Start
@@ -70,11 +70,11 @@ builder
 
 ## 📚 Documentation
 
-> ℹ️ **Info**: All instances resolved from subcontainers have to be implement `IDisposable` and `ICollection<IDisposable>` interfaces. This needed linit subcontainers lifetime. When instance is disposed, all subcontainer is disposed too. 
+> ℹ️ **Info**: All instances resolved from subcontainers have to be implement `IDisposable` and `ICollection<IDisposable>` interfaces. This needed limit subcontainers lifetime. When instance is disposed, it's subcontainer will be disposed too. See [BaseCompositeDisposable](#basecompositedisposable) approach for more details. 
 
 ### Creating Subcontainers
-
-See [Quick Start](#quick-start)
+Create isolated subcontainers for instance. Based on Autofac's lifetime scope. Scope will inherit all dependencies from parent scope(s). In the same time scope could have own dependencies, that will be available only in this scope.   
+See [Quick Start](#️-quick-start) for code sample.
 
 ### Decorators
 
@@ -123,7 +123,7 @@ builder
 ```
 
 ### Factories
-
+Provides interface `IFactory<parameter1, parameter2, ... , parameterN, Iinstance>` where `parameter1, parameter2, ... , parameterN` are parameters for factory creation and `Iinstance` is instance type. 
 #### From Functions
 
 Use function to register IFactory<Iinstance> in DI:  
@@ -148,7 +148,7 @@ builder
 
 #### From Subcontainers
 
-Use subcontainer to create factory IFactory<Iinstance>, new subcontainer will be created when factory's `Create` method is called:    
+Use subcontainer to create factory `IFactory<Iinstance>`, new subcontainer will be created when factory's `Create` method is called:    
 ```csharp
 builder
     .RegisterFactoryFromSubScope<Iinstance>(
@@ -168,7 +168,7 @@ builder
         })
 ```
 
-parameters edition:  
+Parameters edition:  
 ```csharp
 builder
     .RegisterFactoryFromSubScope<Guid, Iinstance>(
@@ -190,7 +190,7 @@ builder
 ```
 
 #### Placeholders Factories
-used to register type distincted from interface IFactory<T>, and/or modify factory `Create` behavior, like some instance initialization:  
+Used to register type distincted from interface IFactory<T>, and/or modify factory `Create` behavior, like some instance initialization:  
 Create new class and inherit from PlaceholderFactory<T>:  
 ```csharp
 class MyCustomFactory : PlaceholderFactory<Iinstance>
@@ -231,6 +231,30 @@ builder
         {
             Data = Guid.NewGuid()
         })
+```
+
+### Other Helpers
+
+#### BaseCompositeDisposable
+
+Inherit from `BaseCompositeDisposable` for services or from `BaseCompositeDisposable<T>` for decorators to comply with `IDisposable` and `ICollection<IDisposable>` interfaces.
+
+#### IComponentContext.CreateInstance
+
+Use `IComponentContext.CreateInstance` to create instance of type with using DI container:
+
+```csharp
+builder
+    .Register<SampleService>(context =>
+    {
+        var result = context.CreateInstance<SampleService>(Guid.NewGuid());
+
+        result.Setup();
+
+        return result;
+    })
+    .As<ISampleService>()
+    .SingleInstance();
 ```
 
 ## 🤝 Contributing
