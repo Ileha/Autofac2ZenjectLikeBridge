@@ -4,7 +4,33 @@
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <PackageId>com.alexey-developer89.Autofac2ZenjectLikeBridge</PackageId>
+        <Title>Autofac2ZenjectLikeBridge</Title>
+        <Authors>alexeydeveloper1030@gmail.com</Authors>
+        <PackageProjectUrl>https://github.com/Ileha/Autofac2ZenjectLikeBridge</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Ileha/Autofac2ZenjectLikeBridge</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageTags>DI, Autofac, Zenject, Extenject</PackageTags>
+        <Description>Brings the power of Zenject's subcontainers syntax to Autofac, enabling Zenject-style dependency injection patterns in your Autofac applications. This library provides a familiar API for developers who love Zenject's approach to scoping and subcontainers but want to leverage Autofac's robust dependency injection capabilities.
+
+## 🚀 Key Features
+
+- **Zenject-inspired subcontainer syntax** for Autofac
+- Seamless integration of Zenject's scoping patterns
+- Simplified decorator registration with isolated scopes
+- Cross-container dependency management
+- Full compatibility with existing Autofac applications</Description>
+        <PackageReleaseNotes>initial implementation</PackageReleaseNotes>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
+
+    <ItemGroup>
+      <None Include="..\README.md">
+        <Pack>True</Pack>
+        <PackagePath>\</PackagePath>
+      </None>
+    </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Autofac" Version="8.4.0" />
