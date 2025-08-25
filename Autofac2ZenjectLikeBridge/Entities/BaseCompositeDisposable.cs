@@ -7,10 +7,6 @@ public abstract class BaseCompositeDisposable<T> : ICollection<IDisposable>, IDi
     where T : ICollection<IDisposable>, IDisposable
 {
     private readonly T _compositeDisposable;
-    public int Count => _compositeDisposable.Count;
-    public bool IsReadOnly => _compositeDisposable.IsReadOnly;
-
-    protected CancellationToken CancellationToken { get; }
 
     protected BaseCompositeDisposable(T baseDisposable)
     {
@@ -21,6 +17,10 @@ public abstract class BaseCompositeDisposable<T> : ICollection<IDisposable>, IDi
 
         CancellationToken = cancellationDisposable.Token;
     }
+
+    protected CancellationToken CancellationToken { get; }
+    public int Count => _compositeDisposable.Count;
+    public bool IsReadOnly => _compositeDisposable.IsReadOnly;
 
     public IEnumerator<IDisposable> GetEnumerator()
     {
@@ -52,14 +52,14 @@ public abstract class BaseCompositeDisposable<T> : ICollection<IDisposable>, IDi
         return _compositeDisposable.Remove(item);
     }
 
-    public virtual void Dispose()
-    {
-        _compositeDisposable.Dispose();
-    }
-
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
+    }
+
+    public virtual void Dispose()
+    {
+        _compositeDisposable.Dispose();
     }
 }
 

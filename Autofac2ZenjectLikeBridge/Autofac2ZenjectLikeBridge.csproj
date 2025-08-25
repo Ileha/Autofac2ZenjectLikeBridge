@@ -13,55 +13,56 @@
         <PackageTags>DI, Autofac, Zenject, Extenject</PackageTags>
         <Description>Brings the power of Zenject's subcontainers syntax to Autofac, enabling Zenject-style dependency injection patterns in your Autofac applications. This library provides a familiar API for developers who love Zenject's approach to scoping and subcontainers but want to leverage Autofac's robust dependency injection capabilities.
 
-## 🚀 Key Features
+            ## 🚀 Key Features
 
-- **Zenject-inspired subcontainer syntax** for Autofac
-- Seamless integration of Zenject's scoping patterns
-- Simplified decorator registration with isolated scopes
-- Cross-container dependency management
-- Full compatibility with existing Autofac applications</Description>
+            - **Zenject-inspired subcontainer syntax** for Autofac
+            - Seamless integration of Zenject's scoping patterns
+            - Simplified decorator registration with isolated scopes
+            - Cross-container dependency management
+            - Full compatibility with existing Autofac applications
+        </Description>
         <PackageReleaseNotes>initial implementation</PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
-      <None Include="..\README.md">
-        <Pack>True</Pack>
-        <PackagePath>\</PackagePath>
-      </None>
+        <None Include="..\README.md">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Autofac" Version="8.4.0" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
+        <PackageReference Include="Autofac" Version="8.4.0"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="DIExtensionsFactories.tt">
-        <Generator>TextTemplatingFileGenerator</Generator>
-        <LastGenOutput>DIExtensionsFactories.cs</LastGenOutput>
-      </None>
-      <None Update="Interfaces\IFactory.tt">
-        <Generator>TextTemplatingFileGenerator</Generator>
-        <LastGenOutput>IFactory.cs</LastGenOutput>
-      </None>
-      <None Update="PlaceholderFactory.tt">
-        <Generator>TextTemplatingFileGenerator</Generator>
-        <LastGenOutput>PlaceholderFactory.cs</LastGenOutput>
-      </None>
+        <None Update="DIExtensionsFactories.tt">
+            <Generator>TextTemplatingFileGenerator</Generator>
+            <LastGenOutput>DIExtensionsFactories.cs</LastGenOutput>
+        </None>
+        <None Update="Interfaces\IFactory.tt">
+            <Generator>TextTemplatingFileGenerator</Generator>
+            <LastGenOutput>IFactory.cs</LastGenOutput>
+        </None>
+        <None Update="PlaceholderFactory.tt">
+            <Generator>TextTemplatingFileGenerator</Generator>
+            <LastGenOutput>PlaceholderFactory.cs</LastGenOutput>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="DIExtensionsFactories.cs">
-        <DependentUpon>DIExtensionsFactories.tt</DependentUpon>
-      </Compile>
-      <Compile Update="Interfaces\IFactory.cs">
-        <DependentUpon>IFactory.tt</DependentUpon>
-      </Compile>
-      <Compile Update="PlaceholderFactory.cs">
-        <DependentUpon>PlaceholderFactory.tt</DependentUpon>
-      </Compile>
+        <Compile Update="DIExtensionsFactories.cs">
+            <DependentUpon>DIExtensionsFactories.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Interfaces\IFactory.cs">
+            <DependentUpon>IFactory.tt</DependentUpon>
+        </Compile>
+        <Compile Update="PlaceholderFactory.cs">
+            <DependentUpon>PlaceholderFactory.tt</DependentUpon>
+        </Compile>
     </ItemGroup>
 
 </Project>

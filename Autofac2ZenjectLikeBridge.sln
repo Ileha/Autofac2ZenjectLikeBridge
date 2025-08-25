@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Autofac2ZenjectLikeBridge", "Autofac2ZenjectLikeBridge/Autofac2ZenjectLikeBridge.csproj", "{F7E596AE-9311-45A5-BC4F-3EA1388733E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{67748580-3A54-4B32-B665-EAC8447BCB0B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{F7E596AE-9311-45A5-BC4F-3EA1388733E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7E596AE-9311-45A5-BC4F-3EA1388733E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7E596AE-9311-45A5-BC4F-3EA1388733E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67748580-3A54-4B32-B665-EAC8447BCB0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67748580-3A54-4B32-B665-EAC8447BCB0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67748580-3A54-4B32-B665-EAC8447BCB0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67748580-3A54-4B32-B665-EAC8447BCB0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
