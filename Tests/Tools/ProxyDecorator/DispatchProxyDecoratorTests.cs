@@ -7,13 +7,13 @@ namespace Tests.Tools.ProxyDecorator;
 [TestFixture]
 public class DispatchProxyDecoratorTests
 {
-    private interface ITestService : IDisposable
+    internal interface ITestService : IDisposable
     {
         int Add(int a, int b);
         string Echo(string s);
     }
 
-    private class TestService : ITestService
+    internal class TestService : ITestService
     {
         public bool Disposed { get; private set; }
 
@@ -40,7 +40,7 @@ public class DispatchProxyDecoratorTests
         public object?[]? LastArgs { get; private set; }
         public bool ProceedCalled { get; private set; }
         public Func<object?>? LastProceed { get; private set; }
-        public Func<object?>? ProceedOverride { get; }
+        public Func<object?>? ProceedOverride { get; set; }
         public Func<object?, object?>? ReturnTransform { get; set; }
 
         public object? Invoke(object target, MethodInfo method, object?[]? args, Func<object?> proceed)

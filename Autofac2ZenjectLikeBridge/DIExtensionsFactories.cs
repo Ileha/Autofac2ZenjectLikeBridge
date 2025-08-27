@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using Autofac.Builder;
 using Autofac2ZenjectLikeBridge.Extensions;
+using Autofac2ZenjectLikeBridge.Extensions.ProxyDecorator;
+using Autofac2ZenjectLikeBridge.Extensions.ProxyDecorator.Interceptors;
 using Autofac2ZenjectLikeBridge.Interfaces;
 
 namespace Autofac2ZenjectLikeBridge
@@ -81,7 +83,7 @@ namespace Autofac2ZenjectLikeBridge
             this ContainerBuilder builder,
             Action<ContainerBuilder> subScopeInstaller
         )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
             where TFactory : PlaceholderFactory<TInstance>, new()
         {
             return builder
@@ -116,7 +118,7 @@ namespace Autofac2ZenjectLikeBridge
                 this ContainerBuilder builder,
                 Action<ContainerBuilder> subScopeInstaller
                 )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             return builder
                 .RegisterType<AutofacSubScopeFactory<TInstance>>()
@@ -125,7 +127,7 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         private class AutofacSubScopeFactory<TInstance> : IFactory<TInstance>
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder> _subScopeInstaller;
@@ -149,10 +151,12 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                subScope
-                    .AddTo(instance);
+                var interceptor = new DisposeInterceptor();
 
-                return instance;
+                subScope
+                    .AddTo(interceptor);
+
+                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
             }
         }
 
@@ -289,7 +293,7 @@ namespace Autofac2ZenjectLikeBridge
             this ContainerBuilder builder,
             Action<ContainerBuilder, P0> subScopeInstaller
         )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
             where TFactory : PlaceholderFactory<P0, TInstance>, new()
         {
             return builder
@@ -324,7 +328,7 @@ namespace Autofac2ZenjectLikeBridge
                 this ContainerBuilder builder,
                 Action<ContainerBuilder, P0> subScopeInstaller
                 )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             return builder
                 .RegisterType<AutofacSubScopeFactory<P0, TInstance>>()
@@ -333,7 +337,7 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         private class AutofacSubScopeFactory<P0, TInstance> : IFactory<P0, TInstance>
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, P0> _subScopeInstaller;
@@ -357,10 +361,12 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                subScope
-                    .AddTo(instance);
+                var interceptor = new DisposeInterceptor();
 
-                return instance;
+                subScope
+                    .AddTo(interceptor);
+
+                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
             }
         }
 
@@ -497,7 +503,7 @@ namespace Autofac2ZenjectLikeBridge
             this ContainerBuilder builder,
             Action<ContainerBuilder, P0, P1> subScopeInstaller
         )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
             where TFactory : PlaceholderFactory<P0, P1, TInstance>, new()
         {
             return builder
@@ -532,7 +538,7 @@ namespace Autofac2ZenjectLikeBridge
                 this ContainerBuilder builder,
                 Action<ContainerBuilder, P0, P1> subScopeInstaller
                 )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             return builder
                 .RegisterType<AutofacSubScopeFactory<P0, P1, TInstance>>()
@@ -541,7 +547,7 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         private class AutofacSubScopeFactory<P0, P1, TInstance> : IFactory<P0, P1, TInstance>
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, P0, P1> _subScopeInstaller;
@@ -565,10 +571,12 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                subScope
-                    .AddTo(instance);
+                var interceptor = new DisposeInterceptor();
 
-                return instance;
+                subScope
+                    .AddTo(interceptor);
+
+                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
             }
         }
 
@@ -705,7 +713,7 @@ namespace Autofac2ZenjectLikeBridge
             this ContainerBuilder builder,
             Action<ContainerBuilder, P0, P1, P2> subScopeInstaller
         )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
             where TFactory : PlaceholderFactory<P0, P1, P2, TInstance>, new()
         {
             return builder
@@ -740,7 +748,7 @@ namespace Autofac2ZenjectLikeBridge
                 this ContainerBuilder builder,
                 Action<ContainerBuilder, P0, P1, P2> subScopeInstaller
                 )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             return builder
                 .RegisterType<AutofacSubScopeFactory<P0, P1, P2, TInstance>>()
@@ -749,7 +757,7 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         private class AutofacSubScopeFactory<P0, P1, P2, TInstance> : IFactory<P0, P1, P2, TInstance>
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, P0, P1, P2> _subScopeInstaller;
@@ -773,10 +781,12 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                subScope
-                    .AddTo(instance);
+                var interceptor = new DisposeInterceptor();
 
-                return instance;
+                subScope
+                    .AddTo(interceptor);
+
+                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
             }
         }
 
@@ -913,7 +923,7 @@ namespace Autofac2ZenjectLikeBridge
             this ContainerBuilder builder,
             Action<ContainerBuilder, P0, P1, P2, P3> subScopeInstaller
         )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
             where TFactory : PlaceholderFactory<P0, P1, P2, P3, TInstance>, new()
         {
             return builder
@@ -948,7 +958,7 @@ namespace Autofac2ZenjectLikeBridge
                 this ContainerBuilder builder,
                 Action<ContainerBuilder, P0, P1, P2, P3> subScopeInstaller
                 )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             return builder
                 .RegisterType<AutofacSubScopeFactory<P0, P1, P2, P3, TInstance>>()
@@ -957,7 +967,7 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         private class AutofacSubScopeFactory<P0, P1, P2, P3, TInstance> : IFactory<P0, P1, P2, P3, TInstance>
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, P0, P1, P2, P3> _subScopeInstaller;
@@ -981,10 +991,12 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                subScope
-                    .AddTo(instance);
+                var interceptor = new DisposeInterceptor();
 
-                return instance;
+                subScope
+                    .AddTo(interceptor);
+
+                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
             }
         }
 
@@ -1121,7 +1133,7 @@ namespace Autofac2ZenjectLikeBridge
             this ContainerBuilder builder,
             Action<ContainerBuilder, P0, P1, P2, P3, P4> subScopeInstaller
         )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
             where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, TInstance>, new()
         {
             return builder
@@ -1156,7 +1168,7 @@ namespace Autofac2ZenjectLikeBridge
                 this ContainerBuilder builder,
                 Action<ContainerBuilder, P0, P1, P2, P3, P4> subScopeInstaller
                 )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             return builder
                 .RegisterType<AutofacSubScopeFactory<P0, P1, P2, P3, P4, TInstance>>()
@@ -1165,7 +1177,7 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         private class AutofacSubScopeFactory<P0, P1, P2, P3, P4, TInstance> : IFactory<P0, P1, P2, P3, P4, TInstance>
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, P0, P1, P2, P3, P4> _subScopeInstaller;
@@ -1189,10 +1201,12 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                subScope
-                    .AddTo(instance);
+                var interceptor = new DisposeInterceptor();
 
-                return instance;
+                subScope
+                    .AddTo(interceptor);
+
+                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
             }
         }
 
@@ -1329,7 +1343,7 @@ namespace Autofac2ZenjectLikeBridge
             this ContainerBuilder builder,
             Action<ContainerBuilder, P0, P1, P2, P3, P4, P5> subScopeInstaller
         )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
             where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, TInstance>, new()
         {
             return builder
@@ -1364,7 +1378,7 @@ namespace Autofac2ZenjectLikeBridge
                 this ContainerBuilder builder,
                 Action<ContainerBuilder, P0, P1, P2, P3, P4, P5> subScopeInstaller
                 )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             return builder
                 .RegisterType<AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, TInstance>>()
@@ -1373,7 +1387,7 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         private class AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, TInstance>
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, P0, P1, P2, P3, P4, P5> _subScopeInstaller;
@@ -1397,10 +1411,12 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                subScope
-                    .AddTo(instance);
+                var interceptor = new DisposeInterceptor();
 
-                return instance;
+                subScope
+                    .AddTo(interceptor);
+
+                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
             }
         }
 
@@ -1537,7 +1553,7 @@ namespace Autofac2ZenjectLikeBridge
             this ContainerBuilder builder,
             Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6> subScopeInstaller
         )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
             where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>, new()
         {
             return builder
@@ -1572,7 +1588,7 @@ namespace Autofac2ZenjectLikeBridge
                 this ContainerBuilder builder,
                 Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6> subScopeInstaller
                 )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             return builder
                 .RegisterType<AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>>()
@@ -1581,7 +1597,7 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         private class AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, P6, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6> _subScopeInstaller;
@@ -1605,10 +1621,12 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                subScope
-                    .AddTo(instance);
+                var interceptor = new DisposeInterceptor();
 
-                return instance;
+                subScope
+                    .AddTo(interceptor);
+
+                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
             }
         }
 
@@ -1745,7 +1763,7 @@ namespace Autofac2ZenjectLikeBridge
             this ContainerBuilder builder,
             Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7> subScopeInstaller
         )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
             where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>, new()
         {
             return builder
@@ -1780,7 +1798,7 @@ namespace Autofac2ZenjectLikeBridge
                 this ContainerBuilder builder,
                 Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7> subScopeInstaller
                 )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             return builder
                 .RegisterType<AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>>()
@@ -1789,7 +1807,7 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         private class AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7> _subScopeInstaller;
@@ -1813,10 +1831,12 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                subScope
-                    .AddTo(instance);
+                var interceptor = new DisposeInterceptor();
 
-                return instance;
+                subScope
+                    .AddTo(interceptor);
+
+                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
             }
         }
 
@@ -1953,7 +1973,7 @@ namespace Autofac2ZenjectLikeBridge
             this ContainerBuilder builder,
             Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7, P8> subScopeInstaller
         )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
             where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>, new()
         {
             return builder
@@ -1988,7 +2008,7 @@ namespace Autofac2ZenjectLikeBridge
                 this ContainerBuilder builder,
                 Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7, P8> subScopeInstaller
                 )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             return builder
                 .RegisterType<AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>>()
@@ -1997,7 +2017,7 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         private class AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7, P8> _subScopeInstaller;
@@ -2021,10 +2041,12 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                subScope
-                    .AddTo(instance);
+                var interceptor = new DisposeInterceptor();
 
-                return instance;
+                subScope
+                    .AddTo(interceptor);
+
+                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
             }
         }
 
@@ -2161,7 +2183,7 @@ namespace Autofac2ZenjectLikeBridge
             this ContainerBuilder builder,
             Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7, P8, P9> subScopeInstaller
         )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
             where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>, new()
         {
             return builder
@@ -2196,7 +2218,7 @@ namespace Autofac2ZenjectLikeBridge
                 this ContainerBuilder builder,
                 Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7, P8, P9> subScopeInstaller
                 )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             return builder
                 .RegisterType<AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>>()
@@ -2205,7 +2227,7 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         private class AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7, P8, P9> _subScopeInstaller;
@@ -2229,10 +2251,12 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                subScope
-                    .AddTo(instance);
+                var interceptor = new DisposeInterceptor();
 
-                return instance;
+                subScope
+                    .AddTo(interceptor);
+
+                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
             }
         }
 

@@ -7,6 +7,8 @@
 using Autofac;
 using Autofac.Builder;
 using Autofac2ZenjectLikeBridge.Extensions;
+using Autofac2ZenjectLikeBridge.Extensions.ProxyDecorator;
+using Autofac2ZenjectLikeBridge.Extensions.ProxyDecorator.Interceptors;
 using Autofac2ZenjectLikeBridge.Interfaces;
 
 namespace Autofac2ZenjectLikeBridge
@@ -108,7 +110,7 @@ namespace Autofac2ZenjectLikeBridge
             Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=
             string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #>> subScopeInstaller
         )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
             where TFactory : PlaceholderFactory<<#=
             string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>, new()
         {
@@ -149,7 +151,7 @@ namespace Autofac2ZenjectLikeBridge
                 Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=
             string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #>> subScopeInstaller
                 )
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             return builder
                 .RegisterType<AutofacSubScopeFactory<<#=
@@ -162,7 +164,7 @@ namespace Autofac2ZenjectLikeBridge
         private class AutofacSubScopeFactory<<#=
             string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance> : IFactory<<#=
             string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>
-            where TInstance : class, ICollection<IDisposable>, IDisposable
+            where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=
@@ -190,10 +192,12 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                subScope
-                    .AddTo(instance);
+                var interceptor = new DisposeInterceptor();
 
-                return instance;
+                subScope
+                    .AddTo(interceptor);
+
+                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
             }
         }
 

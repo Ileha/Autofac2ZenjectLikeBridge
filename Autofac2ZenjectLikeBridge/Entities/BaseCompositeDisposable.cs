@@ -19,35 +19,35 @@ public abstract class BaseCompositeDisposable<T> : ICollection<IDisposable>, IDi
     }
 
     protected CancellationToken CancellationToken { get; }
-    public int Count => _compositeDisposable.Count;
-    public bool IsReadOnly => _compositeDisposable.IsReadOnly;
+    public virtual int Count => _compositeDisposable.Count;
+    public virtual bool IsReadOnly => _compositeDisposable.IsReadOnly;
 
-    public IEnumerator<IDisposable> GetEnumerator()
+    public virtual IEnumerator<IDisposable> GetEnumerator()
     {
         return _compositeDisposable.GetEnumerator();
     }
 
-    public void Add(IDisposable item)
+    public virtual void Add(IDisposable item)
     {
         _compositeDisposable.Add(item);
     }
 
-    public void Clear()
+    public virtual void Clear()
     {
         _compositeDisposable.Clear();
     }
 
-    public bool Contains(IDisposable item)
+    public virtual bool Contains(IDisposable item)
     {
         return _compositeDisposable.Contains(item);
     }
 
-    public void CopyTo(IDisposable[] array, int arrayIndex)
+    public virtual void CopyTo(IDisposable[] array, int arrayIndex)
     {
         _compositeDisposable.CopyTo(array, arrayIndex);
     }
 
-    public bool Remove(IDisposable item)
+    public virtual bool Remove(IDisposable item)
     {
         return _compositeDisposable.Remove(item);
     }

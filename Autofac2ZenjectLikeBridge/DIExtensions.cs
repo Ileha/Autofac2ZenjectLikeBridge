@@ -3,7 +3,10 @@ using Autofac.Builder;
 using Autofac.Core;
 using Autofac.Core.Registration;
 using Autofac2ZenjectLikeBridge.Extensions;
+using Autofac2ZenjectLikeBridge.Extensions.ProxyDecorator;
+using Autofac2ZenjectLikeBridge.Extensions.ProxyDecorator.Interceptors;
 using Microsoft.Extensions.DependencyInjection;
+using Module = Autofac.Module;
 
 namespace Autofac2ZenjectLikeBridge;
 
@@ -52,7 +55,7 @@ public static partial class DIExtensions
         SingleRegistrationStyle> RegisterFromSubScope<TComponent>(
         this ContainerBuilder builder,
         Action<ContainerBuilder> subScopeInstaller)
-        where TComponent : ICollection<IDisposable>, IDisposable
+        where TComponent : class, IDisposable
     {
         ArgumentNullException.ThrowIfNull(builder);
 
@@ -75,10 +78,12 @@ public static partial class DIExtensions
 
                     var service = subScope.Resolve<TComponent>();
 
-                    subScope
-                        .AddTo(service);
+                    var interceptor = new DisposeInterceptor();
 
-                    return service;
+                    subScope
+                        .AddTo(interceptor);
+
+                    return DispatchProxyDecorator<TComponent>.Create(service, interceptor);
                 });
     }
 
@@ -178,7 +183,7 @@ public static partial class DIExtensions
         this ContainerBuilder builder,
         Action<ContainerBuilder, TService> subScopeInstaller)
         where TService : class
-        where TDecorator : TService, ICollection<IDisposable>, IDisposable
+        where TDecorator : class, TService, IDisposable
     {
         builder
             .RegisterDecorator<TService>(
@@ -198,10 +203,12 @@ public static partial class DIExtensions
 
                     var instance = subScope.Resolve<TDecorator>();
 
-                    subScope
-                        .AddTo(instance);
+                    var interceptor = new DisposeInterceptor();
 
-                    return instance;
+                    subScope
+                        .AddTo(interceptor);
+
+                    return DispatchProxyDecorator<TDecorator>.Create(instance, interceptor);
                 });
     }
 
@@ -211,7 +218,7 @@ public static partial class DIExtensions
         object fromKey,
         object? toKey = null)
         where TService : class
-        where TDecorator : TService, ICollection<IDisposable>, IDisposable
+        where TDecorator : class, TService, IDisposable
     {
         builder
             .RegisterDecorator<TService>(
@@ -231,10 +238,12 @@ public static partial class DIExtensions
 
                     var instance = subScope.Resolve<TDecorator>();
 
-                    subScope
-                        .AddTo(instance);
+                    var interceptor = new DisposeInterceptor();
 
-                    return instance;
+                    subScope
+                        .AddTo(interceptor);
+
+                    return DispatchProxyDecorator<TDecorator>.Create(instance, interceptor);
                 },
                 fromKey,
                 toKey);

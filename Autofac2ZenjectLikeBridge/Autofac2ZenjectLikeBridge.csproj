@@ -35,6 +35,7 @@
 
     <ItemGroup>
         <PackageReference Include="Autofac" Version="8.4.0"/>
+        <PackageReference Include="Castle.Core" Version="5.2.1" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8"/>
     </ItemGroup>
 

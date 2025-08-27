@@ -374,7 +374,11 @@ public class DecoratorDisposeTests
 
     public class SubContainerDataExtractor<T> : BaseCompositeDisposable
     {
-        public readonly T Data;
+        public virtual T Data { get; }
+
+        public SubContainerDataExtractor()
+        {
+        }
 
         public SubContainerDataExtractor(T data)
         {
@@ -382,12 +386,12 @@ public class DecoratorDisposeTests
         }
     }
 
-    public interface ISampleReturn : ICollection<IDisposable>, IDisposable
+    public interface ISampleReturn : IDisposable
     {
         string GetData();
     }
 
-    public class SampleReturn : BaseCompositeDisposable, ISampleReturn
+    public class SampleReturn : ISampleReturn
     {
         private readonly string _data;
 
@@ -400,14 +404,18 @@ public class DecoratorDisposeTests
         {
             return _data;
         }
+
+        public void Dispose()
+        {
+
+        }
     }
 
-    public class SampleReturnDecorator : BaseCompositeDisposable<ISampleReturn>, ISampleReturn
+    public class SampleReturnDecorator : ISampleReturn
     {
         private readonly ISampleReturn _baseService;
 
         public SampleReturnDecorator(ISampleReturn baseService)
-            : base(baseService)
         {
             _baseService = baseService ?? throw new ArgumentNullException(nameof(baseService));
         }
@@ -415,6 +423,11 @@ public class DecoratorDisposeTests
         public string GetData()
         {
             return string.Format(DecoratedDataFormat, _baseService.GetData());
+        }
+
+        public void Dispose()
+        {
+            _baseService.Dispose();
         }
     }
 
