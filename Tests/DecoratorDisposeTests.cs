@@ -17,7 +17,7 @@ public class DecoratorDisposeTests
     [Test]
     public void DecoratorInSubContainerTest_WhenDIExtensions()
     {
-        HarmonyPatch.Patch();
+        HarmonyPatch.PatchNonLazy();
 
         var builder = new ContainerBuilder();
 
@@ -117,7 +117,7 @@ public class DecoratorDisposeTests
     [Test]
     public void SameInterfacesInRootAndInSubContainerTest_WhenDIExtensions()
     {
-        HarmonyPatch.Patch();
+        HarmonyPatch.PatchNonLazy();
         var builder = new ContainerBuilder();
 
         builder
@@ -341,7 +341,7 @@ public class DecoratorDisposeTests
     [Test]
     public void Dispose_WhenSubContainerDisposed_DisposeDecorator_WhenDIExtensions()
     {
-        HarmonyPatch.Patch();
+        HarmonyPatch.PatchNonLazy();
 
         // Arrange
         var builder = new ContainerBuilder();
@@ -380,11 +380,7 @@ public class DecoratorDisposeTests
 
     public class SubContainerDataExtractor<T> : BaseCompositeDisposable
     {
-        public virtual T Data { get; }
-
-        public SubContainerDataExtractor()
-        {
-        }
+        public readonly T Data;
 
         public SubContainerDataExtractor(T data)
         {

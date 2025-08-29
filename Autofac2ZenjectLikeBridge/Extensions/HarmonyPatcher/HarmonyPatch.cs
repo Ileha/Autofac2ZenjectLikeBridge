@@ -14,11 +14,11 @@ public static class HarmonyPatch
     private static readonly Harmony Harmony = new(PatchId);
     private static readonly HarmonyMethod PrefixMethod = new(typeof(HarmonyPatch).GetMethod(nameof(DisposePrefix)));
 
-    public static void Patch()
+    public static void PatchNonLazy()
     {
         lock (Locker)
         {
-            var types2Patch = AppDomain.CurrentDomain.GetAssemblies()
+            var methods2Patch = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(assembly =>
                 {
                     try
@@ -38,14 +38,15 @@ public static class HarmonyPatch
                     var interfaceMap = type.GetInterfaceMap(typeof(IDisposable));
                     var disposeMethod = interfaceMap.TargetMethods.FirstOrDefault();
 
-                    return (type, method: disposeMethod);
+                    return disposeMethod;
                 })
-                .Where(type => type.method?.IsDeclaredMember<MethodBase>() ?? false)
+                .Where(method => method != null)
+                .Distinct()
                 .ToArray();
 
-            foreach (var data in types2Patch)
+            foreach (var method in methods2Patch)
             {
-                PatchMethodLockFree(data.method, PrefixMethod);
+                PatchMethodLockFree(method, PrefixMethod);
             }
         }
     }
@@ -57,27 +58,43 @@ public static class HarmonyPatch
             if (!type.IsClass || type.IsAbstract || PatchedTypes.Contains(type))
                 return;
 
-            throw new InvalidOperationException($"The {type.FullName} is not patched, make sure that {nameof(HarmonyPatch)}.{nameof(Patch)} called first");
+            var interfaceMap = type.GetInterfaceMap(typeof(IDisposable));
+            var disposeMethod = interfaceMap.TargetMethods.FirstOrDefault();
+
+            if (disposeMethod == null)
+                throw new InvalidOperationException(
+                    $"can't find {nameof(IDisposable)}.{nameof(IDisposable.Dispose)} method in {type}");
+
+            PatchMethodLockFree(disposeMethod, PrefixMethod);
         }
     }
 
-    public static void PatchMethod(MethodInfo? method)
+    public static void PatchMethod(MethodBase? method)
     {
         lock (Locker)
             PatchMethodLockFree(method, PrefixMethod);
     }
 
-    private static void PatchMethodLockFree(MethodInfo? method, HarmonyMethod prefix)
+    private static void PatchMethodLockFree(MethodBase? method, HarmonyMethod prefix)
     {
         if (method == null)
             return;
 
+        if (PatchedTypes.Contains(method.DeclaringType))
+            return;
+
+        var declaredMethod = method.GetDeclaredMember();
+
+        if (PatchedTypes.Contains(declaredMethod.DeclaringType))
+            return;
+
         Harmony.Patch(
-            method,
+            declaredMethod,
             prefix: prefix
         );
 
         PatchedTypes.Add(method.DeclaringType);
+        PatchedTypes.Add(declaredMethod.DeclaringType);
     }
 
     public static T AddToHarmony<T>(this IDisposable disposable, T instance)
