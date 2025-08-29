@@ -1,8 +1,7 @@
 ﻿using Autofac;
 using Autofac.Builder;
 using Autofac2ZenjectLikeBridge.Extensions;
-using Autofac2ZenjectLikeBridge.Extensions.ProxyDecorator;
-using Autofac2ZenjectLikeBridge.Extensions.ProxyDecorator.Interceptors;
+using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
 using Autofac2ZenjectLikeBridge.Interfaces;
 
 namespace Autofac2ZenjectLikeBridge
@@ -151,12 +150,10 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                var interceptor = new DisposeInterceptor();
-
                 subScope
-                    .AddTo(interceptor);
+                    .AddToHarmony(instance);
 
-                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
+                return instance;
             }
         }
 
@@ -361,12 +358,10 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                var interceptor = new DisposeInterceptor();
-
                 subScope
-                    .AddTo(interceptor);
+                    .AddToHarmony(instance);
 
-                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
+                return instance;
             }
         }
 
@@ -571,12 +566,10 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                var interceptor = new DisposeInterceptor();
-
                 subScope
-                    .AddTo(interceptor);
+                    .AddToHarmony(instance);
 
-                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
+                return instance;
             }
         }
 
@@ -781,12 +774,10 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                var interceptor = new DisposeInterceptor();
-
                 subScope
-                    .AddTo(interceptor);
+                    .AddToHarmony(instance);
 
-                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
+                return instance;
             }
         }
 
@@ -991,12 +982,10 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                var interceptor = new DisposeInterceptor();
-
                 subScope
-                    .AddTo(interceptor);
+                    .AddToHarmony(instance);
 
-                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
+                return instance;
             }
         }
 
@@ -1201,12 +1190,10 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                var interceptor = new DisposeInterceptor();
-
                 subScope
-                    .AddTo(interceptor);
+                    .AddToHarmony(instance);
 
-                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
+                return instance;
             }
         }
 
@@ -1411,12 +1398,10 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                var interceptor = new DisposeInterceptor();
-
                 subScope
-                    .AddTo(interceptor);
+                    .AddToHarmony(instance);
 
-                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
+                return instance;
             }
         }
 
@@ -1621,12 +1606,10 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                var interceptor = new DisposeInterceptor();
-
                 subScope
-                    .AddTo(interceptor);
+                    .AddToHarmony(instance);
 
-                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
+                return instance;
             }
         }
 
@@ -1831,12 +1814,10 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                var interceptor = new DisposeInterceptor();
-
                 subScope
-                    .AddTo(interceptor);
+                    .AddToHarmony(instance);
 
-                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
+                return instance;
             }
         }
 
@@ -2041,12 +2022,10 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                var interceptor = new DisposeInterceptor();
-
                 subScope
-                    .AddTo(interceptor);
+                    .AddToHarmony(instance);
 
-                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
+                return instance;
             }
         }
 
@@ -2251,12 +2230,10 @@ namespace Autofac2ZenjectLikeBridge
 
                 var instance = subScope.Resolve<TInstance>();
 
-                var interceptor = new DisposeInterceptor();
-
                 subScope
-                    .AddTo(interceptor);
+                    .AddToHarmony(instance);
 
-                return DispatchProxyDecorator<TInstance>.Create(instance, interceptor);
+                return instance;
             }
         }
 

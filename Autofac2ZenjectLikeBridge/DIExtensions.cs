@@ -2,9 +2,7 @@
 using Autofac.Builder;
 using Autofac.Core;
 using Autofac.Core.Registration;
-using Autofac2ZenjectLikeBridge.Extensions;
-using Autofac2ZenjectLikeBridge.Extensions.ProxyDecorator;
-using Autofac2ZenjectLikeBridge.Extensions.ProxyDecorator.Interceptors;
+using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
 using Microsoft.Extensions.DependencyInjection;
 using Module = Autofac.Module;
 
@@ -78,12 +76,10 @@ public static partial class DIExtensions
 
                     var service = subScope.Resolve<TComponent>();
 
-                    var interceptor = new DisposeInterceptor();
-
                     subScope
-                        .AddTo(interceptor);
+                        .AddToHarmony(service);
 
-                    return DispatchProxyDecorator<TComponent>.Create(service, interceptor);
+                    return service;
                 });
     }
 
@@ -203,12 +199,10 @@ public static partial class DIExtensions
 
                     var instance = subScope.Resolve<TDecorator>();
 
-                    var interceptor = new DisposeInterceptor();
-
                     subScope
-                        .AddTo(interceptor);
+                        .AddToHarmony(instance);
 
-                    return DispatchProxyDecorator<TDecorator>.Create(instance, interceptor);
+                    return instance;
                 });
     }
 
@@ -238,12 +232,10 @@ public static partial class DIExtensions
 
                     var instance = subScope.Resolve<TDecorator>();
 
-                    var interceptor = new DisposeInterceptor();
-
                     subScope
-                        .AddTo(interceptor);
+                        .AddToHarmony(instance);
 
-                    return DispatchProxyDecorator<TDecorator>.Create(instance, interceptor);
+                    return instance;
                 },
                 fromKey,
                 toKey);

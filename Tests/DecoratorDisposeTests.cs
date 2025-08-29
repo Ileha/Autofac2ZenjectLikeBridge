@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac2ZenjectLikeBridge;
 using Autofac2ZenjectLikeBridge.Entities;
+using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
 using Autofac2ZenjectLikeBridge.Interfaces;
 using NSubstitute;
 
@@ -16,6 +17,8 @@ public class DecoratorDisposeTests
     [Test]
     public void DecoratorInSubContainerTest_WhenDIExtensions()
     {
+        HarmonyPatch.Patch();
+
         var builder = new ContainerBuilder();
 
         var decoratedOnceData = $"{SubContainerData}_1";
@@ -114,6 +117,7 @@ public class DecoratorDisposeTests
     [Test]
     public void SameInterfacesInRootAndInSubContainerTest_WhenDIExtensions()
     {
+        HarmonyPatch.Patch();
         var builder = new ContainerBuilder();
 
         builder
@@ -337,6 +341,8 @@ public class DecoratorDisposeTests
     [Test]
     public void Dispose_WhenSubContainerDisposed_DisposeDecorator_WhenDIExtensions()
     {
+        HarmonyPatch.Patch();
+
         // Arrange
         var builder = new ContainerBuilder();
 
