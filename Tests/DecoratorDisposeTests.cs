@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Autofac2ZenjectLikeBridge;
 using Autofac2ZenjectLikeBridge.Entities;
-using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
 using Autofac2ZenjectLikeBridge.Interfaces;
 using NSubstitute;
 
@@ -17,8 +16,6 @@ public class DecoratorDisposeTests
     [Test]
     public void DecoratorInSubContainerTest_WhenDIExtensions()
     {
-        HarmonyPatch.PatchNonLazy();
-
         var builder = new ContainerBuilder();
 
         var decoratedOnceData = $"{SubContainerData}_1";
@@ -76,48 +73,8 @@ public class DecoratorDisposeTests
     }
 
     [Test]
-    public void DecoratorInSubContainerTest()
-    {
-        // Arrange
-        var builder = new ContainerBuilder();
-
-        builder
-            .RegisterInstance(Substitute.For<IDisposeReceiver>())
-            .As<IDisposeReceiver>()
-            .SingleInstance();
-
-        var iSampleRootLowLevel = Guid.NewGuid();
-
-        builder.RegisterType<LowLevel>()
-            .Keyed<ISample>(iSampleRootLowLevel)
-            .SingleInstance();
-
-        builder.RegisterDecorator<ISample>(
-            (context, sample) => context.CreateInstance<Decorator>(sample), fromKey: iSampleRootLowLevel, toKey: null);
-
-        using (var container = builder.Build())
-        {
-            using (var scope = container.BeginLifetimeScope(subContainer =>
-                   {
-                       subContainer.RegisterType<LowLevelWithData>()
-                           .As<ISample>()
-                           .WithParameters(TypedParameter.From(SubContainerData))
-                           .SingleInstance();
-                   }))
-            {
-                var service = scope.Resolve<ISample>();
-                service.DoWork();
-            }
-
-            var rootService = container.Resolve<ISample>();
-            rootService.DoWork();
-        }
-    }
-
-    [Test]
     public void SameInterfacesInRootAndInSubContainerTest_WhenDIExtensions()
     {
-        HarmonyPatch.PatchNonLazy();
         var builder = new ContainerBuilder();
 
         builder
@@ -152,197 +109,8 @@ public class DecoratorDisposeTests
     }
 
     [Test]
-    public void SameInterfacesInRootAndInSubContainerTest()
-    {
-        var builder = new ContainerBuilder();
-
-        builder
-            .RegisterType<SampleReturn>()
-            .As<ISampleReturn>()
-            .WithParameters(TypedParameter.From(RootContainerData))
-            .SingleInstance();
-
-        using (var rootContainer = builder.Build())
-        {
-            var sampleReturn = rootContainer.Resolve<ISampleReturn>();
-
-            Console.WriteLine(sampleReturn.GetData());
-            Assert.That(sampleReturn.GetData(), Is.EqualTo(RootContainerData));
-
-            using (var scope = rootContainer.BeginLifetimeScope(subContainer =>
-                   {
-                       subContainer
-                           .RegisterType<SampleReturn>()
-                           .As<ISampleReturn>()
-                           .WithParameters(TypedParameter.From(SubContainerData))
-                           .SingleInstance();
-                   }))
-            {
-                var subContainerService = scope.Resolve<ISampleReturn>();
-
-                Console.WriteLine(subContainerService.GetData());
-                Assert.That(subContainerService.GetData(), Is.EqualTo(SubContainerData));
-            }
-        }
-    }
-
-    [Test]
-    public void Dispose_When2DecoratorsInChildSubScopes()
-    {
-        // Arrange
-        var builder = new ContainerBuilder();
-
-        var receiver = Substitute.For<IDisposeReceiver>();
-        builder
-            .RegisterInstance(receiver)
-            .As<IDisposeReceiver>()
-            .SingleInstance();
-
-        builder
-            .RegisterType<LowLevel>()
-            .As<ISample>()
-            .SingleInstance();
-
-        using (var container = builder.Build())
-        {
-            // Act
-            using (var scope = container.BeginLifetimeScope(subContainer =>
-                   {
-                       subContainer.RegisterDecorator<Decorator, ISample>();
-                   }))
-            using (var scope2 = scope.BeginLifetimeScope(subContainer =>
-                   {
-                       subContainer.RegisterDecorator<Decorator, ISample>();
-                   }))
-            {
-                var service = scope2.Resolve<ISample>();
-                service.DoWork();
-            }
-
-            // Assert
-            receiver.Received(0).ReceiveDispose();
-        }
-
-        receiver.Received(2).ReceiveDispose();
-    }
-
-    [Test]
-    public void Dispose_When2DecoratorsInDifferentSubScopes()
-    {
-        // Arrange
-        var builder = new ContainerBuilder();
-
-        var receiver = Substitute.For<IDisposeReceiver>();
-        builder
-            .RegisterInstance(receiver)
-            .As<IDisposeReceiver>()
-            .SingleInstance();
-
-        builder
-            .RegisterType<LowLevel>()
-            .As<ISample>()
-            .SingleInstance();
-
-        using (var container = builder.Build())
-        {
-            // Act
-            using (var scope = container.BeginLifetimeScope(subContainer =>
-                   {
-                       subContainer.RegisterDecorator<Decorator, ISample>();
-                   }))
-            {
-                var service = scope.Resolve<ISample>();
-                service.DoWork();
-            }
-
-            using (var scope = container.BeginLifetimeScope(subContainer =>
-                   {
-                       subContainer.RegisterDecorator<Decorator, ISample>();
-                   }))
-            {
-                var service = scope.Resolve<ISample>();
-                service.DoWork();
-            }
-
-            // Assert
-            receiver.Received(0).ReceiveDispose();
-        }
-
-        receiver.Received(2).ReceiveDispose();
-    }
-
-    [Test]
-    public void Dispose_WhenContainerDisposed_DisposeDecorator()
-    {
-        // Arrange
-        var builder = new ContainerBuilder();
-
-        var receiver = Substitute.For<IDisposeReceiver>();
-        builder
-            .RegisterInstance(receiver)
-            .As<IDisposeReceiver>()
-            .SingleInstance();
-
-        builder
-            .RegisterType<LowLevel>()
-            .As<ISample>()
-            .SingleInstance();
-
-        using (var container = builder.Build())
-        {
-            // Act
-            using (var scope = container.BeginLifetimeScope(subContainer =>
-                   {
-                       subContainer.RegisterDecorator<Decorator, ISample>();
-                   }))
-            {
-                var service = scope.Resolve<ISample>();
-                service.DoWork();
-            }
-
-            // Assert
-            receiver.Received(0).ReceiveDispose();
-        }
-
-        receiver.Received(1).ReceiveDispose();
-    }
-
-    [Test]
-    public void Dispose_WhenSubContainerDisposed_DisposeDecorator()
-    {
-        // Arrange
-        var builder = new ContainerBuilder();
-
-        var receiver = Substitute.For<IDisposeReceiver>();
-        builder
-            .RegisterInstance(receiver)
-            .As<IDisposeReceiver>()
-            .SingleInstance();
-
-        using var container = builder.Build();
-        // Act
-        using (var scope = container.BeginLifetimeScope(subContainer =>
-               {
-                   subContainer.RegisterType<LowLevel>()
-                       .As<ISample>()
-                       .SingleInstance();
-
-                   subContainer.RegisterDecorator<Decorator, ISample>();
-               }))
-        {
-            var service = scope.Resolve<ISample>();
-            service.DoWork();
-        }
-
-        // Assert
-        receiver.Received(1).ReceiveDispose();
-    }
-
-    [Test]
     public void Dispose_WhenSubContainerDisposed_DisposeDecorator_WhenDIExtensions()
     {
-        HarmonyPatch.PatchNonLazy();
-
         // Arrange
         var builder = new ContainerBuilder();
 
