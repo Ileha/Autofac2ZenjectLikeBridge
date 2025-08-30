@@ -7,54 +7,54 @@
         T Create();
     }
 
-    public interface IFactory<in P0, out T>
+    public interface IFactory<in TP0, out T>
     {
-        T Create(P0 param0);
+        T Create(TP0 param0);
     }
 
-    public interface IFactory<in P0, in P1, out T>
+    public interface IFactory<in TP0, in TP1, out T>
     {
-        T Create(P0 param0, P1 param1);
+        T Create(TP0 param0, TP1 param1);
     }
 
-    public interface IFactory<in P0, in P1, in P2, out T>
+    public interface IFactory<in TP0, in TP1, in TP2, out T>
     {
-        T Create(P0 param0, P1 param1, P2 param2);
+        T Create(TP0 param0, TP1 param1, TP2 param2);
     }
 
-    public interface IFactory<in P0, in P1, in P2, in P3, out T>
+    public interface IFactory<in TP0, in TP1, in TP2, in TP3, out T>
     {
-        T Create(P0 param0, P1 param1, P2 param2, P3 param3);
+        T Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3);
     }
 
-    public interface IFactory<in P0, in P1, in P2, in P3, in P4, out T>
+    public interface IFactory<in TP0, in TP1, in TP2, in TP3, in TP4, out T>
     {
-        T Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4);
+        T Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4);
     }
 
-    public interface IFactory<in P0, in P1, in P2, in P3, in P4, in P5, out T>
+    public interface IFactory<in TP0, in TP1, in TP2, in TP3, in TP4, in TP5, out T>
     {
-        T Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5);
+        T Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5);
     }
 
-    public interface IFactory<in P0, in P1, in P2, in P3, in P4, in P5, in P6, out T>
+    public interface IFactory<in TP0, in TP1, in TP2, in TP3, in TP4, in TP5, in TP6, out T>
     {
-        T Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5, P6 param6);
+        T Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6);
     }
 
-    public interface IFactory<in P0, in P1, in P2, in P3, in P4, in P5, in P6, in P7, out T>
+    public interface IFactory<in TP0, in TP1, in TP2, in TP3, in TP4, in TP5, in TP6, in TP7, out T>
     {
-        T Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5, P6 param6, P7 param7);
+        T Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7);
     }
 
-    public interface IFactory<in P0, in P1, in P2, in P3, in P4, in P5, in P6, in P7, in P8, out T>
+    public interface IFactory<in TP0, in TP1, in TP2, in TP3, in TP4, in TP5, in TP6, in TP7, in TP8, out T>
     {
-        T Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5, P6 param6, P7 param7, P8 param8);
+        T Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7, TP8 param8);
     }
 
-    public interface IFactory<in P0, in P1, in P2, in P3, in P4, in P5, in P6, in P7, in P8, in P9, out T>
+    public interface IFactory<in TP0, in TP1, in TP2, in TP3, in TP4, in TP5, in TP6, in TP7, in TP8, in TP9, out T>
     {
-        T Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5, P6 param6, P7 param7, P8 param8, P9 param9);
+        T Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7, TP8 param8, TP9 param9);
     }
 
 }

@@ -228,11 +228,11 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Func<ILifetimeScope, P0, TInstance> func)
+            Func<ILifetimeScope, TP0, TInstance> func)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -248,7 +248,7 @@ namespace Autofac2ZenjectLikeBridge
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -261,34 +261,34 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, TInstance>,
+            IFactory<TP0, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TInstance>(
                 this ContainerBuilder builder,
-                Func<ILifetimeScope, P0, TInstance> func)
+                Func<ILifetimeScope, TP0, TInstance> func)
             where TInstance : class
         {
             return builder
-                .RegisterType<AutofacFunctionFactory<P0, TInstance>>()
+                .RegisterType<AutofacFunctionFactory<TP0, TInstance>>()
                 .WithParameter(TypedParameter.From(func))
-                .As<IFactory<P0, TInstance>>();
+                .As<IFactory<TP0, TInstance>>();
         }
 
-        private class AutofacFunctionFactory<P0, TInstance> : IFactory<P0, TInstance>
+        private class AutofacFunctionFactory<TP0, TInstance> : IFactory<TP0, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, P0, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TInstance> _subScopeInstaller;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, P0, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TInstance> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0)
+            public TInstance Create(TP0 param0)
             {
                 return _subScopeInstaller(_scope, param0);
             }
@@ -297,12 +297,12 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Action<ContainerBuilder, P0> subScopeInstaller
+            Action<ContainerBuilder, TP0> subScopeInstaller
         )
             where TInstance : class, IDisposable
-            where TFactory : PlaceholderFactory<P0, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -311,14 +311,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactoryFromSubScope<P0, TInstance>(subScopeInstaller)
+                                .RegisterFactoryFromSubScope<TP0, TInstance>(subScopeInstaller)
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TInstance>>()
                                     })
                                 .SingleInstance()
                                 .ExternallyOwned();
@@ -333,33 +333,33 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, TInstance>,
+            IFactory<TP0, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TInstance>(
                 this ContainerBuilder builder,
-                Action<ContainerBuilder, P0> subScopeInstaller
+                Action<ContainerBuilder, TP0> subScopeInstaller
                 )
             where TInstance : class, IDisposable
         {
             return builder
-                .RegisterType<AutofacSubScopeFactory<P0, TInstance>>()
+                .RegisterType<AutofacSubScopeFactory<TP0, TInstance>>()
                 .WithParameter(TypedParameter.From(subScopeInstaller))
-                .As<IFactory<P0, TInstance>>();
+                .As<IFactory<TP0, TInstance>>();
         }
 
-        private class AutofacSubScopeFactory<P0, TInstance> : IFactory<P0, TInstance>
+        private class AutofacSubScopeFactory<TP0, TInstance> : IFactory<TP0, TInstance>
             where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
-            private readonly Action<ContainerBuilder, P0> _subScopeInstaller;
+            private readonly Action<ContainerBuilder, TP0> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, P0> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0)
+            public TInstance Create(TP0 param0)
             {
                 var guid = Guid.NewGuid();
 
@@ -382,9 +382,9 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterPlaceholderFactory<P0, TInstance, TFactory>(this ContainerBuilder builder)
+            SingleRegistrationStyle> RegisterPlaceholderFactory<TP0, TInstance, TFactory>(this ContainerBuilder builder)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -393,14 +393,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactory<P0, TInstance>()
+                                .RegisterFactory<TP0, TInstance>()
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -414,17 +414,17 @@ namespace Autofac2ZenjectLikeBridge
 
 
         public static IRegistrationBuilder<
-            IFactory<P0, TInstance>,
+            IFactory<TP0, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactory<P0, TInstance>(this ContainerBuilder typeSourceSelector)
+            SingleRegistrationStyle> RegisterFactory<TP0, TInstance>(this ContainerBuilder typeSourceSelector)
             where TInstance : class
         {
             return typeSourceSelector
-                .RegisterType<AutofacResolveFactory<P0, TInstance>>()
-                .As<IFactory<P0, TInstance>>();
+                .RegisterType<AutofacResolveFactory<TP0, TInstance>>()
+                .As<IFactory<TP0, TInstance>>();
         }
 
-        private class AutofacResolveFactory<P0, TInstance> : IFactory<P0, TInstance>
+        private class AutofacResolveFactory<TP0, TInstance> : IFactory<TP0, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
@@ -434,7 +434,7 @@ namespace Autofac2ZenjectLikeBridge
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
             }
 
-            public TInstance Create(P0 param0)
+            public TInstance Create(TP0 param0)
             {
                 return _scope.CreateInstance<TInstance>(parameters: [ param0 ]);
             }
@@ -443,11 +443,11 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, P1, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TP1, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Func<ILifetimeScope, P0, P1, TInstance> func)
+            Func<ILifetimeScope, TP0, TP1, TInstance> func)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, P1, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -463,7 +463,7 @@ namespace Autofac2ZenjectLikeBridge
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -476,34 +476,34 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, TInstance>,
+            IFactory<TP0, TP1, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, P1, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TP1, TInstance>(
                 this ContainerBuilder builder,
-                Func<ILifetimeScope, P0, P1, TInstance> func)
+                Func<ILifetimeScope, TP0, TP1, TInstance> func)
             where TInstance : class
         {
             return builder
-                .RegisterType<AutofacFunctionFactory<P0, P1, TInstance>>()
+                .RegisterType<AutofacFunctionFactory<TP0, TP1, TInstance>>()
                 .WithParameter(TypedParameter.From(func))
-                .As<IFactory<P0, P1, TInstance>>();
+                .As<IFactory<TP0, TP1, TInstance>>();
         }
 
-        private class AutofacFunctionFactory<P0, P1, TInstance> : IFactory<P0, P1, TInstance>
+        private class AutofacFunctionFactory<TP0, TP1, TInstance> : IFactory<TP0, TP1, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, P0, P1, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TP1, TInstance> _subScopeInstaller;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, P0, P1, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TP1, TInstance> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0, P1 param1)
+            public TInstance Create(TP0 param0, TP1 param1)
             {
                 return _subScopeInstaller(_scope, param0, param1);
             }
@@ -512,12 +512,12 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, P1, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TP1, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Action<ContainerBuilder, P0, P1> subScopeInstaller
+            Action<ContainerBuilder, TP0, TP1> subScopeInstaller
         )
             where TInstance : class, IDisposable
-            where TFactory : PlaceholderFactory<P0, P1, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -526,14 +526,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactoryFromSubScope<P0, P1, TInstance>(subScopeInstaller)
+                                .RegisterFactoryFromSubScope<TP0, TP1, TInstance>(subScopeInstaller)
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TInstance>>()
                                     })
                                 .SingleInstance()
                                 .ExternallyOwned();
@@ -548,33 +548,33 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, TInstance>,
+            IFactory<TP0, TP1, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, P1, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TP1, TInstance>(
                 this ContainerBuilder builder,
-                Action<ContainerBuilder, P0, P1> subScopeInstaller
+                Action<ContainerBuilder, TP0, TP1> subScopeInstaller
                 )
             where TInstance : class, IDisposable
         {
             return builder
-                .RegisterType<AutofacSubScopeFactory<P0, P1, TInstance>>()
+                .RegisterType<AutofacSubScopeFactory<TP0, TP1, TInstance>>()
                 .WithParameter(TypedParameter.From(subScopeInstaller))
-                .As<IFactory<P0, P1, TInstance>>();
+                .As<IFactory<TP0, TP1, TInstance>>();
         }
 
-        private class AutofacSubScopeFactory<P0, P1, TInstance> : IFactory<P0, P1, TInstance>
+        private class AutofacSubScopeFactory<TP0, TP1, TInstance> : IFactory<TP0, TP1, TInstance>
             where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
-            private readonly Action<ContainerBuilder, P0, P1> _subScopeInstaller;
+            private readonly Action<ContainerBuilder, TP0, TP1> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, P0, P1> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0, TP1> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0, P1 param1)
+            public TInstance Create(TP0 param0, TP1 param1)
             {
                 var guid = Guid.NewGuid();
 
@@ -597,9 +597,9 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterPlaceholderFactory<P0, P1, TInstance, TFactory>(this ContainerBuilder builder)
+            SingleRegistrationStyle> RegisterPlaceholderFactory<TP0, TP1, TInstance, TFactory>(this ContainerBuilder builder)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, P1, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -608,14 +608,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactory<P0, P1, TInstance>()
+                                .RegisterFactory<TP0, TP1, TInstance>()
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -629,17 +629,17 @@ namespace Autofac2ZenjectLikeBridge
 
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, TInstance>,
+            IFactory<TP0, TP1, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactory<P0, P1, TInstance>(this ContainerBuilder typeSourceSelector)
+            SingleRegistrationStyle> RegisterFactory<TP0, TP1, TInstance>(this ContainerBuilder typeSourceSelector)
             where TInstance : class
         {
             return typeSourceSelector
-                .RegisterType<AutofacResolveFactory<P0, P1, TInstance>>()
-                .As<IFactory<P0, P1, TInstance>>();
+                .RegisterType<AutofacResolveFactory<TP0, TP1, TInstance>>()
+                .As<IFactory<TP0, TP1, TInstance>>();
         }
 
-        private class AutofacResolveFactory<P0, P1, TInstance> : IFactory<P0, P1, TInstance>
+        private class AutofacResolveFactory<TP0, TP1, TInstance> : IFactory<TP0, TP1, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
@@ -649,7 +649,7 @@ namespace Autofac2ZenjectLikeBridge
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
             }
 
-            public TInstance Create(P0 param0, P1 param1)
+            public TInstance Create(TP0 param0, TP1 param1)
             {
                 return _scope.CreateInstance<TInstance>(parameters: [ param0, param1 ]);
             }
@@ -658,11 +658,11 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, P1, P2, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TP1, TP2, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Func<ILifetimeScope, P0, P1, P2, TInstance> func)
+            Func<ILifetimeScope, TP0, TP1, TP2, TInstance> func)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, P1, P2, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -678,7 +678,7 @@ namespace Autofac2ZenjectLikeBridge
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -691,34 +691,34 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, TInstance>,
+            IFactory<TP0, TP1, TP2, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, P1, P2, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TP1, TP2, TInstance>(
                 this ContainerBuilder builder,
-                Func<ILifetimeScope, P0, P1, P2, TInstance> func)
+                Func<ILifetimeScope, TP0, TP1, TP2, TInstance> func)
             where TInstance : class
         {
             return builder
-                .RegisterType<AutofacFunctionFactory<P0, P1, P2, TInstance>>()
+                .RegisterType<AutofacFunctionFactory<TP0, TP1, TP2, TInstance>>()
                 .WithParameter(TypedParameter.From(func))
-                .As<IFactory<P0, P1, P2, TInstance>>();
+                .As<IFactory<TP0, TP1, TP2, TInstance>>();
         }
 
-        private class AutofacFunctionFactory<P0, P1, P2, TInstance> : IFactory<P0, P1, P2, TInstance>
+        private class AutofacFunctionFactory<TP0, TP1, TP2, TInstance> : IFactory<TP0, TP1, TP2, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, P0, P1, P2, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TInstance> _subScopeInstaller;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, P0, P1, P2, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TP1, TP2, TInstance> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2)
             {
                 return _subScopeInstaller(_scope, param0, param1, param2);
             }
@@ -727,12 +727,12 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, P1, P2, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TP1, TP2, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Action<ContainerBuilder, P0, P1, P2> subScopeInstaller
+            Action<ContainerBuilder, TP0, TP1, TP2> subScopeInstaller
         )
             where TInstance : class, IDisposable
-            where TFactory : PlaceholderFactory<P0, P1, P2, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -741,14 +741,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactoryFromSubScope<P0, P1, P2, TInstance>(subScopeInstaller)
+                                .RegisterFactoryFromSubScope<TP0, TP1, TP2, TInstance>(subScopeInstaller)
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TInstance>>()
                                     })
                                 .SingleInstance()
                                 .ExternallyOwned();
@@ -763,33 +763,33 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, TInstance>,
+            IFactory<TP0, TP1, TP2, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, P1, P2, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TP1, TP2, TInstance>(
                 this ContainerBuilder builder,
-                Action<ContainerBuilder, P0, P1, P2> subScopeInstaller
+                Action<ContainerBuilder, TP0, TP1, TP2> subScopeInstaller
                 )
             where TInstance : class, IDisposable
         {
             return builder
-                .RegisterType<AutofacSubScopeFactory<P0, P1, P2, TInstance>>()
+                .RegisterType<AutofacSubScopeFactory<TP0, TP1, TP2, TInstance>>()
                 .WithParameter(TypedParameter.From(subScopeInstaller))
-                .As<IFactory<P0, P1, P2, TInstance>>();
+                .As<IFactory<TP0, TP1, TP2, TInstance>>();
         }
 
-        private class AutofacSubScopeFactory<P0, P1, P2, TInstance> : IFactory<P0, P1, P2, TInstance>
+        private class AutofacSubScopeFactory<TP0, TP1, TP2, TInstance> : IFactory<TP0, TP1, TP2, TInstance>
             where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
-            private readonly Action<ContainerBuilder, P0, P1, P2> _subScopeInstaller;
+            private readonly Action<ContainerBuilder, TP0, TP1, TP2> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, P0, P1, P2> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0, TP1, TP2> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2)
             {
                 var guid = Guid.NewGuid();
 
@@ -812,9 +812,9 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterPlaceholderFactory<P0, P1, P2, TInstance, TFactory>(this ContainerBuilder builder)
+            SingleRegistrationStyle> RegisterPlaceholderFactory<TP0, TP1, TP2, TInstance, TFactory>(this ContainerBuilder builder)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, P1, P2, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -823,14 +823,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactory<P0, P1, P2, TInstance>()
+                                .RegisterFactory<TP0, TP1, TP2, TInstance>()
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -844,17 +844,17 @@ namespace Autofac2ZenjectLikeBridge
 
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, TInstance>,
+            IFactory<TP0, TP1, TP2, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactory<P0, P1, P2, TInstance>(this ContainerBuilder typeSourceSelector)
+            SingleRegistrationStyle> RegisterFactory<TP0, TP1, TP2, TInstance>(this ContainerBuilder typeSourceSelector)
             where TInstance : class
         {
             return typeSourceSelector
-                .RegisterType<AutofacResolveFactory<P0, P1, P2, TInstance>>()
-                .As<IFactory<P0, P1, P2, TInstance>>();
+                .RegisterType<AutofacResolveFactory<TP0, TP1, TP2, TInstance>>()
+                .As<IFactory<TP0, TP1, TP2, TInstance>>();
         }
 
-        private class AutofacResolveFactory<P0, P1, P2, TInstance> : IFactory<P0, P1, P2, TInstance>
+        private class AutofacResolveFactory<TP0, TP1, TP2, TInstance> : IFactory<TP0, TP1, TP2, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
@@ -864,7 +864,7 @@ namespace Autofac2ZenjectLikeBridge
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2)
             {
                 return _scope.CreateInstance<TInstance>(parameters: [ param0, param1, param2 ]);
             }
@@ -873,11 +873,11 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, P1, P2, P3, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TP1, TP2, TP3, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Func<ILifetimeScope, P0, P1, P2, P3, TInstance> func)
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TInstance> func)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -893,7 +893,7 @@ namespace Autofac2ZenjectLikeBridge
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -906,34 +906,34 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, P1, P2, P3, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TP1, TP2, TP3, TInstance>(
                 this ContainerBuilder builder,
-                Func<ILifetimeScope, P0, P1, P2, P3, TInstance> func)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TInstance> func)
             where TInstance : class
         {
             return builder
-                .RegisterType<AutofacFunctionFactory<P0, P1, P2, P3, TInstance>>()
+                .RegisterType<AutofacFunctionFactory<TP0, TP1, TP2, TP3, TInstance>>()
                 .WithParameter(TypedParameter.From(func))
-                .As<IFactory<P0, P1, P2, P3, TInstance>>();
+                .As<IFactory<TP0, TP1, TP2, TP3, TInstance>>();
         }
 
-        private class AutofacFunctionFactory<P0, P1, P2, P3, TInstance> : IFactory<P0, P1, P2, P3, TInstance>
+        private class AutofacFunctionFactory<TP0, TP1, TP2, TP3, TInstance> : IFactory<TP0, TP1, TP2, TP3, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, P0, P1, P2, P3, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TInstance> _subScopeInstaller;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, P0, P1, P2, P3, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TInstance> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3)
             {
                 return _subScopeInstaller(_scope, param0, param1, param2, param3);
             }
@@ -942,12 +942,12 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, P1, P2, P3, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Action<ContainerBuilder, P0, P1, P2, P3> subScopeInstaller
+            Action<ContainerBuilder, TP0, TP1, TP2, TP3> subScopeInstaller
         )
             where TInstance : class, IDisposable
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -956,14 +956,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactoryFromSubScope<P0, P1, P2, P3, TInstance>(subScopeInstaller)
+                                .RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TInstance>(subScopeInstaller)
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TInstance>>()
                                     })
                                 .SingleInstance()
                                 .ExternallyOwned();
@@ -978,33 +978,33 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, P1, P2, P3, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TInstance>(
                 this ContainerBuilder builder,
-                Action<ContainerBuilder, P0, P1, P2, P3> subScopeInstaller
+                Action<ContainerBuilder, TP0, TP1, TP2, TP3> subScopeInstaller
                 )
             where TInstance : class, IDisposable
         {
             return builder
-                .RegisterType<AutofacSubScopeFactory<P0, P1, P2, P3, TInstance>>()
+                .RegisterType<AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TInstance>>()
                 .WithParameter(TypedParameter.From(subScopeInstaller))
-                .As<IFactory<P0, P1, P2, P3, TInstance>>();
+                .As<IFactory<TP0, TP1, TP2, TP3, TInstance>>();
         }
 
-        private class AutofacSubScopeFactory<P0, P1, P2, P3, TInstance> : IFactory<P0, P1, P2, P3, TInstance>
+        private class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TInstance> : IFactory<TP0, TP1, TP2, TP3, TInstance>
             where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
-            private readonly Action<ContainerBuilder, P0, P1, P2, P3> _subScopeInstaller;
+            private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, P0, P1, P2, P3> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0, TP1, TP2, TP3> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3)
             {
                 var guid = Guid.NewGuid();
 
@@ -1027,9 +1027,9 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterPlaceholderFactory<P0, P1, P2, P3, TInstance, TFactory>(this ContainerBuilder builder)
+            SingleRegistrationStyle> RegisterPlaceholderFactory<TP0, TP1, TP2, TP3, TInstance, TFactory>(this ContainerBuilder builder)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -1038,14 +1038,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactory<P0, P1, P2, P3, TInstance>()
+                                .RegisterFactory<TP0, TP1, TP2, TP3, TInstance>()
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -1059,17 +1059,17 @@ namespace Autofac2ZenjectLikeBridge
 
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactory<P0, P1, P2, P3, TInstance>(this ContainerBuilder typeSourceSelector)
+            SingleRegistrationStyle> RegisterFactory<TP0, TP1, TP2, TP3, TInstance>(this ContainerBuilder typeSourceSelector)
             where TInstance : class
         {
             return typeSourceSelector
-                .RegisterType<AutofacResolveFactory<P0, P1, P2, P3, TInstance>>()
-                .As<IFactory<P0, P1, P2, P3, TInstance>>();
+                .RegisterType<AutofacResolveFactory<TP0, TP1, TP2, TP3, TInstance>>()
+                .As<IFactory<TP0, TP1, TP2, TP3, TInstance>>();
         }
 
-        private class AutofacResolveFactory<P0, P1, P2, P3, TInstance> : IFactory<P0, P1, P2, P3, TInstance>
+        private class AutofacResolveFactory<TP0, TP1, TP2, TP3, TInstance> : IFactory<TP0, TP1, TP2, TP3, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
@@ -1079,7 +1079,7 @@ namespace Autofac2ZenjectLikeBridge
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3)
             {
                 return _scope.CreateInstance<TInstance>(parameters: [ param0, param1, param2, param3 ]);
             }
@@ -1088,11 +1088,11 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, P1, P2, P3, P4, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TP1, TP2, TP3, TP4, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Func<ILifetimeScope, P0, P1, P2, P3, P4, TInstance> func)
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TInstance> func)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -1108,7 +1108,7 @@ namespace Autofac2ZenjectLikeBridge
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, P4, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -1121,34 +1121,34 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, P4, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, P1, P2, P3, P4, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TP1, TP2, TP3, TP4, TInstance>(
                 this ContainerBuilder builder,
-                Func<ILifetimeScope, P0, P1, P2, P3, P4, TInstance> func)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TInstance> func)
             where TInstance : class
         {
             return builder
-                .RegisterType<AutofacFunctionFactory<P0, P1, P2, P3, P4, TInstance>>()
+                .RegisterType<AutofacFunctionFactory<TP0, TP1, TP2, TP3, TP4, TInstance>>()
                 .WithParameter(TypedParameter.From(func))
-                .As<IFactory<P0, P1, P2, P3, P4, TInstance>>();
+                .As<IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>>();
         }
 
-        private class AutofacFunctionFactory<P0, P1, P2, P3, P4, TInstance> : IFactory<P0, P1, P2, P3, P4, TInstance>
+        private class AutofacFunctionFactory<TP0, TP1, TP2, TP3, TP4, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, P0, P1, P2, P3, P4, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TInstance> _subScopeInstaller;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, P0, P1, P2, P3, P4, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TInstance> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4)
             {
                 return _subScopeInstaller(_scope, param0, param1, param2, param3, param4);
             }
@@ -1157,12 +1157,12 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, P1, P2, P3, P4, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TP4, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Action<ContainerBuilder, P0, P1, P2, P3, P4> subScopeInstaller
+            Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4> subScopeInstaller
         )
             where TInstance : class, IDisposable
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -1171,14 +1171,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactoryFromSubScope<P0, P1, P2, P3, P4, TInstance>(subScopeInstaller)
+                                .RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TP4, TInstance>(subScopeInstaller)
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, P4, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>>()
                                     })
                                 .SingleInstance()
                                 .ExternallyOwned();
@@ -1193,33 +1193,33 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, P4, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, P1, P2, P3, P4, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TP4, TInstance>(
                 this ContainerBuilder builder,
-                Action<ContainerBuilder, P0, P1, P2, P3, P4> subScopeInstaller
+                Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4> subScopeInstaller
                 )
             where TInstance : class, IDisposable
         {
             return builder
-                .RegisterType<AutofacSubScopeFactory<P0, P1, P2, P3, P4, TInstance>>()
+                .RegisterType<AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TInstance>>()
                 .WithParameter(TypedParameter.From(subScopeInstaller))
-                .As<IFactory<P0, P1, P2, P3, P4, TInstance>>();
+                .As<IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>>();
         }
 
-        private class AutofacSubScopeFactory<P0, P1, P2, P3, P4, TInstance> : IFactory<P0, P1, P2, P3, P4, TInstance>
+        private class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>
             where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
-            private readonly Action<ContainerBuilder, P0, P1, P2, P3, P4> _subScopeInstaller;
+            private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, P0, P1, P2, P3, P4> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4)
             {
                 var guid = Guid.NewGuid();
 
@@ -1242,9 +1242,9 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterPlaceholderFactory<P0, P1, P2, P3, P4, TInstance, TFactory>(this ContainerBuilder builder)
+            SingleRegistrationStyle> RegisterPlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TInstance, TFactory>(this ContainerBuilder builder)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -1253,14 +1253,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactory<P0, P1, P2, P3, P4, TInstance>()
+                                .RegisterFactory<TP0, TP1, TP2, TP3, TP4, TInstance>()
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, P4, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -1274,17 +1274,17 @@ namespace Autofac2ZenjectLikeBridge
 
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, P4, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactory<P0, P1, P2, P3, P4, TInstance>(this ContainerBuilder typeSourceSelector)
+            SingleRegistrationStyle> RegisterFactory<TP0, TP1, TP2, TP3, TP4, TInstance>(this ContainerBuilder typeSourceSelector)
             where TInstance : class
         {
             return typeSourceSelector
-                .RegisterType<AutofacResolveFactory<P0, P1, P2, P3, P4, TInstance>>()
-                .As<IFactory<P0, P1, P2, P3, P4, TInstance>>();
+                .RegisterType<AutofacResolveFactory<TP0, TP1, TP2, TP3, TP4, TInstance>>()
+                .As<IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>>();
         }
 
-        private class AutofacResolveFactory<P0, P1, P2, P3, P4, TInstance> : IFactory<P0, P1, P2, P3, P4, TInstance>
+        private class AutofacResolveFactory<TP0, TP1, TP2, TP3, TP4, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
@@ -1294,7 +1294,7 @@ namespace Autofac2ZenjectLikeBridge
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4)
             {
                 return _scope.CreateInstance<TInstance>(parameters: [ param0, param1, param2, param3, param4 ]);
             }
@@ -1303,11 +1303,11 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, P1, P2, P3, P4, P5, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TP1, TP2, TP3, TP4, TP5, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, TInstance> func)
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TInstance> func)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -1323,7 +1323,7 @@ namespace Autofac2ZenjectLikeBridge
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, P4, P5, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -1336,34 +1336,34 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, P4, P5, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, P1, P2, P3, P4, P5, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>(
                 this ContainerBuilder builder,
-                Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, TInstance> func)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TInstance> func)
             where TInstance : class
         {
             return builder
-                .RegisterType<AutofacFunctionFactory<P0, P1, P2, P3, P4, P5, TInstance>>()
+                .RegisterType<AutofacFunctionFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>>()
                 .WithParameter(TypedParameter.From(func))
-                .As<IFactory<P0, P1, P2, P3, P4, P5, TInstance>>();
+                .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>>();
         }
 
-        private class AutofacFunctionFactory<P0, P1, P2, P3, P4, P5, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, TInstance>
+        private class AutofacFunctionFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TInstance> _subScopeInstaller;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TInstance> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5)
             {
                 return _subScopeInstaller(_scope, param0, param1, param2, param3, param4, param5);
             }
@@ -1372,12 +1372,12 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, P1, P2, P3, P4, P5, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Action<ContainerBuilder, P0, P1, P2, P3, P4, P5> subScopeInstaller
+            Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5> subScopeInstaller
         )
             where TInstance : class, IDisposable
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -1386,14 +1386,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactoryFromSubScope<P0, P1, P2, P3, P4, P5, TInstance>(subScopeInstaller)
+                                .RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>(subScopeInstaller)
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, P4, P5, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>>()
                                     })
                                 .SingleInstance()
                                 .ExternallyOwned();
@@ -1408,33 +1408,33 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, P4, P5, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, P1, P2, P3, P4, P5, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>(
                 this ContainerBuilder builder,
-                Action<ContainerBuilder, P0, P1, P2, P3, P4, P5> subScopeInstaller
+                Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5> subScopeInstaller
                 )
             where TInstance : class, IDisposable
         {
             return builder
-                .RegisterType<AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, TInstance>>()
+                .RegisterType<AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>>()
                 .WithParameter(TypedParameter.From(subScopeInstaller))
-                .As<IFactory<P0, P1, P2, P3, P4, P5, TInstance>>();
+                .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>>();
         }
 
-        private class AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, TInstance>
+        private class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>
             where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
-            private readonly Action<ContainerBuilder, P0, P1, P2, P3, P4, P5> _subScopeInstaller;
+            private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, P0, P1, P2, P3, P4, P5> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5)
             {
                 var guid = Guid.NewGuid();
 
@@ -1457,9 +1457,9 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterPlaceholderFactory<P0, P1, P2, P3, P4, P5, TInstance, TFactory>(this ContainerBuilder builder)
+            SingleRegistrationStyle> RegisterPlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance, TFactory>(this ContainerBuilder builder)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -1468,14 +1468,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactory<P0, P1, P2, P3, P4, P5, TInstance>()
+                                .RegisterFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>()
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, P4, P5, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -1489,17 +1489,17 @@ namespace Autofac2ZenjectLikeBridge
 
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, P4, P5, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactory<P0, P1, P2, P3, P4, P5, TInstance>(this ContainerBuilder typeSourceSelector)
+            SingleRegistrationStyle> RegisterFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>(this ContainerBuilder typeSourceSelector)
             where TInstance : class
         {
             return typeSourceSelector
-                .RegisterType<AutofacResolveFactory<P0, P1, P2, P3, P4, P5, TInstance>>()
-                .As<IFactory<P0, P1, P2, P3, P4, P5, TInstance>>();
+                .RegisterType<AutofacResolveFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>>()
+                .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>>();
         }
 
-        private class AutofacResolveFactory<P0, P1, P2, P3, P4, P5, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, TInstance>
+        private class AutofacResolveFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
@@ -1509,7 +1509,7 @@ namespace Autofac2ZenjectLikeBridge
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5)
             {
                 return _scope.CreateInstance<TInstance>(parameters: [ param0, param1, param2, param3, param4, param5 ]);
             }
@@ -1518,11 +1518,11 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, P1, P2, P3, P4, P5, P6, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, P6, TInstance> func)
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance> func)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -1538,7 +1538,7 @@ namespace Autofac2ZenjectLikeBridge
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -1551,34 +1551,34 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, P1, P2, P3, P4, P5, P6, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>(
                 this ContainerBuilder builder,
-                Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, P6, TInstance> func)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance> func)
             where TInstance : class
         {
             return builder
-                .RegisterType<AutofacFunctionFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>>()
+                .RegisterType<AutofacFunctionFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>>()
                 .WithParameter(TypedParameter.From(func))
-                .As<IFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>>();
+                .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>>();
         }
 
-        private class AutofacFunctionFactory<P0, P1, P2, P3, P4, P5, P6, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>
+        private class AutofacFunctionFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, P6, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance> _subScopeInstaller;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, P6, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5, P6 param6)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6)
             {
                 return _subScopeInstaller(_scope, param0, param1, param2, param3, param4, param5, param6);
             }
@@ -1587,12 +1587,12 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, P1, P2, P3, P4, P5, P6, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6> subScopeInstaller
+            Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6> subScopeInstaller
         )
             where TInstance : class, IDisposable
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -1601,14 +1601,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactoryFromSubScope<P0, P1, P2, P3, P4, P5, P6, TInstance>(subScopeInstaller)
+                                .RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>(subScopeInstaller)
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>>()
                                     })
                                 .SingleInstance()
                                 .ExternallyOwned();
@@ -1623,33 +1623,33 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, P1, P2, P3, P4, P5, P6, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>(
                 this ContainerBuilder builder,
-                Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6> subScopeInstaller
+                Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6> subScopeInstaller
                 )
             where TInstance : class, IDisposable
         {
             return builder
-                .RegisterType<AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>>()
+                .RegisterType<AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>>()
                 .WithParameter(TypedParameter.From(subScopeInstaller))
-                .As<IFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>>();
+                .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>>();
         }
 
-        private class AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, P6, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>
+        private class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>
             where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
-            private readonly Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6> _subScopeInstaller;
+            private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5, P6 param6)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6)
             {
                 var guid = Guid.NewGuid();
 
@@ -1672,9 +1672,9 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterPlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, TInstance, TFactory>(this ContainerBuilder builder)
+            SingleRegistrationStyle> RegisterPlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance, TFactory>(this ContainerBuilder builder)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -1683,14 +1683,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>()
+                                .RegisterFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>()
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -1704,17 +1704,17 @@ namespace Autofac2ZenjectLikeBridge
 
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>(this ContainerBuilder typeSourceSelector)
+            SingleRegistrationStyle> RegisterFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>(this ContainerBuilder typeSourceSelector)
             where TInstance : class
         {
             return typeSourceSelector
-                .RegisterType<AutofacResolveFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>>()
-                .As<IFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>>();
+                .RegisterType<AutofacResolveFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>>()
+                .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>>();
         }
 
-        private class AutofacResolveFactory<P0, P1, P2, P3, P4, P5, P6, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>
+        private class AutofacResolveFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
@@ -1724,7 +1724,7 @@ namespace Autofac2ZenjectLikeBridge
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5, P6 param6)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6)
             {
                 return _scope.CreateInstance<TInstance>(parameters: [ param0, param1, param2, param3, param4, param5, param6 ]);
             }
@@ -1733,11 +1733,11 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, P1, P2, P3, P4, P5, P6, P7, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, P6, P7, TInstance> func)
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance> func)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -1753,7 +1753,7 @@ namespace Autofac2ZenjectLikeBridge
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -1766,34 +1766,34 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>(
                 this ContainerBuilder builder,
-                Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, P6, P7, TInstance> func)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance> func)
             where TInstance : class
         {
             return builder
-                .RegisterType<AutofacFunctionFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>>()
+                .RegisterType<AutofacFunctionFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>>()
                 .WithParameter(TypedParameter.From(func))
-                .As<IFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>>();
+                .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>>();
         }
 
-        private class AutofacFunctionFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>
+        private class AutofacFunctionFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, P6, P7, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance> _subScopeInstaller;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, P6, P7, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5, P6 param6, P7 param7)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7)
             {
                 return _subScopeInstaller(_scope, param0, param1, param2, param3, param4, param5, param6, param7);
             }
@@ -1802,12 +1802,12 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, P1, P2, P3, P4, P5, P6, P7, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7> subScopeInstaller
+            Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7> subScopeInstaller
         )
             where TInstance : class, IDisposable
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -1816,14 +1816,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactoryFromSubScope<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>(subScopeInstaller)
+                                .RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>(subScopeInstaller)
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>>()
                                     })
                                 .SingleInstance()
                                 .ExternallyOwned();
@@ -1838,33 +1838,33 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>(
                 this ContainerBuilder builder,
-                Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7> subScopeInstaller
+                Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7> subScopeInstaller
                 )
             where TInstance : class, IDisposable
         {
             return builder
-                .RegisterType<AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>>()
+                .RegisterType<AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>>()
                 .WithParameter(TypedParameter.From(subScopeInstaller))
-                .As<IFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>>();
+                .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>>();
         }
 
-        private class AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>
+        private class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>
             where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
-            private readonly Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7> _subScopeInstaller;
+            private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5, P6 param6, P7 param7)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7)
             {
                 var guid = Guid.NewGuid();
 
@@ -1887,9 +1887,9 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterPlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance, TFactory>(this ContainerBuilder builder)
+            SingleRegistrationStyle> RegisterPlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance, TFactory>(this ContainerBuilder builder)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -1898,14 +1898,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>()
+                                .RegisterFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>()
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -1919,17 +1919,17 @@ namespace Autofac2ZenjectLikeBridge
 
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>(this ContainerBuilder typeSourceSelector)
+            SingleRegistrationStyle> RegisterFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>(this ContainerBuilder typeSourceSelector)
             where TInstance : class
         {
             return typeSourceSelector
-                .RegisterType<AutofacResolveFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>>()
-                .As<IFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>>();
+                .RegisterType<AutofacResolveFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>>()
+                .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>>();
         }
 
-        private class AutofacResolveFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>
+        private class AutofacResolveFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
@@ -1939,7 +1939,7 @@ namespace Autofac2ZenjectLikeBridge
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5, P6 param6, P7 param7)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7)
             {
                 return _scope.CreateInstance<TInstance>(parameters: [ param0, param1, param2, param3, param4, param5, param6, param7 ]);
             }
@@ -1948,11 +1948,11 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance> func)
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance> func)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -1968,7 +1968,7 @@ namespace Autofac2ZenjectLikeBridge
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -1981,34 +1981,34 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>(
                 this ContainerBuilder builder,
-                Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance> func)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance> func)
             where TInstance : class
         {
             return builder
-                .RegisterType<AutofacFunctionFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>>()
+                .RegisterType<AutofacFunctionFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>>()
                 .WithParameter(TypedParameter.From(func))
-                .As<IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>>();
+                .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>>();
         }
 
-        private class AutofacFunctionFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>
+        private class AutofacFunctionFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance> _subScopeInstaller;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5, P6 param6, P7 param7, P8 param8)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7, TP8 param8)
             {
                 return _subScopeInstaller(_scope, param0, param1, param2, param3, param4, param5, param6, param7, param8);
             }
@@ -2017,12 +2017,12 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7, P8> subScopeInstaller
+            Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8> subScopeInstaller
         )
             where TInstance : class, IDisposable
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -2031,14 +2031,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactoryFromSubScope<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>(subScopeInstaller)
+                                .RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>(subScopeInstaller)
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>>()
                                     })
                                 .SingleInstance()
                                 .ExternallyOwned();
@@ -2053,33 +2053,33 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>(
                 this ContainerBuilder builder,
-                Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7, P8> subScopeInstaller
+                Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8> subScopeInstaller
                 )
             where TInstance : class, IDisposable
         {
             return builder
-                .RegisterType<AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>>()
+                .RegisterType<AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>>()
                 .WithParameter(TypedParameter.From(subScopeInstaller))
-                .As<IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>>();
+                .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>>();
         }
 
-        private class AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>
+        private class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>
             where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
-            private readonly Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7, P8> _subScopeInstaller;
+            private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7, P8> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5, P6 param6, P7 param7, P8 param8)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7, TP8 param8)
             {
                 var guid = Guid.NewGuid();
 
@@ -2102,9 +2102,9 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterPlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance, TFactory>(this ContainerBuilder builder)
+            SingleRegistrationStyle> RegisterPlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance, TFactory>(this ContainerBuilder builder)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -2113,14 +2113,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>()
+                                .RegisterFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>()
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -2134,17 +2134,17 @@ namespace Autofac2ZenjectLikeBridge
 
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>(this ContainerBuilder typeSourceSelector)
+            SingleRegistrationStyle> RegisterFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>(this ContainerBuilder typeSourceSelector)
             where TInstance : class
         {
             return typeSourceSelector
-                .RegisterType<AutofacResolveFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>>()
-                .As<IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>>();
+                .RegisterType<AutofacResolveFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>>()
+                .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>>();
         }
 
-        private class AutofacResolveFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>
+        private class AutofacResolveFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
@@ -2154,7 +2154,7 @@ namespace Autofac2ZenjectLikeBridge
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5, P6 param6, P7 param7, P8 param8)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7, TP8 param8)
             {
                 return _scope.CreateInstance<TInstance>(parameters: [ param0, param1, param2, param3, param4, param5, param6, param7, param8 ]);
             }
@@ -2163,11 +2163,11 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance> func)
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance> func)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -2183,7 +2183,7 @@ namespace Autofac2ZenjectLikeBridge
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -2196,34 +2196,34 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromFunction<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromFunction<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>(
                 this ContainerBuilder builder,
-                Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance> func)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance> func)
             where TInstance : class
         {
             return builder
-                .RegisterType<AutofacFunctionFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>>()
+                .RegisterType<AutofacFunctionFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>>()
                 .WithParameter(TypedParameter.From(func))
-                .As<IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>>();
+                .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>>();
         }
 
-        private class AutofacFunctionFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>
+        private class AutofacFunctionFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance> _subScopeInstaller;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5, P6 param6, P7 param7, P8 param8, P9 param9)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7, TP8 param8, TP9 param9)
             {
                 return _subScopeInstaller(_scope, param0, param1, param2, param3, param4, param5, param6, param7, param8, param9);
             }
@@ -2232,12 +2232,12 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance, TFactory>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance, TFactory>(
             this ContainerBuilder builder,
-            Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7, P8, P9> subScopeInstaller
+            Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9> subScopeInstaller
         )
             where TInstance : class, IDisposable
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -2246,14 +2246,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactoryFromSubScope<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>(subScopeInstaller)
+                                .RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>(subScopeInstaller)
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>>()
                                     })
                                 .SingleInstance()
                                 .ExternallyOwned();
@@ -2268,33 +2268,33 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactoryFromSubScope<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>(
+            SingleRegistrationStyle> RegisterFactoryFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>(
                 this ContainerBuilder builder,
-                Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7, P8, P9> subScopeInstaller
+                Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9> subScopeInstaller
                 )
             where TInstance : class, IDisposable
         {
             return builder
-                .RegisterType<AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>>()
+                .RegisterType<AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>>()
                 .WithParameter(TypedParameter.From(subScopeInstaller))
-                .As<IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>>();
+                .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>>();
         }
 
-        private class AutofacSubScopeFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>
+        private class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>
             where TInstance : class, IDisposable
         {
             private readonly ILifetimeScope _scope;
-            private readonly Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7, P8, P9> _subScopeInstaller;
+            private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, P0, P1, P2, P3, P4, P5, P6, P7, P8, P9> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5, P6 param6, P7 param7, P8 param8, P9 param9)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7, TP8 param8, TP9 param9)
             {
                 var guid = Guid.NewGuid();
 
@@ -2317,9 +2317,9 @@ namespace Autofac2ZenjectLikeBridge
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,
-            SingleRegistrationStyle> RegisterPlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance, TFactory>(this ContainerBuilder builder)
+            SingleRegistrationStyle> RegisterPlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance, TFactory>(this ContainerBuilder builder)
             where TInstance : class
-            where TFactory : PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>, new()
+            where TFactory : PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>, new()
         {
             return builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -2328,14 +2328,14 @@ namespace Autofac2ZenjectLikeBridge
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>()
+                                .RegisterFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>()
                                 .SingleInstance();
 
                             subScopeBuilder
                                 .Register(context
                                     => new TFactory
                                     {
-                                        Nested = context.Resolve<IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>>()
+                                        Nested = context.Resolve<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>>()
                                     })
                                 .SingleInstance();
                         })
@@ -2349,17 +2349,17 @@ namespace Autofac2ZenjectLikeBridge
 
 
         public static IRegistrationBuilder<
-            IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>,
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>,
             ConcreteReflectionActivatorData,
-            SingleRegistrationStyle> RegisterFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>(this ContainerBuilder typeSourceSelector)
+            SingleRegistrationStyle> RegisterFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>(this ContainerBuilder typeSourceSelector)
             where TInstance : class
         {
             return typeSourceSelector
-                .RegisterType<AutofacResolveFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>>()
-                .As<IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>>();
+                .RegisterType<AutofacResolveFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>>()
+                .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>>();
         }
 
-        private class AutofacResolveFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>
+        private class AutofacResolveFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
@@ -2369,7 +2369,7 @@ namespace Autofac2ZenjectLikeBridge
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
             }
 
-            public TInstance Create(P0 param0, P1 param1, P2 param2, P3 param3, P4 param4, P5 param5, P6 param6, P7 param7, P8 param8, P9 param9)
+            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7, TP8 param8, TP9 param9)
             {
                 return _scope.CreateInstance<TInstance>(parameters: [ param0, param1, param2, param3, param4, param5, param6, param7, param8, param9 ]);
             }

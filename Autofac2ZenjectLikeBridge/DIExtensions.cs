@@ -83,6 +83,7 @@ public static partial class DIExtensions
                 });
     }
 
+    // ReSharper disable once MemberCanBePrivate.Global
     public static void OverrideExternallyOwnedInScope<T>(this ContainerBuilder builder, object scopeTag)
     {
         var module = new OverrideExternallyOwnedModule<T>(scopeTag);
