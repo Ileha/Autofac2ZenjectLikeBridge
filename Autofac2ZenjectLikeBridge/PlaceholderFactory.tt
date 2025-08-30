@@ -8,6 +8,8 @@ using Autofac2ZenjectLikeBridge.Interfaces;
 
 namespace Autofac2ZenjectLikeBridge
 {
+    //generated amount <#=Constants.GenericParametersCount#>
+
 <#
     for (var i = 0; i <= Constants.GenericParametersCount; i++)
     {

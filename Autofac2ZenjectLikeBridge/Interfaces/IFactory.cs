@@ -1,5 +1,7 @@
 ﻿namespace Autofac2ZenjectLikeBridge.Interfaces
 {
+    //generated amount 10
+
     public interface IFactory<out T>
     {
         T Create();

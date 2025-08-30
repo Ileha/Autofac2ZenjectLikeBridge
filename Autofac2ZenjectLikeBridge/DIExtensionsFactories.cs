@@ -8,6 +8,8 @@ namespace Autofac2ZenjectLikeBridge
 {
     public static partial class DIExtensions
     {
+        //generated amount 10
+
         public static IRegistrationBuilder<
             TFactory,
             SimpleActivatorData,

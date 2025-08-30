@@ -2,6 +2,8 @@
 
 namespace Autofac2ZenjectLikeBridge
 {
+    //generated amount 10
+
     public class PlaceholderFactory<TInstance> : IFactory<TInstance>, IDisposable
     {
         internal IFactory<TInstance> Nested { get; init; }

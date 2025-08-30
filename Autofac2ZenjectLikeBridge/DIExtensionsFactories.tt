@@ -14,6 +14,8 @@ namespace Autofac2ZenjectLikeBridge
 {
     public static partial class DIExtensions
     {
+        //generated amount <#=Constants.GenericParametersCount#>
+
 <#
     for (var i = 0; i <= Constants.GenericParametersCount; i++)
     {
