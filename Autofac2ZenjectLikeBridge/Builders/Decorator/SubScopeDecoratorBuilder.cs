@@ -8,6 +8,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
 {
     public class SubScopeDecoratorBuilder<TDecorator, TService> : ISubScopeDecoratorBuilder<TDecorator, TService>
         where TDecorator : TService, IDisposable
+        where TService : class
     {
         private readonly ContainerBuilder _builder;
 
@@ -20,10 +21,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
         {
             _builder
                 .RegisterDecorator<TService>(
-                    (context, _, nestedService) => ResolveFromSubScope<TDecorator>(subScopeInstaller, context, nestedService),
-                    // ReSharper disable once AssignNullToNotNullAttribute
-                    null,
-                    null);
+                    (context, _, nestedService) => ResolveFromSubScope<TDecorator>(subScopeInstaller, context, nestedService));
         }
 
         public void FromInstaller<TInstaller>(TInstaller installer)
@@ -31,10 +29,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
         {
             _builder
                 .RegisterDecorator<TService>(
-                    (context, _, nestedService) => ResolveFromSubScopeInstaller<TDecorator, TInstaller>(context, nestedService),
-                    // ReSharper disable once AssignNullToNotNullAttribute
-                    null,
-                    null);
+                    (context, _, nestedService) => ResolveFromSubScopeInstaller<TDecorator, TInstaller>(context, nestedService));
         }
 
         public void FromFunction(Action<ContainerBuilder, TService> subScopeInstaller, object fromKey, object toKey = null)

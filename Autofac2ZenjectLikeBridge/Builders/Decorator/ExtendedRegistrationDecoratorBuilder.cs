@@ -1,10 +1,12 @@
 ﻿using System;
 using Autofac;
+using Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator;
 
-namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator
+namespace Autofac2ZenjectLikeBridge.Builders.Decorator
 {
     public class ExtendedRegistrationDecoratorBuilder<TDecorator, TService>
         : IExtendedRegistrationDecoratorBuilder<TDecorator, TService> where TDecorator : TService
+        where TService : class
     {
         private readonly ContainerBuilder _builder;
 
@@ -16,10 +18,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator
         public void RegisterDecoratorFromFunction(Func<IComponentContext, TService, TDecorator> createFunction)
         {
             _builder
-                .RegisterDecorator<TService>((context, _, baseHandler) => createFunction(context, baseHandler),
-                    // ReSharper disable once AssignNullToNotNullAttribute
-                    fromKey: null,
-                    null);
+                .RegisterDecorator<TService>((context, _, baseHandler) => createFunction(context, baseHandler));
         }
 
         public void RegisterDecoratorFromFunction(
@@ -37,7 +36,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator
         public ISubScopeDecoratorBuilder<TTDecoratorDisposable, TService> FromSubScope<TTDecoratorDisposable>()
             where TTDecoratorDisposable : TDecorator, IDisposable
         {
-            throw new NotImplementedException();
+            return new SubScopeDecoratorBuilder<TTDecoratorDisposable, TService>(_builder);
         }
     }
 }
