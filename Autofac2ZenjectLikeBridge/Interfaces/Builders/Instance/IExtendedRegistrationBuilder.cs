@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Autofac2ZenjectLikeBridge.Interfaces.Builders
+namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance
 {
     public interface IExtendedRegistrationBuilder<in TComponent>
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 using Autofac;
-using Autofac2ZenjectLikeBridge.Interfaces.Builders;
+using Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance;
 
 namespace Autofac2ZenjectLikeBridge.Builders.Instance
 {

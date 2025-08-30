@@ -7,6 +7,7 @@ using Autofac.Core.Registration;
 using Autofac2ZenjectLikeBridge.Builders.Instance;
 using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
 using Autofac2ZenjectLikeBridge.Interfaces.Builders;
+using Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Module = Autofac.Module;

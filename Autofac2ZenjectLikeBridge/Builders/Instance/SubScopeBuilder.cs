@@ -3,7 +3,7 @@ using Autofac;
 using Autofac.Builder;
 using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
 using Autofac2ZenjectLikeBridge.Interfaces;
-using Autofac2ZenjectLikeBridge.Interfaces.Builders;
+using Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance;
 
 namespace Autofac2ZenjectLikeBridge.Builders.Instance
 {

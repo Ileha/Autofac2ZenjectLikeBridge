@@ -2,9 +2,10 @@
 using Autofac;
 using Autofac.Builder;
 
-namespace Autofac2ZenjectLikeBridge.Interfaces.Builders
+namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance
 {
     public interface ISubScopeBuilder<out TComponent>
+        where TComponent : IDisposable
     {
         IRegistrationBuilder<
             TComponent,
