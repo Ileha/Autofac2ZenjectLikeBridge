@@ -1,7 +1,7 @@
 # Autofac2ZenjectLikeBridge
 
-[![NuGet Version](https://img.shields.io/nuget/v/Autofac2ZenjectLikeBridge.svg?style=flat-square)](https://www.nuget.org/packages/com.alexey-developer89.Autofac2ZenjectLikeBridge)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![NuGet Version](https://img.shields.io/nuget/v/com.alexey-developer89.Autofac2ZenjectLikeBridge.svg)](https://www.nuget.org/packages/com.alexey-developer89.Autofac2ZenjectLikeBridge)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/Ileha/Autofac2ZenjectLikeBridge?tab=MIT-1-ov-file#MIT-1-ov-file)
 
 Brings the power of Zenject's subcontainers syntax to Autofac, enabling Zenject-style dependency injection patterns in
 your Autofac applications. This library provides a familiar API for developers who love Zenject's approach to scoping
