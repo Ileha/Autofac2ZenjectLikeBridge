@@ -4,7 +4,9 @@ using Autofac;
 using Autofac.Builder;
 using Autofac.Core;
 using Autofac.Core.Registration;
+using Autofac2ZenjectLikeBridge.Builders.Instance;
 using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
+using Autofac2ZenjectLikeBridge.Interfaces.Builders;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Module = Autofac.Module;
@@ -53,6 +55,14 @@ namespace Autofac2ZenjectLikeBridge
                 throw new ArgumentNullException(nameof(scope));
 
             return scope.AsServiceProvider().CreateInstance<T>(parameters);
+        }
+
+        public static IExtendedRegistrationBuilder<T> RegisterExtended<T>(this ContainerBuilder builder)
+        {
+            if (builder is null)
+                throw new ArgumentNullException(nameof(builder));
+
+            return new ExtendedRegistrationBuilder<T>(builder);
         }
 
         public static IRegistrationBuilder<
