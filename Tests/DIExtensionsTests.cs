@@ -1,5 +1,6 @@
 using Autofac;
 using Autofac2ZenjectLikeBridge;
+using Autofac2ZenjectLikeBridge.Interfaces;
 using NSubstitute;
 
 namespace Tests;
@@ -7,6 +8,14 @@ namespace Tests;
 [TestFixture]
 public class DIExtensionsTests
 {
+    private class Factory<T> : PlaceholderFactory<T>
+    {
+    }
+
+    private class Factory<TParam, T> : PlaceholderFactory<TParam, T>
+    {
+    }
+
     [Test]
     public void WithParameters_WhenCalled_PassesParametersToRegistration()
     {
@@ -276,77 +285,288 @@ public class DIExtensionsTests
         mockSubContainerDisposable.Received(1).Dispose();
         mockExternalDisposable.Received(1).Dispose();
     }
-}
 
-// Test Classes
-public interface IService
-{
-    string GetData();
-}
-
-public class SimpleService : IService
-{
-    public string GetData() => nameof(SimpleService);
-}
-
-public class ServiceDecorator : IService
-{
-    public ServiceDecorator(IService baseService)
+    [Test]
+    public void RegisterFactory_WhenCalled_ResolvesInstanceWithParameter()
     {
-        BaseService = baseService;
+        // Arrange
+        var builder = new ContainerBuilder();
+        const string expectedParameter = "test_parameter";
+
+        builder.RegisterFactory<string, ServiceWithParameter>();
+
+        using var container = builder.Build();
+        var factory = container.Resolve<IFactory<string, ServiceWithParameter>>();
+
+        // Act
+        var instance = factory.Create(expectedParameter);
+
+        // Assert
+        Assert.That(instance.Data, Is.EqualTo(expectedParameter));
     }
 
-    public IService BaseService { get; }
-
-    public virtual string GetData() => $"{BaseService.GetData()}.{nameof(ServiceDecorator)}";
-}
-
-public class ServiceDecoratorDisposable : ServiceDecorator, IDisposable
-{
-    private readonly string _dependency;
-
-    public ServiceDecoratorDisposable(
-        string dependency,
-        IService baseService) : base(baseService)
+    [Test]
+    public void RegisterPlaceholderFactory_WhenCalled_ResolvesInstanceWithParameter()
     {
-        _dependency = dependency;
+        // Arrange
+        var builder = new ContainerBuilder();
+        const string expectedParameter = "test_parameter";
+
+        builder.RegisterPlaceholderFactory<string, ServiceWithParameter, Factory<string, ServiceWithParameter>>();
+
+        using var container = builder.Build();
+        var factory = container.Resolve<Factory<string, ServiceWithParameter>>();
+
+        // Act
+        var instance = factory.Create(expectedParameter);
+
+        // Assert
+        Assert.That(instance.Data, Is.EqualTo(expectedParameter));
     }
 
-    public override string GetData() => $"{BaseService.GetData()}.{_dependency}";
-
-    public void Dispose()
+    [Test]
+    public void RegisterFactoryFromFunction_WhenCalledPlaceholder_ResolvesInstanceWithParameter()
     {
-    }
-}
+        // Arrange
+        var builder = new ContainerBuilder();
+        const string expectedParameter = "test_parameter";
 
-public class ServiceWithParameter
-{
-    public ServiceWithParameter(string data)
-    {
-        Data = data;
-    }
+        builder.RegisterFactoryFromFunction<
+            string, ServiceWithParameter,
+            Factory<string, ServiceWithParameter>>(
+            (_, param) => new ServiceWithParameter(param));
 
-    public string Data { get; }
-}
+        using var container = builder.Build();
+        var factory = container.Resolve<Factory<string, ServiceWithParameter>>();
 
-public class ServiceWithDependency
-{
-    public ServiceWithDependency(SimpleService dependency)
-    {
-        Dependency = dependency;
+        // Act
+        var instance = factory.Create(expectedParameter);
+
+        // Assert
+        Assert.That(instance.Data, Is.EqualTo(expectedParameter));
     }
 
-    public SimpleService Dependency { get; }
-}
-
-public class ServiceWithDependencyDisposable : ServiceWithDependency, IDisposable
-{
-    public ServiceWithDependencyDisposable(SimpleService dependency)
-        : base(dependency)
+    [Test]
+    public void RegisterFactoryFromFunction_WhenCalled_ResolvesInstanceWithParameter()
     {
+        // Arrange
+        var builder = new ContainerBuilder();
+        const string expectedParameter = "test_parameter";
+
+        builder.RegisterFactoryFromFunction<
+            string, ServiceWithParameter>(
+            (_, param) => new ServiceWithParameter(param));
+
+        using var container = builder.Build();
+        var factory = container.Resolve<IFactory<string, ServiceWithParameter>>();
+
+        // Act
+        var instance = factory.Create(expectedParameter);
+
+        // Assert
+        Assert.That(instance.Data, Is.EqualTo(expectedParameter));
     }
 
-    public void Dispose()
+    [Test]
+    public void RegisterFactoryFromSubScope_WhenCalledPlaceholder_ResolvesInstanceWithParameterAndDependency()
     {
+        // Arrange
+        var builder = new ContainerBuilder();
+        const string expectedParameter = "test_parameter";
+
+        builder.RegisterFactoryFromSubScope<
+            string, ServiceWithDependencyAndParameterDisposable,
+            Factory<string, ServiceWithDependencyAndParameterDisposable>>((subContainer, param) =>
+        {
+            subContainer.RegisterType<SimpleService>().AsSelf();
+            subContainer.RegisterType<ServiceWithDependencyAndParameterDisposable>()
+                .WithParameter(new NamedParameter("data", param));
+        });
+
+        using var container = builder.Build();
+        var factory = container.Resolve<Factory<string, ServiceWithDependencyAndParameterDisposable>>();
+
+        // Act
+        var instance = factory.Create(expectedParameter);
+
+        // Assert
+        Assert.That(instance.Data, Is.EqualTo(expectedParameter));
+        Assert.IsNotNull(instance.Dependency);
+    }
+
+    [Test]
+    public void RegisterFactoryFromSubScope_WhenCalled_ResolvesInstanceWithParameterAndDependency()
+    {
+        // Arrange
+        var builder = new ContainerBuilder();
+        const string expectedParameter = "test_parameter";
+
+        builder.RegisterFactoryFromSubScope<
+            string, ServiceWithDependencyAndParameterDisposable>((subContainer, param) =>
+        {
+            subContainer.RegisterType<SimpleService>().AsSelf();
+            subContainer.RegisterType<ServiceWithDependencyAndParameterDisposable>()
+                .WithParameter(new NamedParameter("data", param));
+        });
+
+        using var container = builder.Build();
+        var factory = container.Resolve<IFactory<string, ServiceWithDependencyAndParameterDisposable>>();
+
+        // Act
+        var instance = factory.Create(expectedParameter);
+
+        // Assert
+        Assert.That(instance.Data, Is.EqualTo(expectedParameter));
+        Assert.IsNotNull(instance.Dependency);
+    }
+
+    [Test]
+    public void RegisterFactoryFromSubScope_WhenInstanceDisposedPlaceholder_SubScopeIsDisposed()
+    {
+        // Arrange
+        var builder = new ContainerBuilder();
+        var disposable = Substitute.For<IDisposable>();
+
+        builder
+            .RegisterFactoryFromSubScope<string, ServiceWithDependencyAndParameterDisposable,
+                Factory<string, ServiceWithDependencyAndParameterDisposable>>((subContainer, param) =>
+            {
+                subContainer.RegisterInstance(disposable);
+                subContainer.RegisterType<SimpleService>().AsSelf();
+                subContainer.RegisterType<ServiceWithDependencyAndParameterDisposable>()
+                    .WithParameter(new NamedParameter("data", param));
+            });
+
+        using var container = builder.Build();
+        var factory = container.Resolve<Factory<string, ServiceWithDependencyAndParameterDisposable>>();
+
+        // Act
+        using (factory.Create("test"))
+        {
+        }
+
+        // Assert
+        disposable.Received(1).Dispose();
+    }
+
+    [Test]
+    public void RegisterFactoryFromSubScope_WhenInstanceDisposed_SubScopeIsDisposed()
+    {
+        // Arrange
+        var builder = new ContainerBuilder();
+        var disposable = Substitute.For<IDisposable>();
+
+        builder
+            .RegisterFactoryFromSubScope<string, ServiceWithDependencyAndParameterDisposable>(
+                (subContainer, param) =>
+                {
+                    subContainer.RegisterInstance(disposable);
+                    subContainer.RegisterType<SimpleService>().AsSelf();
+                    subContainer.RegisterType<ServiceWithDependencyAndParameterDisposable>()
+                        .WithParameter(new NamedParameter("data", param));
+                });
+
+        using var container = builder.Build();
+        var factory = container.Resolve<IFactory<string, ServiceWithDependencyAndParameterDisposable>>();
+
+        // Act
+        using (factory.Create("test"))
+        {
+        }
+
+        // Assert
+        disposable.Received(1).Dispose();
+    }
+
+    // Test Classes
+    public interface IService
+    {
+        string GetData();
+    }
+
+    public class SimpleService : IService
+    {
+        public string GetData()
+        {
+            return nameof(SimpleService);
+        }
+    }
+
+    public class ServiceDecorator : IService
+    {
+        public ServiceDecorator(IService baseService)
+        {
+            BaseService = baseService;
+        }
+
+        public IService BaseService { get; }
+
+        public virtual string GetData()
+        {
+            return $"{BaseService.GetData()}.{nameof(ServiceDecorator)}";
+        }
+    }
+
+    public class ServiceDecoratorDisposable : ServiceDecorator, IDisposable
+    {
+        private readonly string _dependency;
+
+        public ServiceDecoratorDisposable(
+            string dependency,
+            IService baseService) : base(baseService)
+        {
+            _dependency = dependency;
+        }
+
+        public void Dispose()
+        {
+        }
+
+        public override string GetData()
+        {
+            return $"{BaseService.GetData()}.{_dependency}";
+        }
+    }
+
+    public class ServiceWithParameter
+    {
+        public ServiceWithParameter(string data)
+        {
+            Data = data;
+        }
+
+        public string Data { get; }
+    }
+
+    public class ServiceWithDependency
+    {
+        public ServiceWithDependency(SimpleService dependency)
+        {
+            Dependency = dependency;
+        }
+
+        public SimpleService Dependency { get; }
+    }
+
+    public class ServiceWithDependencyDisposable : ServiceWithDependency, IDisposable
+    {
+        public ServiceWithDependencyDisposable(SimpleService dependency)
+            : base(dependency)
+        {
+        }
+
+        public void Dispose()
+        {
+        }
+    }
+
+    public class ServiceWithDependencyAndParameterDisposable : ServiceWithDependencyDisposable
+    {
+        public ServiceWithDependencyAndParameterDisposable(SimpleService dependency, string data) : base(dependency)
+        {
+            Data = data;
+        }
+
+        public string Data { get; }
     }
 }
