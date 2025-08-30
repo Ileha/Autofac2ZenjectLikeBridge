@@ -37,7 +37,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -106,7 +108,10 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -184,7 +189,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -245,7 +252,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -314,7 +323,10 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -392,7 +404,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -453,7 +467,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -522,7 +538,10 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -600,7 +619,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -661,7 +682,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -730,7 +753,10 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -808,7 +834,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -869,7 +897,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -938,7 +968,10 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -1016,7 +1049,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -1077,7 +1112,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -1146,7 +1183,10 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -1224,7 +1264,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -1285,7 +1327,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -1354,7 +1398,10 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -1432,7 +1479,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -1493,7 +1542,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -1562,7 +1613,10 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -1640,7 +1694,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -1701,7 +1757,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -1770,7 +1828,10 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -1848,7 +1909,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -1909,7 +1972,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -1978,7 +2043,10 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -2056,7 +2124,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -2117,7 +2187,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -2186,7 +2258,10 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 
@@ -2264,7 +2339,9 @@ namespace Autofac2ZenjectLikeBridge
                         })
                         .AddTo(scope.Disposer);
 
-                    return subScope.Resolve<TFactory>();
+                    var factory = subScope.Resolve<TFactory>();
+
+                    return subScope.AddToHarmony(factory);
                 });
         }
 

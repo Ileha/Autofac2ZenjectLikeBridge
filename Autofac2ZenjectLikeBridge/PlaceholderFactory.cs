@@ -2,7 +2,7 @@
 
 namespace Autofac2ZenjectLikeBridge
 {
-    public class PlaceholderFactory<TInstance> : IFactory<TInstance>
+    public class PlaceholderFactory<TInstance> : IFactory<TInstance>, IDisposable
     {
         internal IFactory<TInstance> Nested { get; init; }
 
@@ -10,9 +10,12 @@ namespace Autofac2ZenjectLikeBridge
         {
             return Nested.Create();
         }
-    }
 
-    public class PlaceholderFactory<P0, TInstance> : IFactory<P0, TInstance>
+        public virtual void Dispose()
+        {
+        }
+    }
+    public class PlaceholderFactory<P0, TInstance> : IFactory<P0, TInstance>, IDisposable
     {
         internal IFactory<P0, TInstance> Nested { get; init; }
 
@@ -20,9 +23,12 @@ namespace Autofac2ZenjectLikeBridge
         {
             return Nested.Create(param0);
         }
-    }
 
-    public class PlaceholderFactory<P0, P1, TInstance> : IFactory<P0, P1, TInstance>
+        public virtual void Dispose()
+        {
+        }
+    }
+    public class PlaceholderFactory<P0, P1, TInstance> : IFactory<P0, P1, TInstance>, IDisposable
     {
         internal IFactory<P0, P1, TInstance> Nested { get; init; }
 
@@ -30,9 +36,12 @@ namespace Autofac2ZenjectLikeBridge
         {
             return Nested.Create(param0, param1);
         }
-    }
 
-    public class PlaceholderFactory<P0, P1, P2, TInstance> : IFactory<P0, P1, P2, TInstance>
+        public virtual void Dispose()
+        {
+        }
+    }
+    public class PlaceholderFactory<P0, P1, P2, TInstance> : IFactory<P0, P1, P2, TInstance>, IDisposable
     {
         internal IFactory<P0, P1, P2, TInstance> Nested { get; init; }
 
@@ -40,9 +49,12 @@ namespace Autofac2ZenjectLikeBridge
         {
             return Nested.Create(param0, param1, param2);
         }
-    }
 
-    public class PlaceholderFactory<P0, P1, P2, P3, TInstance> : IFactory<P0, P1, P2, P3, TInstance>
+        public virtual void Dispose()
+        {
+        }
+    }
+    public class PlaceholderFactory<P0, P1, P2, P3, TInstance> : IFactory<P0, P1, P2, P3, TInstance>, IDisposable
     {
         internal IFactory<P0, P1, P2, P3, TInstance> Nested { get; init; }
 
@@ -50,9 +62,12 @@ namespace Autofac2ZenjectLikeBridge
         {
             return Nested.Create(param0, param1, param2, param3);
         }
-    }
 
-    public class PlaceholderFactory<P0, P1, P2, P3, P4, TInstance> : IFactory<P0, P1, P2, P3, P4, TInstance>
+        public virtual void Dispose()
+        {
+        }
+    }
+    public class PlaceholderFactory<P0, P1, P2, P3, P4, TInstance> : IFactory<P0, P1, P2, P3, P4, TInstance>, IDisposable
     {
         internal IFactory<P0, P1, P2, P3, P4, TInstance> Nested { get; init; }
 
@@ -60,9 +75,12 @@ namespace Autofac2ZenjectLikeBridge
         {
             return Nested.Create(param0, param1, param2, param3, param4);
         }
-    }
 
-    public class PlaceholderFactory<P0, P1, P2, P3, P4, P5, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, TInstance>
+        public virtual void Dispose()
+        {
+        }
+    }
+    public class PlaceholderFactory<P0, P1, P2, P3, P4, P5, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, TInstance>, IDisposable
     {
         internal IFactory<P0, P1, P2, P3, P4, P5, TInstance> Nested { get; init; }
 
@@ -70,9 +88,12 @@ namespace Autofac2ZenjectLikeBridge
         {
             return Nested.Create(param0, param1, param2, param3, param4, param5);
         }
-    }
 
-    public class PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>
+        public virtual void Dispose()
+        {
+        }
+    }
+    public class PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, TInstance>, IDisposable
     {
         internal IFactory<P0, P1, P2, P3, P4, P5, P6, TInstance> Nested { get; init; }
 
@@ -80,9 +101,12 @@ namespace Autofac2ZenjectLikeBridge
         {
             return Nested.Create(param0, param1, param2, param3, param4, param5, param6);
         }
-    }
 
-    public class PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>
+        public virtual void Dispose()
+        {
+        }
+    }
+    public class PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance>, IDisposable
     {
         internal IFactory<P0, P1, P2, P3, P4, P5, P6, P7, TInstance> Nested { get; init; }
 
@@ -90,9 +114,12 @@ namespace Autofac2ZenjectLikeBridge
         {
             return Nested.Create(param0, param1, param2, param3, param4, param5, param6, param7);
         }
-    }
 
-    public class PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>
+        public virtual void Dispose()
+        {
+        }
+    }
+    public class PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance>, IDisposable
     {
         internal IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, TInstance> Nested { get; init; }
 
@@ -100,9 +127,12 @@ namespace Autofac2ZenjectLikeBridge
         {
             return Nested.Create(param0, param1, param2, param3, param4, param5, param6, param7, param8);
         }
-    }
 
-    public class PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>
+        public virtual void Dispose()
+        {
+        }
+    }
+    public class PlaceholderFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance> : IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance>, IDisposable
     {
         internal IFactory<P0, P1, P2, P3, P4, P5, P6, P7, P8, P9, TInstance> Nested { get; init; }
 
@@ -110,6 +140,9 @@ namespace Autofac2ZenjectLikeBridge
         {
             return Nested.Create(param0, param1, param2, param3, param4, param5, param6, param7, param8, param9);
         }
-    }
 
+        public virtual void Dispose()
+        {
+        }
+    }
 }

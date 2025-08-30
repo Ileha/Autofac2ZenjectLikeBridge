@@ -14,7 +14,7 @@ namespace Autofac2ZenjectLikeBridge
 #>
     public class PlaceholderFactory<<#=
             string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance> : IFactory<<#=
-            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>, IDisposable
     {
         internal IFactory<<#=
             string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance> Nested { get; init; }
@@ -25,8 +25,11 @@ namespace Autofac2ZenjectLikeBridge
             return Nested.Create(<#=
             string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"param{j}")) #>);
         }
-    }
 
+        public virtual void Dispose()
+        {
+        }
+    }
 <#
     }
 #>
