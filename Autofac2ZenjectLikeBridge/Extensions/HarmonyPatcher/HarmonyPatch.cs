@@ -31,7 +31,7 @@ public static class HarmonyPatch
                     }
                 })
                 .Except(PatchedTypes)
-                .Where(type => type is { IsClass: true, IsAbstract: false, IsGenericTypeDefinition: false }
+                .Where(type => type is {IsClass: true, IsAbstract: false, IsGenericTypeDefinition: false}
                                && type.IsAssignableTo(typeof(IDisposable)))
                 .Select(type =>
                 {
@@ -45,9 +45,7 @@ public static class HarmonyPatch
                 .ToArray();
 
             foreach (var method in methods2Patch)
-            {
                 PatchMethodLockFree(method, PrefixMethod);
-            }
         }
     }
 

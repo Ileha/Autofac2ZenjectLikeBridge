@@ -11,7 +11,8 @@ public class HarmonyPatchTests
     public void TearDown()
     {
         // Reset patched types to ensure test isolation
-        var patchedTypesField = typeof(HarmonyPatch).GetField("PatchedTypes", BindingFlags.NonPublic | BindingFlags.Static);
+        var patchedTypesField =
+            typeof(HarmonyPatch).GetField("PatchedTypes", BindingFlags.NonPublic | BindingFlags.Static);
 
         if (patchedTypesField != null)
         {
@@ -84,17 +85,26 @@ public class HarmonyPatchTests
 // Test Classes
 public class SimpleDisposable : IDisposable
 {
-    public void Dispose() { /* Patched by Harmony */ }
+    public void Dispose()
+    {
+        /* Patched by Harmony */
+    }
 }
 
 public class DynamicDisposable : IDisposable
 {
-    public void Dispose() { /* Patched by Harmony */ }
+    public void Dispose()
+    {
+        /* Patched by Harmony */
+    }
 }
 
 public class GenericDisposable<T> : IDisposable
 {
-    public void Dispose() { /* Patched by Harmony */ }
+    public void Dispose()
+    {
+        /* Patched by Harmony */
+    }
 }
 
 public abstract class AbstractDisposable : IDisposable

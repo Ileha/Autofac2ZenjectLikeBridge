@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Autofac2ZenjectLikeBridge;
-using Autofac2ZenjectLikeBridge.Entities;
 using Autofac2ZenjectLikeBridge.Interfaces;
 using NSubstitute;
 
@@ -157,7 +156,6 @@ public class DecoratorDisposeTests
 
         public void Dispose()
         {
-
         }
     }
 
@@ -182,7 +180,6 @@ public class DecoratorDisposeTests
 
         public void Dispose()
         {
-
         }
     }
 
