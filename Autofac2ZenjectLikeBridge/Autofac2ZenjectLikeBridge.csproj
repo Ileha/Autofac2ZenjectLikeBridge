@@ -1,9 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>disable</Nullable>
         <PackageId>com.alexey-developer89.Autofac2ZenjectLikeBridge</PackageId>
         <Title>Autofac2ZenjectLikeBridge</Title>
         <Authors>alexeydeveloper1030@gmail.com</Authors>
@@ -24,6 +23,7 @@
         <PackageReleaseNotes>initial implementation</PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <TargetFrameworks>net6.0;net8.0;netstandard2.1;netstandard2.0</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -35,6 +35,7 @@
 
     <ItemGroup>
         <PackageReference Include="Autofac" Version="8.4.0"/>
+        <PackageReference Include="JetBrains.Annotations" Version="2025.2.1" />
         <PackageReference Include="Lib.Harmony" Version="2.4.1"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8"/>
     </ItemGroup>

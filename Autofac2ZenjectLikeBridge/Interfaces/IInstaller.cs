@@ -1,6 +1,7 @@
-﻿namespace Autofac2ZenjectLikeBridge.Interfaces;
-
-public interface IInstaller
+﻿namespace Autofac2ZenjectLikeBridge.Interfaces
 {
-    void Install();
+    public interface IInstaller
+    {
+        void Install();
+    }
 }
