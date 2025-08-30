@@ -53,7 +53,7 @@ public static partial class DIExtensions
         SingleRegistrationStyle> RegisterFromSubScope<TComponent>(
         this ContainerBuilder builder,
         Action<ContainerBuilder> subScopeInstaller)
-        where TComponent : class, IDisposable
+        where TComponent : IDisposable
     {
         ArgumentNullException.ThrowIfNull(builder);
 
@@ -167,7 +167,7 @@ public static partial class DIExtensions
         object fromKey,
         object? toKey = null)
         where TDecorator : TService
-        where TService : class
+        where TService : notnull
     {
         builder
             .RegisterDecorator<TService>(
@@ -180,7 +180,7 @@ public static partial class DIExtensions
         this ContainerBuilder builder,
         Action<ContainerBuilder, TService> subScopeInstaller)
         where TService : class
-        where TDecorator : class, TService, IDisposable
+        where TDecorator : TService, IDisposable
     {
         builder
             .RegisterDecorator<TService>(
@@ -212,8 +212,8 @@ public static partial class DIExtensions
         Action<ContainerBuilder, TService> subScopeInstaller,
         object fromKey,
         object? toKey = null)
-        where TService : class
-        where TDecorator : class, TService, IDisposable
+        where TService : notnull
+        where TDecorator : TService, IDisposable
     {
         builder
             .RegisterDecorator<TService>(
