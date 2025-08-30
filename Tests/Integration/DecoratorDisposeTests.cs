@@ -146,13 +146,18 @@ public class DecoratorDisposeTests
         receiver.Received(1).ReceiveDispose();
     }
 
-    public class SubContainerDataExtractor<T> : BaseCompositeDisposable
+    public class SubContainerDataExtractor<T> : IDisposable
     {
         public readonly T Data;
 
         public SubContainerDataExtractor(T data)
         {
             Data = data;
+        }
+
+        public void Dispose()
+        {
+
         }
     }
 
