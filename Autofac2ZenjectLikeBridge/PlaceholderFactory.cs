@@ -4,8 +4,7 @@ namespace Autofac2ZenjectLikeBridge
 {
     //generated amount 10
 
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public class PlaceholderFactory<TInstance> : IFactory<TInstance>, IDisposable
+    public abstract class PlaceholderFactory<TInstance> : IFactory<TInstance>, IDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         internal IFactory<TInstance> Nested { get; init; }
@@ -21,8 +20,7 @@ namespace Autofac2ZenjectLikeBridge
         }
     }
 
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public class PlaceholderFactory<TP0, TInstance> : IFactory<TP0, TInstance>, IDisposable
+    public abstract class PlaceholderFactory<TP0, TInstance> : IFactory<TP0, TInstance>, IDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         internal IFactory<TP0, TInstance> Nested { get; init; }
@@ -38,8 +36,7 @@ namespace Autofac2ZenjectLikeBridge
         }
     }
 
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public class PlaceholderFactory<TP0, TP1, TInstance> : IFactory<TP0, TP1, TInstance>, IDisposable
+    public abstract class PlaceholderFactory<TP0, TP1, TInstance> : IFactory<TP0, TP1, TInstance>, IDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         internal IFactory<TP0, TP1, TInstance> Nested { get; init; }
@@ -55,8 +52,7 @@ namespace Autofac2ZenjectLikeBridge
         }
     }
 
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public class PlaceholderFactory<TP0, TP1, TP2, TInstance> : IFactory<TP0, TP1, TP2, TInstance>, IDisposable
+    public abstract class PlaceholderFactory<TP0, TP1, TP2, TInstance> : IFactory<TP0, TP1, TP2, TInstance>, IDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         internal IFactory<TP0, TP1, TP2, TInstance> Nested { get; init; }
@@ -72,8 +68,7 @@ namespace Autofac2ZenjectLikeBridge
         }
     }
 
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public class PlaceholderFactory<TP0, TP1, TP2, TP3, TInstance> : IFactory<TP0, TP1, TP2, TP3, TInstance>, IDisposable
+    public abstract class PlaceholderFactory<TP0, TP1, TP2, TP3, TInstance> : IFactory<TP0, TP1, TP2, TP3, TInstance>, IDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         internal IFactory<TP0, TP1, TP2, TP3, TInstance> Nested { get; init; }
@@ -89,8 +84,7 @@ namespace Autofac2ZenjectLikeBridge
         }
     }
 
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public class PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>, IDisposable
+    public abstract class PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>, IDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         internal IFactory<TP0, TP1, TP2, TP3, TP4, TInstance> Nested { get; init; }
@@ -106,8 +100,7 @@ namespace Autofac2ZenjectLikeBridge
         }
     }
 
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public class PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>, IDisposable
+    public abstract class PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>, IDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         internal IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance> Nested { get; init; }
@@ -123,8 +116,7 @@ namespace Autofac2ZenjectLikeBridge
         }
     }
 
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public class PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>, IDisposable
+    public abstract class PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>, IDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         internal IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance> Nested { get; init; }
@@ -140,8 +132,7 @@ namespace Autofac2ZenjectLikeBridge
         }
     }
 
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public class PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>, IDisposable
+    public abstract class PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>, IDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         internal IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance> Nested { get; init; }
@@ -157,8 +148,7 @@ namespace Autofac2ZenjectLikeBridge
         }
     }
 
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public class PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>, IDisposable
+    public abstract class PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>, IDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         internal IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance> Nested { get; init; }
@@ -174,8 +164,7 @@ namespace Autofac2ZenjectLikeBridge
         }
     }
 
-    // ReSharper disable once ClassNeverInstantiated.Global
-    public class PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>, IDisposable
+    public abstract class PlaceholderFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance> : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>, IDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         internal IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance> Nested { get; init; }
