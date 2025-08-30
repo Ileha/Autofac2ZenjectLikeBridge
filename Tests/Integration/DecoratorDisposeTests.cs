@@ -4,7 +4,7 @@ using Autofac2ZenjectLikeBridge.Entities;
 using Autofac2ZenjectLikeBridge.Interfaces;
 using NSubstitute;
 
-namespace Tests;
+namespace Tests.Integration;
 
 [TestFixture]
 public class DecoratorDisposeTests
