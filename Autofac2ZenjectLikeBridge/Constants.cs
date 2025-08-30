@@ -1,7 +1,8 @@
-﻿namespace Autofac2ZenjectLikeBridge;
-
-public static class Constants
+﻿namespace Autofac2ZenjectLikeBridge
 {
-    // ReSharper disable once UnusedMember.Global
-    public const int GenericParametersCount = 10;
+    public static class Constants
+    {
+        // ReSharper disable once UnusedMember.Global
+        public const int GenericParametersCount = 10;
+    }
 }

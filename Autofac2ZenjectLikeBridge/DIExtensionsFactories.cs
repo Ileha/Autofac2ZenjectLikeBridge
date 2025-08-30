@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Autofac.Builder;
 using Autofac2ZenjectLikeBridge.Extensions;
 using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
@@ -436,7 +437,7 @@ namespace Autofac2ZenjectLikeBridge
 
             public TInstance Create(TP0 param0)
             {
-                return _scope.CreateInstance<TInstance>(parameters: [ param0 ]);
+                return _scope.CreateInstance<TInstance>(param0);
             }
         }
 
@@ -651,7 +652,7 @@ namespace Autofac2ZenjectLikeBridge
 
             public TInstance Create(TP0 param0, TP1 param1)
             {
-                return _scope.CreateInstance<TInstance>(parameters: [ param0, param1 ]);
+                return _scope.CreateInstance<TInstance>(param0, param1);
             }
         }
 
@@ -866,7 +867,7 @@ namespace Autofac2ZenjectLikeBridge
 
             public TInstance Create(TP0 param0, TP1 param1, TP2 param2)
             {
-                return _scope.CreateInstance<TInstance>(parameters: [ param0, param1, param2 ]);
+                return _scope.CreateInstance<TInstance>(param0, param1, param2);
             }
         }
 
@@ -1081,7 +1082,7 @@ namespace Autofac2ZenjectLikeBridge
 
             public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3)
             {
-                return _scope.CreateInstance<TInstance>(parameters: [ param0, param1, param2, param3 ]);
+                return _scope.CreateInstance<TInstance>(param0, param1, param2, param3);
             }
         }
 
@@ -1296,7 +1297,7 @@ namespace Autofac2ZenjectLikeBridge
 
             public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4)
             {
-                return _scope.CreateInstance<TInstance>(parameters: [ param0, param1, param2, param3, param4 ]);
+                return _scope.CreateInstance<TInstance>(param0, param1, param2, param3, param4);
             }
         }
 
@@ -1511,7 +1512,7 @@ namespace Autofac2ZenjectLikeBridge
 
             public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5)
             {
-                return _scope.CreateInstance<TInstance>(parameters: [ param0, param1, param2, param3, param4, param5 ]);
+                return _scope.CreateInstance<TInstance>(param0, param1, param2, param3, param4, param5);
             }
         }
 
@@ -1726,7 +1727,7 @@ namespace Autofac2ZenjectLikeBridge
 
             public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6)
             {
-                return _scope.CreateInstance<TInstance>(parameters: [ param0, param1, param2, param3, param4, param5, param6 ]);
+                return _scope.CreateInstance<TInstance>(param0, param1, param2, param3, param4, param5, param6);
             }
         }
 
@@ -1941,7 +1942,7 @@ namespace Autofac2ZenjectLikeBridge
 
             public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7)
             {
-                return _scope.CreateInstance<TInstance>(parameters: [ param0, param1, param2, param3, param4, param5, param6, param7 ]);
+                return _scope.CreateInstance<TInstance>(param0, param1, param2, param3, param4, param5, param6, param7);
             }
         }
 
@@ -2156,7 +2157,7 @@ namespace Autofac2ZenjectLikeBridge
 
             public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7, TP8 param8)
             {
-                return _scope.CreateInstance<TInstance>(parameters: [ param0, param1, param2, param3, param4, param5, param6, param7, param8 ]);
+                return _scope.CreateInstance<TInstance>(param0, param1, param2, param3, param4, param5, param6, param7, param8);
             }
         }
 
@@ -2371,7 +2372,7 @@ namespace Autofac2ZenjectLikeBridge
 
             public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7, TP8 param8, TP9 param9)
             {
-                return _scope.CreateInstance<TInstance>(parameters: [ param0, param1, param2, param3, param4, param5, param6, param7, param8, param9 ]);
+                return _scope.CreateInstance<TInstance>(param0, param1, param2, param3, param4, param5, param6, param7, param8, param9);
             }
         }
 
