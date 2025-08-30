@@ -10,8 +10,7 @@ public static class DisposableExtensions
         if (disposable is null)
             throw new ArgumentNullException(nameof(disposable));
 
-        if (composite is null)
-            throw new ArgumentNullException(nameof(composite));
+        ArgumentNullException.ThrowIfNull(composite);
 
         composite.Add(disposable);
 
@@ -24,8 +23,7 @@ public static class DisposableExtensions
         if (disposable is null)
             throw new ArgumentNullException(nameof(disposable));
 
-        if (disposer is null)
-            throw new ArgumentNullException(nameof(disposer));
+        ArgumentNullException.ThrowIfNull(disposer);
 
         disposer.AddInstanceForDisposal(disposable);
 

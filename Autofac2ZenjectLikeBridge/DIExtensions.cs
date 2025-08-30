@@ -2,8 +2,9 @@
 using Autofac.Builder;
 using Autofac.Core;
 using Autofac.Core.Registration;
-using Autofac2ZenjectLikeBridge.Extensions;
+using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
 using Microsoft.Extensions.DependencyInjection;
+using Module = Autofac.Module;
 
 namespace Autofac2ZenjectLikeBridge;
 
@@ -46,108 +47,13 @@ public static partial class DIExtensions
         return scope.AsServiceProvider().CreateInstance<T>(parameters);
     }
 
-    #region RegisterDecorator
-
-    public static void RegisterDecoratorFromFunction<TDecorator, TService>(
-        this ContainerBuilder builder,
-        Func<IComponentContext, TService, TDecorator> createFunction)
-        where TDecorator : TService
-        where TService : class
-    {
-        builder
-            .RegisterDecorator<TService>((context, _, baseHandler) => createFunction(context, baseHandler));
-    }
-
-    public static void RegisterDecoratorFromFunction<TDecorator, TService>(
-        this ContainerBuilder builder,
-        Func<IComponentContext, TService, TDecorator> createFunction,
-        object fromKey,
-        object? toKey = null)
-        where TDecorator : TService
-        where TService : class
-    {
-        builder
-            .RegisterDecorator<TService>(
-                (context, _, baseHandler) => createFunction(context, baseHandler),
-                fromKey,
-                toKey);
-    }
-
-    public static void RegisterDecoratorFromSubScope<TDecorator, TService>(
-        this ContainerBuilder builder,
-        Action<ContainerBuilder, TService> subScopeInstaller)
-        where TService : class
-        where TDecorator : TService, ICollection<IDisposable>, IDisposable
-    {
-        builder
-            .RegisterDecorator<TService>(
-                (context, _, nestedService) =>
-                {
-                    var scope = context.Resolve<ILifetimeScope>();
-                    var guid = Guid.NewGuid();
-
-                    var subScope = scope.BeginLifetimeScope(
-                        guid,
-                        subScopeBuilder =>
-                        {
-                            subScopeBuilder.OverrideExternallyOwnedInScope<TDecorator>(guid);
-
-                            subScopeInstaller(subScopeBuilder, nestedService);
-                        });
-
-                    var instance = subScope.Resolve<TDecorator>();
-
-                    subScope
-                        .AddTo(instance);
-
-                    return instance;
-                });
-    }
-
-    public static void RegisterDecoratorFromSubScope<TDecorator, TService>(
-        this ContainerBuilder builder,
-        Action<ContainerBuilder, TService> subScopeInstaller,
-        object fromKey,
-        object? toKey = null)
-        where TService : class
-        where TDecorator : TService, ICollection<IDisposable>, IDisposable
-    {
-        builder
-            .RegisterDecorator<TService>(
-                (context, nestedService) =>
-                {
-                    var scope = context.Resolve<ILifetimeScope>();
-                    var guid = Guid.NewGuid();
-
-                    var subScope = scope.BeginLifetimeScope(
-                        guid,
-                        subScopeBuilder =>
-                        {
-                            subScopeBuilder.OverrideExternallyOwnedInScope<TDecorator>(guid);
-
-                            subScopeInstaller(subScopeBuilder, nestedService);
-                        });
-
-                    var instance = subScope.Resolve<TDecorator>();
-
-                    subScope
-                        .AddTo(instance);
-
-                    return instance;
-                },
-                fromKey,
-                toKey);
-    }
-
-    #endregion
-
     public static IRegistrationBuilder<
         TComponent,
         SimpleActivatorData,
         SingleRegistrationStyle> RegisterFromSubScope<TComponent>(
         this ContainerBuilder builder,
         Action<ContainerBuilder> subScopeInstaller)
-        where TComponent : ICollection<IDisposable>, IDisposable
+        where TComponent : IDisposable
     {
         ArgumentNullException.ThrowIfNull(builder);
 
@@ -171,12 +77,13 @@ public static partial class DIExtensions
                     var service = subScope.Resolve<TComponent>();
 
                     subScope
-                        .AddTo(service);
+                        .AddToHarmony(service);
 
                     return service;
                 });
     }
 
+    // ReSharper disable once MemberCanBePrivate.Global
     public static void OverrideExternallyOwnedInScope<T>(this ContainerBuilder builder, object scopeTag)
     {
         var module = new OverrideExternallyOwnedModule<T>(scopeTag);
@@ -241,4 +148,99 @@ public static partial class DIExtensions
             return service;
         }
     }
+
+    #region RegisterDecorator
+
+    public static void RegisterDecoratorFromFunction<TDecorator, TService>(
+        this ContainerBuilder builder,
+        Func<IComponentContext, TService, TDecorator> createFunction)
+        where TDecorator : TService
+        where TService : class
+    {
+        builder
+            .RegisterDecorator<TService>((context, _, baseHandler) => createFunction(context, baseHandler));
+    }
+
+    public static void RegisterDecoratorFromFunction<TDecorator, TService>(
+        this ContainerBuilder builder,
+        Func<IComponentContext, TService, TDecorator> createFunction,
+        object fromKey,
+        object? toKey = null)
+        where TDecorator : TService
+        where TService : notnull
+    {
+        builder
+            .RegisterDecorator<TService>(
+                (context, _, baseHandler) => createFunction(context, baseHandler),
+                fromKey,
+                toKey);
+    }
+
+    public static void RegisterDecoratorFromSubScope<TDecorator, TService>(
+        this ContainerBuilder builder,
+        Action<ContainerBuilder, TService> subScopeInstaller)
+        where TService : class
+        where TDecorator : TService, IDisposable
+    {
+        builder
+            .RegisterDecorator<TService>(
+                (context, _, nestedService) =>
+                {
+                    var scope = context.Resolve<ILifetimeScope>();
+                    var guid = Guid.NewGuid();
+
+                    var subScope = scope.BeginLifetimeScope(
+                        guid,
+                        subScopeBuilder =>
+                        {
+                            subScopeBuilder.OverrideExternallyOwnedInScope<TDecorator>(guid);
+
+                            subScopeInstaller(subScopeBuilder, nestedService);
+                        });
+
+                    var instance = subScope.Resolve<TDecorator>();
+
+                    subScope
+                        .AddToHarmony(instance);
+
+                    return instance;
+                });
+    }
+
+    public static void RegisterDecoratorFromSubScope<TDecorator, TService>(
+        this ContainerBuilder builder,
+        Action<ContainerBuilder, TService> subScopeInstaller,
+        object fromKey,
+        object? toKey = null)
+        where TService : notnull
+        where TDecorator : TService, IDisposable
+    {
+        builder
+            .RegisterDecorator<TService>(
+                (context, nestedService) =>
+                {
+                    var scope = context.Resolve<ILifetimeScope>();
+                    var guid = Guid.NewGuid();
+
+                    var subScope = scope.BeginLifetimeScope(
+                        guid,
+                        subScopeBuilder =>
+                        {
+                            subScopeBuilder.OverrideExternallyOwnedInScope<TDecorator>(guid);
+
+                            subScopeInstaller(subScopeBuilder, nestedService);
+                        });
+
+                    var instance = subScope.Resolve<TDecorator>();
+
+                    subScope
+                        .AddToHarmony(instance);
+
+                    return instance;
+                },
+                fromKey,
+                toKey);
+    }
+
+    #endregion
 }

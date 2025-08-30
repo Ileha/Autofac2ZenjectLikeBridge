@@ -6,15 +6,17 @@
 <#@ import namespace="Autofac2ZenjectLikeBridge" #>
 namespace Autofac2ZenjectLikeBridge.Interfaces
 {
+    //generated amount <#= Constants.GenericParametersCount #>
+
 <#
     for (var i = 0; i <= Constants.GenericParametersCount; i++)
     {
 #>
     public interface IFactory<<#=
-            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"in P{j}")) #><#= i == 0 ? "" : ", " #>out T>
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"in TP{j}")) #><#= i == 0 ? "" : ", " #>out T>
     {
         T Create(<#=
-            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j} param{j}")) #>);
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j} param{j}")) #>);
     }
 
 <#

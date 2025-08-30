@@ -3,7 +3,9 @@
 [![NuGet Version](https://img.shields.io/nuget/v/Autofac2ZenjectLikeBridge.svg?style=flat-square)](https://www.nuget.org/packages/com.alexey-developer89.Autofac2ZenjectLikeBridge)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Brings the power of Zenject's subcontainers syntax to Autofac, enabling Zenject-style dependency injection patterns in your Autofac applications. This library provides a familiar API for developers who love Zenject's approach to scoping and subcontainers but want to leverage Autofac's robust dependency injection capabilities.
+Brings the power of Zenject's subcontainers syntax to Autofac, enabling Zenject-style dependency injection patterns in
+your Autofac applications. This library provides a familiar API for developers who love Zenject's approach to scoping
+and subcontainers but want to leverage Autofac's robust dependency injection capabilities.
 
 ## 🚀 Key Features
 
@@ -16,6 +18,7 @@ Brings the power of Zenject's subcontainers syntax to Autofac, enabling Zenject-
 ## 💡 Why Use Autofac2ZenjectLikeBridge?
 
 This library is ideal for:
+
 - Teams transitioning from Zenject to Autofac
 - Projects that want to combine the best of both DI containers
 - Developers who prefer Zenject's subcontainer API but need Autofac's features
@@ -70,24 +73,31 @@ builder
 
 ## 📚 Documentation
 
-> ℹ️ **Info**: All instances resolved from subcontainers have to be implement `IDisposable` and `ICollection<IDisposable>` interfaces. This needed limit subcontainers lifetime. When instance is disposed, it's subcontainer will be disposed too. See [BaseCompositeDisposable](#basecompositedisposable) approach for more details. 
+> ℹ️ **Info**: All instances resolved from subcontainers have to be implement `IDisposable` and
+`ICollection<IDisposable>` interfaces. This needed limit subcontainers lifetime. When instance is disposed, it's
+> subcontainer will be disposed too. See [BaseCompositeDisposable](#basecompositedisposable) approach for more details.
 
 ### Creating Subcontainers
-Create isolated subcontainers for instance. Based on Autofac's lifetime scope. Scope will inherit all dependencies from parent scope(s). In the same time scope could have own dependencies, that will be available only in this scope.   
+
+Create isolated subcontainers for instance. Based on Autofac's lifetime scope. Scope will inherit all dependencies from
+parent scope(s). In the same time scope could have own dependencies, that will be available only in this scope.
 See [Quick Start](#️-quick-start) for code sample.
 
 ### Decorators
 
 #### Simple
 
-Autofac default:  
+Autofac default:
+
 ```csharp
 builder
     .RegisterDecorator<ServiceDecorator, IService>();
 ```
+
 #### From Function
 
-Use function to create decorator instance:  
+Use function to create decorator instance:
+
 ```csharp
 builder
     .RegisterDecoratorFromFunction<ServiceDecorator, IService>(
@@ -101,7 +111,8 @@ builder
 
 #### With Subcontainer
 
-Use subcontainer to create decorator:  
+Use subcontainer to create decorator:
+
 ```csharp
 builder
     .RegisterDecoratorFromSubScope<ServiceDecorator, IService>(
@@ -123,10 +134,14 @@ builder
 ```
 
 ### Factories
-Provides interface `IFactory<parameter1, parameter2, ... , parameterN, Iinstance>` where `parameter1, parameter2, ... , parameterN` are parameters for factory creation and `Iinstance` is instance type. 
+
+Provides interface `IFactory<parameter1, parameter2, ... , parameterN, Iinstance>` where
+`parameter1, parameter2, ... , parameterN` are parameters for factory creation and `Iinstance` is instance type.
+
 #### From Functions
 
-Use function to register IFactory<Iinstance> in DI:  
+Use function to register IFactory<Iinstance> in DI:
+
 ```csharp
 builder
     .RegisterFactoryFromFunction<Iinstance>(
@@ -136,7 +151,8 @@ builder
         })
 ```
 
-Use function to register IFactory<Guid, Iinstance> in DI:  
+Use function to register IFactory<Guid, Iinstance> in DI:
+
 ```csharp
 builder
     .RegisterFactoryFromFunction<Guid, Iinstance>(
@@ -148,7 +164,9 @@ builder
 
 #### From Subcontainers
 
-Use subcontainer to create factory `IFactory<Iinstance>`, new subcontainer will be created when factory's `Create` method is called:    
+Use subcontainer to create factory `IFactory<Iinstance>`, new subcontainer will be created when factory's `Create`
+method is called:
+
 ```csharp
 builder
     .RegisterFactoryFromSubScope<Iinstance>(
@@ -168,7 +186,8 @@ builder
         })
 ```
 
-Parameters edition:  
+Parameters edition:
+
 ```csharp
 builder
     .RegisterFactoryFromSubScope<Guid, Iinstance>(
@@ -190,8 +209,11 @@ builder
 ```
 
 #### Placeholders Factories
-Used to register type distincted from interface IFactory<T>, and/or modify factory `Create` behavior, like some instance initialization:  
-Create new class and inherit from PlaceholderFactory<T>:  
+
+Used to register type distincted from interface IFactory<T>, and/or modify factory `Create` behavior, like some instance
+initialization:
+Create new class and inherit from PlaceholderFactory<T>:
+
 ```csharp
 class MyCustomFactory : PlaceholderFactory<Iinstance>
 {
@@ -201,9 +223,10 @@ class MyCustomFactory : PlaceholderFactory<Iinstance>
         return base.Create();
     }
 }
-```  
+```
 
-Placeholders Factories registration is available only for SubScope factories:  
+Placeholders Factories registration is available only for SubScope factories:
+
 ```csharp
 builder
     .RegisterFactoryFromSubScope<Iinstance, MyCustomFactory>(
@@ -223,7 +246,8 @@ builder
         })
 ```
 
-and for Function factories:  
+and for Function factories:
+
 ```csharp
 builder
     .RegisterFactoryFromFunction<Iinstance, MyCustomFactory>(
@@ -237,7 +261,8 @@ builder
 
 #### BaseCompositeDisposable
 
-Inherit from `BaseCompositeDisposable` for services or from `BaseCompositeDisposable<T>` for decorators to comply with `IDisposable` and `ICollection<IDisposable>` interfaces.
+Inherit from `BaseCompositeDisposable` for services or from `BaseCompositeDisposable<T>` for decorators to comply with
+`IDisposable` and `ICollection<IDisposable>` interfaces.
 
 #### IComponentContext.CreateInstance
 

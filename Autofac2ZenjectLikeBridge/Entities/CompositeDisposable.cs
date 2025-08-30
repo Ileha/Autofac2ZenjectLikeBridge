@@ -8,17 +8,6 @@ public sealed class CompositeDisposable : ICollection<IDisposable>, IDisposable
     private readonly object _gate = new();
     private bool _disposed;
 
-    public int Count
-    {
-        get
-        {
-            lock (_gate)
-                return _disposed ? 0 : _disposables.Count;
-        }
-    }
-
-    public bool IsReadOnly => false;
-
     public CompositeDisposable()
     {
         _disposables = new List<IDisposable>();
@@ -30,6 +19,17 @@ public sealed class CompositeDisposable : ICollection<IDisposable>, IDisposable
 
         _disposables = new List<IDisposable>(disposables);
     }
+
+    public int Count
+    {
+        get
+        {
+            lock (_gate)
+                return _disposed ? 0 : _disposables.Count;
+        }
+    }
+
+    public bool IsReadOnly => false;
 
     public void Add(IDisposable item)
     {

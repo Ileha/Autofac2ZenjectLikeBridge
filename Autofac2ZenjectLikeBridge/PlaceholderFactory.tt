@@ -8,22 +8,30 @@ using Autofac2ZenjectLikeBridge.Interfaces;
 
 namespace Autofac2ZenjectLikeBridge
 {
+    //generated amount <#= Constants.GenericParametersCount #>
+
 <#
     for (var i = 0; i <= Constants.GenericParametersCount; i++)
     {
 #>
-    public class PlaceholderFactory<<#=
-            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance> : IFactory<<#=
-            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance>
+    public abstract class PlaceholderFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance> : IFactory<<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>, IDisposable
     {
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         internal IFactory<<#=
-            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j}")) #><#= i == 0 ? "" : ", " #>TInstance> Nested { get; init; }
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance> Nested { get; init; }
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
         public virtual TInstance Create(<#=
-            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"P{j} param{j}")) #>)
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j} param{j}")) #>)
         {
             return Nested.Create(<#=
             string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"param{j}")) #>);
+        }
+
+        public virtual void Dispose()
+        {
         }
     }
 
