@@ -5,6 +5,7 @@ using Autofac.Builder;
 using Autofac.Core;
 using Autofac.Core.Registration;
 using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Module = Autofac.Module;
 
@@ -102,9 +103,10 @@ namespace Autofac2ZenjectLikeBridge
 
         public class OverrideExternallyOwnedModule<T> : Module
         {
+            [CanBeNull]
             private readonly object _tag;
 
-            public OverrideExternallyOwnedModule(object tag)
+            public OverrideExternallyOwnedModule([CanBeNull] object tag)
             {
                 _tag = tag;
             }
@@ -150,6 +152,7 @@ namespace Autofac2ZenjectLikeBridge
                 _context = context;
             }
 
+            [CanBeNull]
             public object GetService(Type serviceType)
             {
                 // The method must return null if the service is not registered, otherwise, 'ActivatorUtilities.CreateInstance' will throw an exception
@@ -174,7 +177,7 @@ namespace Autofac2ZenjectLikeBridge
             this ContainerBuilder builder,
             Func<IComponentContext, TService, TDecorator> createFunction,
             object fromKey,
-            object toKey = null)
+            [CanBeNull] object toKey = null)
             where TDecorator : TService
         {
             builder
@@ -219,7 +222,7 @@ namespace Autofac2ZenjectLikeBridge
             this ContainerBuilder builder,
             Action<ContainerBuilder, TService> subScopeInstaller,
             object fromKey,
-            object toKey = null)
+            [CanBeNull] object toKey = null)
             where TDecorator : TService, IDisposable
         {
             builder

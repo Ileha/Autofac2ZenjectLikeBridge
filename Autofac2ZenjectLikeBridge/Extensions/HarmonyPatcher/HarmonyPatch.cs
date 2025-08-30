@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Autofac2ZenjectLikeBridge.Entities;
 using HarmonyLib;
+using JetBrains.Annotations;
 
 namespace Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher
 {
@@ -75,13 +76,13 @@ namespace Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher
             }
         }
 
-        public static void PatchMethod(MethodBase method)
+        public static void PatchMethod([CanBeNull] MethodBase method)
         {
             lock (Locker)
                 PatchMethodLockFree(method, PrefixMethod);
         }
 
-        private static void PatchMethodLockFree(MethodBase method, HarmonyMethod prefix)
+        private static void PatchMethodLockFree([CanBeNull] MethodBase method, HarmonyMethod prefix)
         {
             if (method == null)
                 return;
