@@ -1,6 +1,5 @@
 ﻿using System;
 using Autofac;
-using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
 using Autofac2ZenjectLikeBridge.Interfaces;
 using Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator;
 
@@ -58,22 +57,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
             where TComponent : IDisposable
         {
             var scope = context.Resolve<ILifetimeScope>();
-            var guid = Guid.NewGuid();
-
-            var subScope = scope.BeginLifetimeScope(
-                guid,
-                subScopeBuilder =>
-                {
-                    subScopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                    subScopeInstaller(subScopeBuilder, nestedService);
-                });
-
-            var instance = subScope.Resolve<TComponent>();
-
-            subScope
-                .AddToHarmony(instance);
-
-            return instance;
+            return scope.ResolveFromSubScope<TService, TComponent>(subScopeInstaller, nestedService);
         }
 
         private static TComponent ResolveFromSubScopeInstaller<TComponent, TInstaller>(IComponentContext context, TService nestedService)
@@ -81,23 +65,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
             where TComponent : IDisposable
         {
             var scope = context.Resolve<ILifetimeScope>();
-            var guid = Guid.NewGuid();
-
-            var subScope = scope.BeginLifetimeScope(
-                guid,
-                subScopeBuilder =>
-                {
-                    subScopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                    var installerInstance = scope.CreateInstance<TInstaller>(subScopeBuilder, nestedService);
-                    installerInstance.Install();
-                });
-
-            var instance = subScope.Resolve<TComponent>();
-
-            subScope
-                .AddToHarmony(instance);
-
-            return instance;
+            return scope.ResolveFromSubScope<TService, TComponent, TInstaller>(nestedService);
         }
     }
 }

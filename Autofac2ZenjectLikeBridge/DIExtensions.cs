@@ -6,6 +6,8 @@ using Autofac.Core;
 using Autofac.Core.Registration;
 using Autofac2ZenjectLikeBridge.Builders.Decorator;
 using Autofac2ZenjectLikeBridge.Builders.Instance;
+using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
+using Autofac2ZenjectLikeBridge.Interfaces;
 using Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator;
 using Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance;
 using JetBrains.Annotations;
@@ -16,6 +18,38 @@ namespace Autofac2ZenjectLikeBridge
 {
     public static partial class DIExtensions
     {
+        public interface IExtendedRegistrationFactoryBuilder<in TInstance, out TFactory>
+            where TFactory : IFactory<TInstance>
+        {
+            IRegistrationBuilder<
+                TFactory,
+                ConcreteReflectionActivatorData,
+                SingleRegistrationStyle> FromNewInstance();
+
+            IRegistrationBuilder<
+                TFactory,
+                ConcreteReflectionActivatorData,
+                SingleRegistrationStyle> FromFunction(Func<ILifetimeScope, TInstance> func);
+
+            ISubScopeFactoryBuilder<TNewInstance> FromSubScope<TNewInstance>()
+                where TNewInstance : TInstance, IDisposable;
+        }
+
+        public interface ISubScopeFactoryBuilder<out TInstance>
+            where TInstance : IDisposable
+        {
+            IRegistrationBuilder<
+                IFactory<TInstance>,
+                ConcreteReflectionActivatorData,
+                SingleRegistrationStyle> FromFunction(Action<ContainerBuilder> subScopeInstaller);
+
+            IRegistrationBuilder<
+                IFactory<TInstance>,
+                ConcreteReflectionActivatorData,
+                SingleRegistrationStyle> FromInstaller<TInstaller>(TInstaller installer)
+                where TInstaller : class, IInstaller;
+        }
+
         public static IRegistrationBuilder<TLimit, TReflectionActivatorData, TStyle>
             WithParameters<TLimit, TReflectionActivatorData, TStyle>(
                 this IRegistrationBuilder<TLimit, TReflectionActivatorData, TStyle> registration,

@@ -6,7 +6,6 @@
 <#@ import namespace="Autofac2ZenjectLikeBridge" #>
 using System;
 using Autofac;
-using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
 using Autofac2ZenjectLikeBridge.Interfaces;
 
 namespace Autofac2ZenjectLikeBridge.Entities.Factories
@@ -27,32 +26,17 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             private readonly Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=
             string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=
-            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope,
+                Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(<#=
-            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j} param{j}")) #>)
+            public TInstance Create(<#=string.Join(",\n\t\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j} param{j}")) #>)
             {
-                var guid = Guid.NewGuid();
-
-                var subScope = _scope
-                    .BeginLifetimeScope(guid, subScopeBuilder =>
-                    {
-                        subScopeBuilder.OverrideExternallyOwnedInScope<TInstance>(guid);
-                        _subScopeInstaller(subScopeBuilder<#= i == 0 ? "" : ", " #><#=
-            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"param{j}")) #>);
-                    });
-
-                var instance = subScope.Resolve<TInstance>();
-
-                subScope
-                    .AddToHarmony(instance);
-
-                return instance;
+                return _scope.ResolveFromSubScope<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>(_subScopeInstaller<#= i == 0 ? "" : ",\n\t\t\t\t\t" #><#=
+            string.Join(",\n\t\t\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"param{j}")) #>);
             }
         }
 

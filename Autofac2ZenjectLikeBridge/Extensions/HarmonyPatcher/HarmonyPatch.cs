@@ -104,21 +104,27 @@ namespace Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher
             PatchedTypes.Add(declaredMethod.DeclaringType);
         }
 
-        public static T AddToHarmony<T>(this IDisposable disposable, T instance)
+        public static T AddToHarmony<T>(this T disposable, IDisposable composite)
             where T : IDisposable
         {
-            EnsurePatched(instance.GetType());
+            if (disposable == null)
+                throw new ArgumentNullException(nameof(disposable));
 
-            if (!DisposeData.TryGetValue(instance, out var value))
+            if (composite == null)
+                throw new ArgumentNullException(nameof(composite));
+
+            EnsurePatched(composite.GetType());
+
+            if (!DisposeData.TryGetValue(composite, out var value))
             {
                 value = new CompositeDisposable();
-                DisposeData.Add(instance, value);
+                DisposeData.Add(composite, value);
             }
 
             disposable
                 .AddTo(value);
 
-            return instance;
+            return disposable;
         }
 
         // ReSharper disable once InconsistentNaming

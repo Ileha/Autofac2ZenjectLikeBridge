@@ -42,7 +42,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -114,7 +117,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -194,7 +200,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -257,7 +266,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -329,7 +341,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -409,7 +424,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -472,7 +490,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -544,7 +565,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -624,7 +648,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -687,7 +714,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -759,7 +789,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -839,7 +872,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -902,7 +938,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -974,7 +1013,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -1054,7 +1096,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -1117,7 +1162,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -1189,7 +1237,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -1269,7 +1320,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -1332,7 +1386,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -1404,7 +1461,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -1484,7 +1544,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -1547,7 +1610,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -1619,7 +1685,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -1699,7 +1768,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -1762,7 +1834,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -1834,7 +1909,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -1914,7 +1992,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -1977,7 +2058,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -2049,7 +2133,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -2129,7 +2216,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -2192,7 +2282,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -2264,7 +2357,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 
@@ -2344,7 +2440,10 @@ namespace Autofac2ZenjectLikeBridge
 
                     var factory = subScope.Resolve<TFactory>();
 
-                    return subScope.AddToHarmony(factory);
+                    subScope
+                        .AddToHarmony(factory);
+
+                    return factory;
                 });
         }
 

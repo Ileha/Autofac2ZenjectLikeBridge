@@ -1,7 +1,6 @@
 ﻿using System;
 using Autofac;
 using Autofac.Builder;
-using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
 using Autofac2ZenjectLikeBridge.Interfaces;
 using Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance;
 
@@ -21,26 +20,8 @@ namespace Autofac2ZenjectLikeBridge.Builders.Instance
         {
             return _builder
                 .Register(
-                    (IComponentContext _, ILifetimeScope scope) =>
-                    {
-                        var guid = Guid.NewGuid();
-
-                        var subScope = scope
-                            .BeginLifetimeScope(
-                                guid,
-                                scopeBuilder =>
-                                {
-                                    scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                                    subScopeInstaller(scopeBuilder);
-                                });
-
-                        var service = subScope.Resolve<TComponent>();
-
-                        subScope
-                            .AddToHarmony(service);
-
-                        return service;
-                    });
+                    (IComponentContext _, ILifetimeScope scope)
+                        => scope.ResolveFromSubScope<TComponent>(subScopeInstaller));
         }
 
         public IRegistrationBuilder<TComponent, SimpleActivatorData, SingleRegistrationStyle> FromInstaller<TInstaller>(TInstaller installer)
@@ -48,27 +29,8 @@ namespace Autofac2ZenjectLikeBridge.Builders.Instance
         {
             return _builder
                 .Register(
-                    (IComponentContext _, ILifetimeScope scope) =>
-                    {
-                        var guid = Guid.NewGuid();
-
-                        var subScope = scope
-                            .BeginLifetimeScope(
-                                guid,
-                                scopeBuilder =>
-                                {
-                                    scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                                    var installerInstance = scope.CreateInstance<IInstaller>(scopeBuilder);
-                                    installerInstance.Install();
-                                });
-
-                        var service = subScope.Resolve<TComponent>();
-
-                        subScope
-                            .AddToHarmony(service);
-
-                        return service;
-                    });
+                    (IComponentContext _, ILifetimeScope scope)
+                        => scope.ResolveFromSubScope<TComponent, TInstaller>());
         }
     }
 }

@@ -1,0 +1,113 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="$(TargetPath)" #>
+<#@ output extension=".cs" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="Autofac2ZenjectLikeBridge" #>
+using System;
+using Autofac;
+using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
+using Autofac2ZenjectLikeBridge.Interfaces;
+
+namespace Autofac2ZenjectLikeBridge
+{
+    public static partial class DIExtensions
+    {
+        //generated amount <#= Constants.GenericParametersCount #>
+
+<#
+    for (var i = 0; i <= Constants.GenericParametersCount; i++)
+    {
+#>
+        public static TComponent ResolveFromSubScope<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TComponent>(
+            this ILifetimeScope scope,
+            Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> subScopeInstaller<#= i == 0 ? "" : ",\n\t\t\t" #><#=string.Join(",\n\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j} param{j}")) #>)
+            where TComponent : IDisposable
+        {
+            var guid = Guid.NewGuid();
+
+            var subScope = scope
+                .BeginLifetimeScope(
+                    guid,
+                    scopeBuilder =>
+                    {
+                        scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
+                        subScopeInstaller(scopeBuilder<#= i == 0 ? "" : ",\n\t\t\t\t\t\t\t" #><#=string.Join(",\n\t\t\t\t\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"param{j}")) #>);
+                    });
+
+            var service = subScope.Resolve<TComponent>();
+
+            subScope
+                .AddToHarmony(service);
+
+            return service;
+        }
+
+<#
+    }
+#>
+
+<#
+    for (var i = 0; i <= Constants.GenericParametersCount; i++)
+    {
+#>
+
+        public static TComponent ResolveFromSubScope<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TComponent, TInstaller>(
+            this ILifetimeScope scope<#= i == 0 ? "" : ",\n\t\t\t" #><#=string.Join(",\n\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j} param{j}")) #>)
+            where TComponent : IDisposable
+            where TInstaller : class, IInstaller
+        {
+            var guid = Guid.NewGuid();
+
+            var subScope = scope
+                .BeginLifetimeScope(
+                    guid,
+                    scopeBuilder =>
+                    {
+                        scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
+                        var installerInstance = scope.CreateInstance<TInstaller>(scopeBuilder<#= i == 0 ? "" : ",\n\t\t\t\t\t\t\t" #><#=string.Join(",\n\t\t\t\t\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"param{j}")) #>);
+                        installerInstance.Install();
+                    });
+
+            var service = subScope.Resolve<TComponent>();
+
+            subScope
+                .AddToHarmony(service);
+
+            return service;
+        }
+
+<#
+    }
+#>
+
+/*
+        private static TComponent ResolveFromSubScope<TP0, TComponent, TInstaller>(
+            ILifetimeScope scope,
+            TP0 param0)
+            where TComponent : IDisposable
+            where TInstaller : class, IInstaller
+        {
+            var guid = Guid.NewGuid();
+
+            var subScope = scope
+                .BeginLifetimeScope(
+                    guid,
+                    scopeBuilder =>
+                    {
+                        scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
+                        var installerInstance = scope.CreateInstance<TInstaller>(scopeBuilder, param0);
+                        installerInstance.Install();
+                    });
+
+            var service = subScope.Resolve<TComponent>();
+
+            subScope
+                .AddToHarmony(service);
+
+            return service;
+        }
+*/
+
+    }
+}

@@ -1,6 +1,5 @@
 ﻿using System;
 using Autofac;
-using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
 using Autofac2ZenjectLikeBridge.Interfaces;
 
 namespace Autofac2ZenjectLikeBridge.Entities.Factories
@@ -16,7 +15,8 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope,
+                Action<ContainerBuilder> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
@@ -24,21 +24,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
 
             public TInstance Create()
             {
-                var guid = Guid.NewGuid();
-
-                var subScope = _scope
-                    .BeginLifetimeScope(guid, subScopeBuilder =>
-                    {
-                        subScopeBuilder.OverrideExternallyOwnedInScope<TInstance>(guid);
-                        _subScopeInstaller(subScopeBuilder);
-                    });
-
-                var instance = subScope.Resolve<TInstance>();
-
-                subScope
-                    .AddToHarmony(instance);
-
-                return instance;
+                return _scope.ResolveFromSubScope<TInstance>(_subScopeInstaller);
             }
         }
 
@@ -49,7 +35,8 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope,
+                Action<ContainerBuilder, TP0> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
@@ -57,21 +44,8 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
 
             public TInstance Create(TP0 param0)
             {
-                var guid = Guid.NewGuid();
-
-                var subScope = _scope
-                    .BeginLifetimeScope(guid, subScopeBuilder =>
-                    {
-                        subScopeBuilder.OverrideExternallyOwnedInScope<TInstance>(guid);
-                        _subScopeInstaller(subScopeBuilder, param0);
-                    });
-
-                var instance = subScope.Resolve<TInstance>();
-
-                subScope
-                    .AddToHarmony(instance);
-
-                return instance;
+                return _scope.ResolveFromSubScope<TP0, TInstance>(_subScopeInstaller,
+					param0);
             }
         }
 
@@ -82,29 +56,19 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0, TP1> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0, TP1> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope,
+                Action<ContainerBuilder, TP0, TP1> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(TP0 param0, TP1 param1)
+            public TInstance Create(TP0 param0,
+				TP1 param1)
             {
-                var guid = Guid.NewGuid();
-
-                var subScope = _scope
-                    .BeginLifetimeScope(guid, subScopeBuilder =>
-                    {
-                        subScopeBuilder.OverrideExternallyOwnedInScope<TInstance>(guid);
-                        _subScopeInstaller(subScopeBuilder, param0, param1);
-                    });
-
-                var instance = subScope.Resolve<TInstance>();
-
-                subScope
-                    .AddToHarmony(instance);
-
-                return instance;
+                return _scope.ResolveFromSubScope<TP0, TP1, TInstance>(_subScopeInstaller,
+					param0,
+					param1);
             }
         }
 
@@ -115,29 +79,21 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0, TP1, TP2> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0, TP1, TP2> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope,
+                Action<ContainerBuilder, TP0, TP1, TP2> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(TP0 param0, TP1 param1, TP2 param2)
+            public TInstance Create(TP0 param0,
+				TP1 param1,
+				TP2 param2)
             {
-                var guid = Guid.NewGuid();
-
-                var subScope = _scope
-                    .BeginLifetimeScope(guid, subScopeBuilder =>
-                    {
-                        subScopeBuilder.OverrideExternallyOwnedInScope<TInstance>(guid);
-                        _subScopeInstaller(subScopeBuilder, param0, param1, param2);
-                    });
-
-                var instance = subScope.Resolve<TInstance>();
-
-                subScope
-                    .AddToHarmony(instance);
-
-                return instance;
+                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TInstance>(_subScopeInstaller,
+					param0,
+					param1,
+					param2);
             }
         }
 
@@ -148,29 +104,23 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0, TP1, TP2, TP3> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope,
+                Action<ContainerBuilder, TP0, TP1, TP2, TP3> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3)
+            public TInstance Create(TP0 param0,
+				TP1 param1,
+				TP2 param2,
+				TP3 param3)
             {
-                var guid = Guid.NewGuid();
-
-                var subScope = _scope
-                    .BeginLifetimeScope(guid, subScopeBuilder =>
-                    {
-                        subScopeBuilder.OverrideExternallyOwnedInScope<TInstance>(guid);
-                        _subScopeInstaller(subScopeBuilder, param0, param1, param2, param3);
-                    });
-
-                var instance = subScope.Resolve<TInstance>();
-
-                subScope
-                    .AddToHarmony(instance);
-
-                return instance;
+                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TInstance>(_subScopeInstaller,
+					param0,
+					param1,
+					param2,
+					param3);
             }
         }
 
@@ -181,29 +131,25 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope,
+                Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4)
+            public TInstance Create(TP0 param0,
+				TP1 param1,
+				TP2 param2,
+				TP3 param3,
+				TP4 param4)
             {
-                var guid = Guid.NewGuid();
-
-                var subScope = _scope
-                    .BeginLifetimeScope(guid, subScopeBuilder =>
-                    {
-                        subScopeBuilder.OverrideExternallyOwnedInScope<TInstance>(guid);
-                        _subScopeInstaller(subScopeBuilder, param0, param1, param2, param3, param4);
-                    });
-
-                var instance = subScope.Resolve<TInstance>();
-
-                subScope
-                    .AddToHarmony(instance);
-
-                return instance;
+                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TInstance>(_subScopeInstaller,
+					param0,
+					param1,
+					param2,
+					param3,
+					param4);
             }
         }
 
@@ -214,29 +160,27 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope,
+                Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5)
+            public TInstance Create(TP0 param0,
+				TP1 param1,
+				TP2 param2,
+				TP3 param3,
+				TP4 param4,
+				TP5 param5)
             {
-                var guid = Guid.NewGuid();
-
-                var subScope = _scope
-                    .BeginLifetimeScope(guid, subScopeBuilder =>
-                    {
-                        subScopeBuilder.OverrideExternallyOwnedInScope<TInstance>(guid);
-                        _subScopeInstaller(subScopeBuilder, param0, param1, param2, param3, param4, param5);
-                    });
-
-                var instance = subScope.Resolve<TInstance>();
-
-                subScope
-                    .AddToHarmony(instance);
-
-                return instance;
+                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>(_subScopeInstaller,
+					param0,
+					param1,
+					param2,
+					param3,
+					param4,
+					param5);
             }
         }
 
@@ -247,29 +191,29 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope,
+                Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6)
+            public TInstance Create(TP0 param0,
+				TP1 param1,
+				TP2 param2,
+				TP3 param3,
+				TP4 param4,
+				TP5 param5,
+				TP6 param6)
             {
-                var guid = Guid.NewGuid();
-
-                var subScope = _scope
-                    .BeginLifetimeScope(guid, subScopeBuilder =>
-                    {
-                        subScopeBuilder.OverrideExternallyOwnedInScope<TInstance>(guid);
-                        _subScopeInstaller(subScopeBuilder, param0, param1, param2, param3, param4, param5, param6);
-                    });
-
-                var instance = subScope.Resolve<TInstance>();
-
-                subScope
-                    .AddToHarmony(instance);
-
-                return instance;
+                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>(_subScopeInstaller,
+					param0,
+					param1,
+					param2,
+					param3,
+					param4,
+					param5,
+					param6);
             }
         }
 
@@ -280,29 +224,31 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope,
+                Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7)
+            public TInstance Create(TP0 param0,
+				TP1 param1,
+				TP2 param2,
+				TP3 param3,
+				TP4 param4,
+				TP5 param5,
+				TP6 param6,
+				TP7 param7)
             {
-                var guid = Guid.NewGuid();
-
-                var subScope = _scope
-                    .BeginLifetimeScope(guid, subScopeBuilder =>
-                    {
-                        subScopeBuilder.OverrideExternallyOwnedInScope<TInstance>(guid);
-                        _subScopeInstaller(subScopeBuilder, param0, param1, param2, param3, param4, param5, param6, param7);
-                    });
-
-                var instance = subScope.Resolve<TInstance>();
-
-                subScope
-                    .AddToHarmony(instance);
-
-                return instance;
+                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>(_subScopeInstaller,
+					param0,
+					param1,
+					param2,
+					param3,
+					param4,
+					param5,
+					param6,
+					param7);
             }
         }
 
@@ -313,29 +259,33 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope,
+                Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7, TP8 param8)
+            public TInstance Create(TP0 param0,
+				TP1 param1,
+				TP2 param2,
+				TP3 param3,
+				TP4 param4,
+				TP5 param5,
+				TP6 param6,
+				TP7 param7,
+				TP8 param8)
             {
-                var guid = Guid.NewGuid();
-
-                var subScope = _scope
-                    .BeginLifetimeScope(guid, subScopeBuilder =>
-                    {
-                        subScopeBuilder.OverrideExternallyOwnedInScope<TInstance>(guid);
-                        _subScopeInstaller(subScopeBuilder, param0, param1, param2, param3, param4, param5, param6, param7, param8);
-                    });
-
-                var instance = subScope.Resolve<TInstance>();
-
-                subScope
-                    .AddToHarmony(instance);
-
-                return instance;
+                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>(_subScopeInstaller,
+					param0,
+					param1,
+					param2,
+					param3,
+					param4,
+					param5,
+					param6,
+					param7,
+					param8);
             }
         }
 
@@ -346,30 +296,37 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9> _subScopeInstaller;
 
-            public AutofacSubScopeFactory(ILifetimeScope scope, Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9> subScopeInstaller)
+            public AutofacSubScopeFactory(ILifetimeScope scope,
+                Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9> subScopeInstaller)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7, TP8 param8, TP9 param9)
+            public TInstance Create(TP0 param0,
+				TP1 param1,
+				TP2 param2,
+				TP3 param3,
+				TP4 param4,
+				TP5 param5,
+				TP6 param6,
+				TP7 param7,
+				TP8 param8,
+				TP9 param9)
             {
-                var guid = Guid.NewGuid();
-
-                var subScope = _scope
-                    .BeginLifetimeScope(guid, subScopeBuilder =>
-                    {
-                        subScopeBuilder.OverrideExternallyOwnedInScope<TInstance>(guid);
-                        _subScopeInstaller(subScopeBuilder, param0, param1, param2, param3, param4, param5, param6, param7, param8, param9);
-                    });
-
-                var instance = subScope.Resolve<TInstance>();
-
-                subScope
-                    .AddToHarmony(instance);
-
-                return instance;
+                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>(_subScopeInstaller,
+					param0,
+					param1,
+					param2,
+					param3,
+					param4,
+					param5,
+					param6,
+					param7,
+					param8,
+					param9);
             }
         }
+
     }
 }

@@ -43,6 +43,10 @@
           <Generator>TextTemplatingFileGenerator</Generator>
           <LastGenOutput>AutofacCreateInstanceFactories.cs</LastGenOutput>
         </None>
+        <None Update="DIExtensionsSubScope.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>DIExtensionsSubScope.cs</LastGenOutput>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -68,9 +72,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Update="DIExtensionsFactories.cs">
-            <DependentUpon>DIExtensionsFactories.tt</DependentUpon>
-        </Compile>
         <Compile Update="Interfaces\IFactory.cs">
             <DependentUpon>IFactory.tt</DependentUpon>
         </Compile>
@@ -82,15 +83,25 @@
           <DesignTime>True</DesignTime>
           <DependentUpon>AutofacFunctionFactories.tt</DependentUpon>
         </Compile>
-        <Compile Update="Entities\Factories\AutofacSubScopeFactories.cs">
-          <AutoGen>True</AutoGen>
-          <DesignTime>True</DesignTime>
-          <DependentUpon>AutofacSubScopeFactories.tt</DependentUpon>
-        </Compile>
         <Compile Update="Entities\Factories\AutofacCreateInstanceFactories.cs">
           <AutoGen>True</AutoGen>
           <DesignTime>True</DesignTime>
           <DependentUpon>AutofacCreateInstanceFactories.tt</DependentUpon>
+        </Compile>
+        <Compile Update="DIExtensionsSubScope.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>DIExtensionsSubScope.tt</DependentUpon>
+        </Compile>
+        <Compile Update="DIExtensionsFactories.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>DIExtensionsFactories.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Entities\Factories\AutofacSubScopeFactories.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>AutofacSubScopeFactories.tt</DependentUpon>
         </Compile>
     </ItemGroup>
 
