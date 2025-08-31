@@ -6,7 +6,6 @@ using Autofac.Core;
 using Autofac.Core.Registration;
 using Autofac2ZenjectLikeBridge.Builders.Decorator;
 using Autofac2ZenjectLikeBridge.Builders.Instance;
-using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
 using Autofac2ZenjectLikeBridge.Interfaces;
 using Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator;
 using Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance;
@@ -35,6 +34,39 @@ namespace Autofac2ZenjectLikeBridge
                 where TNewInstance : TInstance, IDisposable;
         }
 
+        public class ExtendedRegistrationFactoryBuilder<TInstance> : IExtendedRegistrationFactoryBuilder<TInstance, IFactory<TInstance>>
+            where TInstance : class
+        {
+            private readonly ContainerBuilder _builder;
+
+            public ExtendedRegistrationFactoryBuilder(ContainerBuilder builder)
+            {
+                _builder = builder ?? throw new ArgumentNullException(nameof(builder));
+            }
+
+            public IRegistrationBuilder<IFactory<TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle> FromNewInstance()
+            {
+                return _builder
+                    .RegisterType<Entities.Factories.DIExtensions.AutofacCreateInstanceFactory<TInstance>>()
+                    .As<IFactory<TInstance>>();
+            }
+
+            public IRegistrationBuilder<IFactory<TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle> FromFunction(
+                Func<ILifetimeScope, TInstance> func)
+            {
+                return _builder
+                    .RegisterType<Entities.Factories.DIExtensions.AutofacFunctionFactory<TInstance>>()
+                    .WithParameters(TypedParameter.From(func))
+                    .As<IFactory<TInstance>>();
+            }
+
+            public ISubScopeFactoryBuilder<TNewInstance> FromSubScope<TNewInstance>()
+                where TNewInstance : TInstance, IDisposable
+            {
+                return new SubScopeFactoryBuilder<TNewInstance>(_builder);
+            }
+        }
+
         public interface ISubScopeFactoryBuilder<out TInstance>
             where TInstance : IDisposable
         {
@@ -48,6 +80,37 @@ namespace Autofac2ZenjectLikeBridge
                 ConcreteReflectionActivatorData,
                 SingleRegistrationStyle> FromInstaller<TInstaller>(TInstaller installer)
                 where TInstaller : class, IInstaller;
+        }
+
+        public class SubScopeFactoryBuilder<TInstance> : ISubScopeFactoryBuilder<TInstance>
+            where TInstance : IDisposable
+        {
+            private readonly ContainerBuilder _builder;
+
+            public SubScopeFactoryBuilder(ContainerBuilder builder)
+            {
+                _builder = builder ?? throw new ArgumentNullException(nameof(builder));
+            }
+
+            public IRegistrationBuilder<IFactory<TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
+                FromFunction(
+                Action<ContainerBuilder> subScopeInstaller)
+            {
+                return _builder
+                    .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeFactory<TInstance>>()
+                    .WithParameters(TypedParameter.From(subScopeInstaller))
+                    .As<IFactory<TInstance>>();
+            }
+
+            public IRegistrationBuilder<IFactory<TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
+                FromInstaller<TInstaller>(
+                TInstaller installer)
+                where TInstaller : class, IInstaller
+            {
+                return _builder
+                    .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeInstallerFactory<TInstance, TInstaller>>()
+                    .As<IFactory<TInstance>>();
+            }
         }
 
         public static IRegistrationBuilder<TLimit, TReflectionActivatorData, TStyle>

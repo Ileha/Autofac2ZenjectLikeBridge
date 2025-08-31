@@ -8,7 +8,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
     {
         //generated amount 10
 
-        private class AutofacCreateInstanceFactory<TInstance>
+        internal class AutofacCreateInstanceFactory<TInstance>
             : IFactory<TInstance>
             where TInstance : class
         {
@@ -25,7 +25,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        private class AutofacCreateInstanceFactory<TP0, TInstance>
+        internal class AutofacCreateInstanceFactory<TP0, TInstance>
             : IFactory<TP0, TInstance>
             where TInstance : class
         {
@@ -42,7 +42,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        private class AutofacCreateInstanceFactory<TP0, TP1, TInstance>
+        internal class AutofacCreateInstanceFactory<TP0, TP1, TInstance>
             : IFactory<TP0, TP1, TInstance>
             where TInstance : class
         {
@@ -59,7 +59,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        private class AutofacCreateInstanceFactory<TP0, TP1, TP2, TInstance>
+        internal class AutofacCreateInstanceFactory<TP0, TP1, TP2, TInstance>
             : IFactory<TP0, TP1, TP2, TInstance>
             where TInstance : class
         {
@@ -76,7 +76,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        private class AutofacCreateInstanceFactory<TP0, TP1, TP2, TP3, TInstance>
+        internal class AutofacCreateInstanceFactory<TP0, TP1, TP2, TP3, TInstance>
             : IFactory<TP0, TP1, TP2, TP3, TInstance>
             where TInstance : class
         {
@@ -93,7 +93,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        private class AutofacCreateInstanceFactory<TP0, TP1, TP2, TP3, TP4, TInstance>
+        internal class AutofacCreateInstanceFactory<TP0, TP1, TP2, TP3, TP4, TInstance>
             : IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>
             where TInstance : class
         {
@@ -110,7 +110,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        private class AutofacCreateInstanceFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>
+        internal class AutofacCreateInstanceFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>
             : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>
             where TInstance : class
         {
@@ -127,7 +127,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        private class AutofacCreateInstanceFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>
+        internal class AutofacCreateInstanceFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>
             : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>
             where TInstance : class
         {
@@ -144,7 +144,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        private class AutofacCreateInstanceFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>
+        internal class AutofacCreateInstanceFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>
             : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>
             where TInstance : class
         {
@@ -161,7 +161,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        private class AutofacCreateInstanceFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>
+        internal class AutofacCreateInstanceFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>
             : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>
             where TInstance : class
         {
@@ -178,7 +178,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        private class AutofacCreateInstanceFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>
+        internal class AutofacCreateInstanceFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>
             : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>
             where TInstance : class
         {

@@ -81,33 +81,5 @@ namespace Autofac2ZenjectLikeBridge
     }
 #>
 
-/*
-        private static TComponent ResolveFromSubScope<TP0, TComponent, TInstaller>(
-            ILifetimeScope scope,
-            TP0 param0)
-            where TComponent : IDisposable
-            where TInstaller : class, IInstaller
-        {
-            var guid = Guid.NewGuid();
-
-            var subScope = scope
-                .BeginLifetimeScope(
-                    guid,
-                    scopeBuilder =>
-                    {
-                        scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        var installerInstance = scope.CreateInstance<TInstaller>(scopeBuilder, param0);
-                        installerInstance.Install();
-                    });
-
-            var service = subScope.Resolve<TComponent>();
-
-            subScope
-                .AddToHarmony(service);
-
-            return service;
-        }
-*/
-
     }
 }

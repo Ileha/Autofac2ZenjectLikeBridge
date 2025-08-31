@@ -8,9 +8,9 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
     {
         //generated amount 10
 
-        private class AutofacSubScopeFactory<TInstance>
+        internal class AutofacSubScopeFactory<TInstance>
             : IFactory<TInstance>
-            where TInstance : class, IDisposable
+            where TInstance : IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder> _subScopeInstaller;
@@ -28,9 +28,9 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        private class AutofacSubScopeFactory<TP0, TInstance>
+        internal class AutofacSubScopeFactory<TP0, TInstance>
             : IFactory<TP0, TInstance>
-            where TInstance : class, IDisposable
+            where TInstance : IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0> _subScopeInstaller;
@@ -42,16 +42,17 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(TP0 param0)
+            public TInstance Create(
+				TP0 param0)
             {
                 return _scope.ResolveFromSubScope<TP0, TInstance>(_subScopeInstaller,
 					param0);
             }
         }
 
-        private class AutofacSubScopeFactory<TP0, TP1, TInstance>
+        internal class AutofacSubScopeFactory<TP0, TP1, TInstance>
             : IFactory<TP0, TP1, TInstance>
-            where TInstance : class, IDisposable
+            where TInstance : IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0, TP1> _subScopeInstaller;
@@ -63,7 +64,8 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(TP0 param0,
+            public TInstance Create(
+				TP0 param0,
 				TP1 param1)
             {
                 return _scope.ResolveFromSubScope<TP0, TP1, TInstance>(_subScopeInstaller,
@@ -72,9 +74,9 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        private class AutofacSubScopeFactory<TP0, TP1, TP2, TInstance>
+        internal class AutofacSubScopeFactory<TP0, TP1, TP2, TInstance>
             : IFactory<TP0, TP1, TP2, TInstance>
-            where TInstance : class, IDisposable
+            where TInstance : IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0, TP1, TP2> _subScopeInstaller;
@@ -86,7 +88,8 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(TP0 param0,
+            public TInstance Create(
+				TP0 param0,
 				TP1 param1,
 				TP2 param2)
             {
@@ -97,9 +100,9 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        private class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TInstance>
+        internal class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TInstance>
             : IFactory<TP0, TP1, TP2, TP3, TInstance>
-            where TInstance : class, IDisposable
+            where TInstance : IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3> _subScopeInstaller;
@@ -111,7 +114,8 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(TP0 param0,
+            public TInstance Create(
+				TP0 param0,
 				TP1 param1,
 				TP2 param2,
 				TP3 param3)
@@ -124,9 +128,9 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        private class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TInstance>
+        internal class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TInstance>
             : IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>
-            where TInstance : class, IDisposable
+            where TInstance : IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4> _subScopeInstaller;
@@ -138,7 +142,8 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(TP0 param0,
+            public TInstance Create(
+				TP0 param0,
 				TP1 param1,
 				TP2 param2,
 				TP3 param3,
@@ -153,9 +158,9 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        private class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>
+        internal class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>
             : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>
-            where TInstance : class, IDisposable
+            where TInstance : IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5> _subScopeInstaller;
@@ -167,7 +172,8 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(TP0 param0,
+            public TInstance Create(
+				TP0 param0,
 				TP1 param1,
 				TP2 param2,
 				TP3 param3,
@@ -184,9 +190,9 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        private class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>
+        internal class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>
             : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>
-            where TInstance : class, IDisposable
+            where TInstance : IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6> _subScopeInstaller;
@@ -198,7 +204,8 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(TP0 param0,
+            public TInstance Create(
+				TP0 param0,
 				TP1 param1,
 				TP2 param2,
 				TP3 param3,
@@ -217,9 +224,9 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        private class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>
+        internal class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>
             : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>
-            where TInstance : class, IDisposable
+            where TInstance : IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7> _subScopeInstaller;
@@ -231,7 +238,8 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(TP0 param0,
+            public TInstance Create(
+				TP0 param0,
 				TP1 param1,
 				TP2 param2,
 				TP3 param3,
@@ -252,9 +260,9 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        private class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>
+        internal class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>
             : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>
-            where TInstance : class, IDisposable
+            where TInstance : IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8> _subScopeInstaller;
@@ -266,7 +274,8 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(TP0 param0,
+            public TInstance Create(
+				TP0 param0,
 				TP1 param1,
 				TP2 param2,
 				TP3 param3,
@@ -289,9 +298,9 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        private class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>
+        internal class AutofacSubScopeFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>
             : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>
-            where TInstance : class, IDisposable
+            where TInstance : IDisposable
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9> _subScopeInstaller;
@@ -303,7 +312,8 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
                 _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
             }
 
-            public TInstance Create(TP0 param0,
+            public TInstance Create(
+				TP0 param0,
 				TP1 param1,
 				TP2 param2,
 				TP3 param3,
@@ -315,6 +325,315 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
 				TP9 param9)
             {
                 return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>(_subScopeInstaller,
+					param0,
+					param1,
+					param2,
+					param3,
+					param4,
+					param5,
+					param6,
+					param7,
+					param8,
+					param9);
+            }
+        }
+
+
+        internal class AutofacSubScopeInstallerFactory<TInstance, TInstaller>
+            : IFactory<TInstance>
+            where TInstance : IDisposable
+            where TInstaller : class, IInstaller
+        {
+            private readonly ILifetimeScope _scope;
+
+            public AutofacSubScopeInstallerFactory(ILifetimeScope scope)
+            {
+                _scope = scope ?? throw new ArgumentNullException(nameof(scope));
+            }
+
+            public TInstance Create()
+            {
+                return _scope.ResolveFromSubScope<TInstance, TInstaller>();
+            }
+        }
+
+        internal class AutofacSubScopeInstallerFactory<TP0, TInstance, TInstaller>
+            : IFactory<TP0, TInstance>
+            where TInstance : IDisposable
+            where TInstaller : class, IInstaller
+        {
+            private readonly ILifetimeScope _scope;
+
+            public AutofacSubScopeInstallerFactory(ILifetimeScope scope)
+            {
+                _scope = scope ?? throw new ArgumentNullException(nameof(scope));
+            }
+
+            public TInstance Create(
+				TP0 param0)
+            {
+                return _scope.ResolveFromSubScope<TP0, TInstance, TInstaller>(
+					param0);
+            }
+        }
+
+        internal class AutofacSubScopeInstallerFactory<TP0, TP1, TInstance, TInstaller>
+            : IFactory<TP0, TP1, TInstance>
+            where TInstance : IDisposable
+            where TInstaller : class, IInstaller
+        {
+            private readonly ILifetimeScope _scope;
+
+            public AutofacSubScopeInstallerFactory(ILifetimeScope scope)
+            {
+                _scope = scope ?? throw new ArgumentNullException(nameof(scope));
+            }
+
+            public TInstance Create(
+				TP0 param0,
+				TP1 param1)
+            {
+                return _scope.ResolveFromSubScope<TP0, TP1, TInstance, TInstaller>(
+					param0,
+					param1);
+            }
+        }
+
+        internal class AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TInstance, TInstaller>
+            : IFactory<TP0, TP1, TP2, TInstance>
+            where TInstance : IDisposable
+            where TInstaller : class, IInstaller
+        {
+            private readonly ILifetimeScope _scope;
+
+            public AutofacSubScopeInstallerFactory(ILifetimeScope scope)
+            {
+                _scope = scope ?? throw new ArgumentNullException(nameof(scope));
+            }
+
+            public TInstance Create(
+				TP0 param0,
+				TP1 param1,
+				TP2 param2)
+            {
+                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TInstance, TInstaller>(
+					param0,
+					param1,
+					param2);
+            }
+        }
+
+        internal class AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TInstance, TInstaller>
+            : IFactory<TP0, TP1, TP2, TP3, TInstance>
+            where TInstance : IDisposable
+            where TInstaller : class, IInstaller
+        {
+            private readonly ILifetimeScope _scope;
+
+            public AutofacSubScopeInstallerFactory(ILifetimeScope scope)
+            {
+                _scope = scope ?? throw new ArgumentNullException(nameof(scope));
+            }
+
+            public TInstance Create(
+				TP0 param0,
+				TP1 param1,
+				TP2 param2,
+				TP3 param3)
+            {
+                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TInstance, TInstaller>(
+					param0,
+					param1,
+					param2,
+					param3);
+            }
+        }
+
+        internal class AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TP4, TInstance, TInstaller>
+            : IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>
+            where TInstance : IDisposable
+            where TInstaller : class, IInstaller
+        {
+            private readonly ILifetimeScope _scope;
+
+            public AutofacSubScopeInstallerFactory(ILifetimeScope scope)
+            {
+                _scope = scope ?? throw new ArgumentNullException(nameof(scope));
+            }
+
+            public TInstance Create(
+				TP0 param0,
+				TP1 param1,
+				TP2 param2,
+				TP3 param3,
+				TP4 param4)
+            {
+                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TInstance, TInstaller>(
+					param0,
+					param1,
+					param2,
+					param3,
+					param4);
+            }
+        }
+
+        internal class AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance, TInstaller>
+            : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>
+            where TInstance : IDisposable
+            where TInstaller : class, IInstaller
+        {
+            private readonly ILifetimeScope _scope;
+
+            public AutofacSubScopeInstallerFactory(ILifetimeScope scope)
+            {
+                _scope = scope ?? throw new ArgumentNullException(nameof(scope));
+            }
+
+            public TInstance Create(
+				TP0 param0,
+				TP1 param1,
+				TP2 param2,
+				TP3 param3,
+				TP4 param4,
+				TP5 param5)
+            {
+                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TInstance, TInstaller>(
+					param0,
+					param1,
+					param2,
+					param3,
+					param4,
+					param5);
+            }
+        }
+
+        internal class AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance, TInstaller>
+            : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>
+            where TInstance : IDisposable
+            where TInstaller : class, IInstaller
+        {
+            private readonly ILifetimeScope _scope;
+
+            public AutofacSubScopeInstallerFactory(ILifetimeScope scope)
+            {
+                _scope = scope ?? throw new ArgumentNullException(nameof(scope));
+            }
+
+            public TInstance Create(
+				TP0 param0,
+				TP1 param1,
+				TP2 param2,
+				TP3 param3,
+				TP4 param4,
+				TP5 param5,
+				TP6 param6)
+            {
+                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance, TInstaller>(
+					param0,
+					param1,
+					param2,
+					param3,
+					param4,
+					param5,
+					param6);
+            }
+        }
+
+        internal class AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance, TInstaller>
+            : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>
+            where TInstance : IDisposable
+            where TInstaller : class, IInstaller
+        {
+            private readonly ILifetimeScope _scope;
+
+            public AutofacSubScopeInstallerFactory(ILifetimeScope scope)
+            {
+                _scope = scope ?? throw new ArgumentNullException(nameof(scope));
+            }
+
+            public TInstance Create(
+				TP0 param0,
+				TP1 param1,
+				TP2 param2,
+				TP3 param3,
+				TP4 param4,
+				TP5 param5,
+				TP6 param6,
+				TP7 param7)
+            {
+                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance, TInstaller>(
+					param0,
+					param1,
+					param2,
+					param3,
+					param4,
+					param5,
+					param6,
+					param7);
+            }
+        }
+
+        internal class AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance, TInstaller>
+            : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>
+            where TInstance : IDisposable
+            where TInstaller : class, IInstaller
+        {
+            private readonly ILifetimeScope _scope;
+
+            public AutofacSubScopeInstallerFactory(ILifetimeScope scope)
+            {
+                _scope = scope ?? throw new ArgumentNullException(nameof(scope));
+            }
+
+            public TInstance Create(
+				TP0 param0,
+				TP1 param1,
+				TP2 param2,
+				TP3 param3,
+				TP4 param4,
+				TP5 param5,
+				TP6 param6,
+				TP7 param7,
+				TP8 param8)
+            {
+                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance, TInstaller>(
+					param0,
+					param1,
+					param2,
+					param3,
+					param4,
+					param5,
+					param6,
+					param7,
+					param8);
+            }
+        }
+
+        internal class AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance, TInstaller>
+            : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>
+            where TInstance : IDisposable
+            where TInstaller : class, IInstaller
+        {
+            private readonly ILifetimeScope _scope;
+
+            public AutofacSubScopeInstallerFactory(ILifetimeScope scope)
+            {
+                _scope = scope ?? throw new ArgumentNullException(nameof(scope));
+            }
+
+            public TInstance Create(
+				TP0 param0,
+				TP1 param1,
+				TP2 param2,
+				TP3 param3,
+				TP4 param4,
+				TP5 param5,
+				TP6 param6,
+				TP7 param7,
+				TP8 param8,
+				TP9 param9)
+            {
+                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance, TInstaller>(
 					param0,
 					param1,
 					param2,
