@@ -31,6 +31,18 @@
             <Pack>True</Pack>
             <PackagePath>\</PackagePath>
         </None>
+        <None Update="Entities\Factories\AutofacFunctionFactories.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>AutofacFunctionFactories.cs</LastGenOutput>
+        </None>
+        <None Update="Entities\Factories\AutofacSubScopeFactories.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>AutofacSubScopeFactories.cs</LastGenOutput>
+        </None>
+        <None Update="Entities\Factories\AutofacCreateInstanceFactories.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>AutofacCreateInstanceFactories.cs</LastGenOutput>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -64,6 +76,21 @@
         </Compile>
         <Compile Update="PlaceholderFactory.cs">
             <DependentUpon>PlaceholderFactory.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Entities\Factories\AutofacFunctionFactories.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>AutofacFunctionFactories.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Entities\Factories\AutofacSubScopeFactories.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>AutofacSubScopeFactories.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Entities\Factories\AutofacCreateInstanceFactories.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>AutofacCreateInstanceFactories.tt</DependentUpon>
         </Compile>
     </ItemGroup>
 

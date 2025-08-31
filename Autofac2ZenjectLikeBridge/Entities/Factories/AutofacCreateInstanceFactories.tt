@@ -1,0 +1,57 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="$(TargetPath)" #>
+<#@ output extension=".cs" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="Autofac2ZenjectLikeBridge" #>
+using System;
+using Autofac;
+using Autofac2ZenjectLikeBridge.Interfaces;
+
+namespace Autofac2ZenjectLikeBridge.Entities.Factories
+{
+    public static partial class DIExtensions
+    {
+        //generated amount <#= Constants.GenericParametersCount #>
+
+<#
+    for (var i = 0; i <= Constants.GenericParametersCount; i++)
+    {
+#>
+        private class AutofacCreateInstanceFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>
+            : IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>
+            where TInstance : class
+        {
+            private readonly ILifetimeScope _scope;
+
+            public AutofacCreateInstanceFactory(ILifetimeScope scope)
+            {
+                _scope = scope ?? throw new ArgumentNullException(nameof(scope));
+            }
+
+            public TInstance Create(<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j} param{j}")) #>)
+            {
+<#
+        if (i > 0)
+        {
+#>
+                return _scope.CreateInstance<TInstance>(<#=
+                string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"param{j}")) #>);
+<#
+        }
+        else
+        {
+#>
+                return _scope.CreateInstance<TInstance>();
+<#
+        }
+#>
+            }
+        }
+
+<#
+    }
+#>
+    }
+}
