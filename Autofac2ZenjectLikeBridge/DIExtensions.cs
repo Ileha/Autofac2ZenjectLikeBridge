@@ -6,6 +6,7 @@ using Autofac.Core;
 using Autofac.Core.Registration;
 using Autofac2ZenjectLikeBridge.Builders.Decorator;
 using Autofac2ZenjectLikeBridge.Builders.Instance;
+using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
 using Autofac2ZenjectLikeBridge.Interfaces;
 using Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator;
 using Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance;
@@ -17,36 +18,135 @@ namespace Autofac2ZenjectLikeBridge
 {
     public static partial class DIExtensions
     {
-        public interface IExtendedRegistrationFactoryBuilder<in TInstance, out TFactory>
+
+        // public static IExtendedRegistrationFactoryBuilderWithDispose<
+        //     TInstance,
+        //     TPlaceholderFactory,
+        //     SimpleActivatorData> AsDispose<TInstance, TPlaceholderFactory>(
+        //         this IExtendedRegistrationFactoryBuilder<TInstance, TPlaceholderFactory, SimpleActivatorData> builder)
+        //     where TInstance : IDisposable
+        //     where TPlaceholderFactory : IFactory<TInstance>
+        // {
+        //     return new ExtendedRegistrationPlaceholderFactoryBuilder()
+        // }
+
+        public interface IExtendedRegistrationFactoryBuilder<in TInstance, out TFactory, out TActivatorData>
             where TFactory : IFactory<TInstance>
         {
-            IRegistrationBuilder<
-                TFactory,
-                ConcreteReflectionActivatorData,
-                SingleRegistrationStyle> FromNewInstance();
-
-            IRegistrationBuilder<
-                TFactory,
-                ConcreteReflectionActivatorData,
-                SingleRegistrationStyle> FromFunction(Func<ILifetimeScope, TInstance> func);
-
-            ISubScopeFactoryBuilder<TNewInstance> FromSubScope<TNewInstance>()
-                where TNewInstance : TInstance, IDisposable;
+            IRegistrationBuilder<TFactory, TActivatorData, SingleRegistrationStyle> FromNewInstance();
+            IRegistrationBuilder<TFactory, TActivatorData, SingleRegistrationStyle> FromFunction(Func<ILifetimeScope, TInstance> func);
         }
 
-        public class ExtendedRegistrationFactoryBuilder<TInstance> : IExtendedRegistrationFactoryBuilder<TInstance, IFactory<TInstance>>
+        public interface IExtendedRegistrationFactoryBuilderWithDispose<TInstance, out TFactory, out TActivatorData>
+            : IExtendedRegistrationFactoryBuilder<TInstance, TFactory, TActivatorData>
+            where TInstance : IDisposable
+            where TFactory : IFactory<TInstance>
+        {
+            ISubScopeFactoryBuilder<TInstance, TFactory, TActivatorData> FromSubScope();
+        }
+
+        public class ExtendedRegistrationPlaceholderFactoryBuilder<TInstance, TPlaceholderFactory>
+            : IExtendedRegistrationFactoryBuilder<TInstance, TPlaceholderFactory, SimpleActivatorData>
+            where TPlaceholderFactory : PlaceholderFactory<TInstance>
             where TInstance : class
         {
-            private readonly ContainerBuilder _builder;
+            protected readonly ContainerBuilder Builder;
+
+            public ExtendedRegistrationPlaceholderFactoryBuilder(ContainerBuilder builder)
+            {
+                Builder = builder;
+            }
+
+            public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle> FromNewInstance()
+            {
+                return Builder
+                    .Register((IComponentContext _, ILifetimeScope scope) =>
+                    {
+                        var subScope = scope
+                            .BeginLifetimeScope(subScopeBuilder =>
+                            {
+                                new ExtendedRegistrationFactoryBuilder<TInstance>(subScopeBuilder)
+                                    .FromNewInstance()
+                                    .SingleInstance();
+
+                                subScopeBuilder
+                                    .RegisterType<TPlaceholderFactory>()
+                                    .SingleInstance()
+                                    .ExternallyOwned();
+                            });
+
+                        var placeholderFactory = subScope.Resolve<TPlaceholderFactory>();
+                        var factory = subScope.Resolve<IFactory<TInstance>>();
+                        placeholderFactory.Nested = factory;
+
+                        subScope
+                            .AddToHarmony(placeholderFactory);
+
+                        return placeholderFactory;
+                    });
+            }
+
+            public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle> FromFunction(Func<ILifetimeScope, TInstance> func)
+            {
+                return Builder
+                    .Register((IComponentContext _, ILifetimeScope scope) =>
+                    {
+                        var subScope = scope
+                            .BeginLifetimeScope(subScopeBuilder =>
+                            {
+                                new ExtendedRegistrationFactoryBuilder<TInstance>(subScopeBuilder)
+                                    .FromFunction(func)
+                                    .SingleInstance();
+
+                                subScopeBuilder
+                                    .RegisterType<TPlaceholderFactory>()
+                                    .SingleInstance()
+                                    .ExternallyOwned();
+                            });
+
+                        var placeholderFactory = subScope.Resolve<TPlaceholderFactory>();
+                        var factory = subScope.Resolve<IFactory<TInstance>>();
+                        placeholderFactory.Nested = factory;
+
+                        subScope
+                            .AddToHarmony(placeholderFactory);
+
+                        return placeholderFactory;
+                    });
+            }
+        }
+
+        public class ExtendedRegistrationPlaceholderFactoryBuilderWithDispose<TInstance, TPlaceholderFactory>
+            : ExtendedRegistrationPlaceholderFactoryBuilder<TInstance, TPlaceholderFactory>,
+                IExtendedRegistrationFactoryBuilderWithDispose<TInstance, TPlaceholderFactory, SimpleActivatorData>
+            where TPlaceholderFactory : PlaceholderFactory<TInstance>
+            where TInstance : class, IDisposable
+        {
+            public ExtendedRegistrationPlaceholderFactoryBuilderWithDispose(ContainerBuilder builder)
+                : base(builder)
+            {
+            }
+
+            public ISubScopeFactoryBuilder<TInstance, TPlaceholderFactory, SimpleActivatorData> FromSubScope()
+            {
+                return new SubScopePlaceholderFactoryBuilder<TInstance, TPlaceholderFactory>(Builder);
+            }
+        }
+
+        public class ExtendedRegistrationFactoryBuilder<TInstance>
+            : IExtendedRegistrationFactoryBuilder<TInstance, IFactory<TInstance>, ConcreteReflectionActivatorData>
+            where TInstance : class
+        {
+            protected readonly ContainerBuilder Builder;
 
             public ExtendedRegistrationFactoryBuilder(ContainerBuilder builder)
             {
-                _builder = builder ?? throw new ArgumentNullException(nameof(builder));
+                Builder = builder ?? throw new ArgumentNullException(nameof(builder));
             }
 
             public IRegistrationBuilder<IFactory<TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle> FromNewInstance()
             {
-                return _builder
+                return Builder
                     .RegisterType<Entities.Factories.DIExtensions.AutofacCreateInstanceFactory<TInstance>>()
                     .As<IFactory<TInstance>>();
             }
@@ -54,35 +154,71 @@ namespace Autofac2ZenjectLikeBridge
             public IRegistrationBuilder<IFactory<TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle> FromFunction(
                 Func<ILifetimeScope, TInstance> func)
             {
-                return _builder
+                return Builder
                     .RegisterType<Entities.Factories.DIExtensions.AutofacFunctionFactory<TInstance>>()
                     .WithParameters(TypedParameter.From(func))
                     .As<IFactory<TInstance>>();
             }
+        }
 
-            public ISubScopeFactoryBuilder<TNewInstance> FromSubScope<TNewInstance>()
-                where TNewInstance : TInstance, IDisposable
+        public class ExtendedRegistrationFactoryBuilderWithDispose<TInstance>
+            : ExtendedRegistrationFactoryBuilder<TInstance>,
+                IExtendedRegistrationFactoryBuilderWithDispose<TInstance, IFactory<TInstance>, ConcreteReflectionActivatorData>
+            where TInstance : class, IDisposable
+        {
+            public ExtendedRegistrationFactoryBuilderWithDispose(ContainerBuilder builder)
+                : base(builder)
             {
-                return new SubScopeFactoryBuilder<TNewInstance>(_builder);
+            }
+
+            public ISubScopeFactoryBuilder<TInstance, IFactory<TInstance>, ConcreteReflectionActivatorData> FromSubScope()
+            {
+                return new SubScopeFactoryBuilder<TInstance>(Builder);
             }
         }
 
-        public interface ISubScopeFactoryBuilder<out TInstance>
+        public interface ISubScopeFactoryBuilder<out TInstance, out TFactory, out TActivatorData>
             where TInstance : IDisposable
+            where TFactory : IFactory<TInstance>
         {
             IRegistrationBuilder<
-                IFactory<TInstance>,
-                ConcreteReflectionActivatorData,
+                TFactory,
+                TActivatorData,
                 SingleRegistrationStyle> FromFunction(Action<ContainerBuilder> subScopeInstaller);
 
             IRegistrationBuilder<
-                IFactory<TInstance>,
-                ConcreteReflectionActivatorData,
+                TFactory,
+                TActivatorData,
                 SingleRegistrationStyle> FromInstaller<TInstaller>(TInstaller installer)
                 where TInstaller : class, IInstaller;
         }
 
-        public class SubScopeFactoryBuilder<TInstance> : ISubScopeFactoryBuilder<TInstance>
+        public class SubScopePlaceholderFactoryBuilder<TInstance, TPlaceholderFactory> : ISubScopeFactoryBuilder<TInstance, TPlaceholderFactory, SimpleActivatorData>
+            where TInstance : IDisposable
+            where TPlaceholderFactory : PlaceholderFactory<TInstance>
+        {
+            private readonly ContainerBuilder _builder;
+
+            public SubScopePlaceholderFactoryBuilder(ContainerBuilder builder)
+            {
+                _builder = builder ?? throw new ArgumentNullException(nameof(builder));
+            }
+
+            public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle>
+                FromFunction(Action<ContainerBuilder> subScopeInstaller)
+            {
+                throw new NotImplementedException();
+            }
+
+            public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle>
+                FromInstaller<TInstaller>(TInstaller installer)
+                where TInstaller : class, IInstaller
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public class SubScopeFactoryBuilder<TInstance> : ISubScopeFactoryBuilder<TInstance, IFactory<TInstance>, ConcreteReflectionActivatorData>
             where TInstance : IDisposable
         {
             private readonly ContainerBuilder _builder;
