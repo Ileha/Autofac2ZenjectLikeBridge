@@ -4,12 +4,12 @@ using JetBrains.Annotations;
 
 namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator
 {
-    public interface ISubScopeDecoratorBuilder<in TDecorator, out TService> : IExtendedRegistrationBuilderBase
+    public interface ISubScopeDecoratorBuilder<in TDecorator, out TService> : IExtendedBuilderBase
         where TDecorator : TService, IDisposable
     {
         void FromFunction(Action<ContainerBuilder, TService> subScopeInstaller);
 
-        void FromInstaller<TInstaller>(TInstaller installer)
+        void FromInstaller<TInstaller>()
             where TInstaller : class, IInstaller;
 
         void FromFunction(
@@ -17,7 +17,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator
             object fromKey,
             [CanBeNull] object toKey = null);
 
-        void FromInstaller<TInstaller>(TInstaller installer,
+        void FromInstaller<TInstaller>(
             object fromKey,
             [CanBeNull] object toKey = null)
             where TInstaller : class, IInstaller;

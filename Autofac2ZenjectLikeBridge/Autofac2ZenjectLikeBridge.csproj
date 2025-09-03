@@ -47,6 +47,26 @@
           <Generator>TextTemplatingFileGenerator</Generator>
           <LastGenOutput>DIExtensionsSubScope.cs</LastGenOutput>
         </None>
+        <None Update="Interfaces\Builders\Factory\IExtendedFactoryBuilder.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>IExtendedFactoryBuilder.cs</LastGenOutput>
+        </None>
+        <None Update="Interfaces\Builders\Factory\ISubScopeFactoryBuilder.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>ISubScopeFactoryBuilder.cs</LastGenOutput>
+        </None>
+        <None Update="Builders\Factory\ExtendedFactoryBuilder.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>ExtendedFactoryBuilder.cs</LastGenOutput>
+        </None>
+        <None Update="Builders\Factory\SubScopeFactoryBuilder.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>SubScopeFactoryBuilder.cs</LastGenOutput>
+        </None>
+        <None Update="DIExtensionsSubScopeFactories.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>DIExtensionsSubScopeFactories.cs</LastGenOutput>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -102,6 +122,31 @@
           <AutoGen>True</AutoGen>
           <DesignTime>True</DesignTime>
           <DependentUpon>AutofacSubScopeFactories.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Interfaces\Builders\Factory\IExtendedFactoryBuilder.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>IExtendedFactoryBuilder.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Builders\Factory\ExtendedFactoryBuilder.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>ExtendedFactoryBuilder.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Interfaces\Builders\Factory\ISubScopeFactoryBuilder.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>ISubScopeFactoryBuilder.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Builders\Factory\SubScopeFactoryBuilder.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>SubScopeFactoryBuilder.tt</DependentUpon>
+        </Compile>
+        <Compile Update="DIExtensionsSubScopeFactories.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>DIExtensionsSubScopeFactories.tt</DependentUpon>
         </Compile>
     </ItemGroup>
 

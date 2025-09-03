@@ -5,10 +5,13 @@ using Autofac.Builder;
 using Autofac.Core;
 using Autofac.Core.Registration;
 using Autofac2ZenjectLikeBridge.Builders.Decorator;
+using Autofac2ZenjectLikeBridge.Builders.Factory;
 using Autofac2ZenjectLikeBridge.Builders.Instance;
 using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
 using Autofac2ZenjectLikeBridge.Interfaces;
+using Autofac2ZenjectLikeBridge.Interfaces.Builders;
 using Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator;
+using Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory;
 using Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,236 +21,156 @@ namespace Autofac2ZenjectLikeBridge
 {
     public static partial class DIExtensions
     {
-
-        // public static IExtendedRegistrationFactoryBuilderWithDispose<
-        //     TInstance,
-        //     TPlaceholderFactory,
-        //     SimpleActivatorData> AsDispose<TInstance, TPlaceholderFactory>(
-        //         this IExtendedRegistrationFactoryBuilder<TInstance, TPlaceholderFactory, SimpleActivatorData> builder)
-        //     where TInstance : IDisposable
-        //     where TPlaceholderFactory : IFactory<TInstance>
+        // public class ExtendedPlaceholderFactoryBuilder<TInstance, TPlaceholderFactory>
+        //     : IExtendedFactoryBuilder<TInstance, TPlaceholderFactory, SimpleActivatorData>
+        //     where TPlaceholderFactory : PlaceholderFactory<TInstance>
+        //     where TInstance : class
         // {
-        //     return new ExtendedRegistrationPlaceholderFactoryBuilder()
+        //     public ContainerBuilder Builder { get; }
+        //
+        //     public ExtendedPlaceholderFactoryBuilder(ContainerBuilder builder)
+        //     {
+        //         Builder = builder;
+        //     }
+        //
+        //     public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle> FromNewInstance()
+        //     {
+        //         return Builder
+        //             .Register((IComponentContext _, ILifetimeScope scope) =>
+        //             {
+        //                 var subScope = scope
+        //                     .BeginLifetimeScope(subScopeBuilder =>
+        //                     {
+        //                         subScopeBuilder
+        //                             .RegisterIFactoryExtended<TInstance>()
+        //                             .FromNewInstance()
+        //                             .SingleInstance();
+        //
+        //                         subScopeBuilder
+        //                             .RegisterType<TPlaceholderFactory>()
+        //                             .SingleInstance()
+        //                             .ExternallyOwned();
+        //                     });
+        //
+        //                 var placeholderFactory = subScope.Resolve<TPlaceholderFactory>();
+        //                 var factory = subScope.Resolve<IFactory<TInstance>>();
+        //                 placeholderFactory.Nested = factory;
+        //
+        //                 subScope
+        //                     .AddToHarmony(placeholderFactory);
+        //
+        //                 return placeholderFactory;
+        //             });
+        //     }
+        //
+        //     public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle> FromFunction(Func<ILifetimeScope, TInstance> func)
+        //     {
+        //         return Builder
+        //             .Register((IComponentContext _, ILifetimeScope scope) =>
+        //             {
+        //                 var subScope = scope
+        //                     .BeginLifetimeScope(subScopeBuilder =>
+        //                     {
+        //                         subScopeBuilder
+        //                             .RegisterIFactoryExtended<TInstance>()
+        //                             .FromFunction(func)
+        //                             .SingleInstance();
+        //
+        //                         subScopeBuilder
+        //                             .RegisterType<TPlaceholderFactory>()
+        //                             .SingleInstance()
+        //                             .ExternallyOwned();
+        //                     });
+        //
+        //                 var placeholderFactory = subScope.Resolve<TPlaceholderFactory>();
+        //                 var factory = subScope.Resolve<IFactory<TInstance>>();
+        //                 placeholderFactory.Nested = factory;
+        //
+        //                 subScope
+        //                     .AddToHarmony(placeholderFactory);
+        //
+        //                 return placeholderFactory;
+        //             });
+        //     }
         // }
-
-        public interface IExtendedRegistrationFactoryBuilder<in TInstance, out TFactory, out TActivatorData>
-            where TFactory : IFactory<TInstance>
-        {
-            IRegistrationBuilder<TFactory, TActivatorData, SingleRegistrationStyle> FromNewInstance();
-            IRegistrationBuilder<TFactory, TActivatorData, SingleRegistrationStyle> FromFunction(Func<ILifetimeScope, TInstance> func);
-        }
-
-        public interface IExtendedRegistrationFactoryBuilderWithDispose<TInstance, out TFactory, out TActivatorData>
-            : IExtendedRegistrationFactoryBuilder<TInstance, TFactory, TActivatorData>
-            where TInstance : IDisposable
-            where TFactory : IFactory<TInstance>
-        {
-            ISubScopeFactoryBuilder<TInstance, TFactory, TActivatorData> FromSubScope();
-        }
-
-        public class ExtendedRegistrationPlaceholderFactoryBuilder<TInstance, TPlaceholderFactory>
-            : IExtendedRegistrationFactoryBuilder<TInstance, TPlaceholderFactory, SimpleActivatorData>
-            where TPlaceholderFactory : PlaceholderFactory<TInstance>
-            where TInstance : class
-        {
-            protected readonly ContainerBuilder Builder;
-
-            public ExtendedRegistrationPlaceholderFactoryBuilder(ContainerBuilder builder)
-            {
-                Builder = builder;
-            }
-
-            public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle> FromNewInstance()
-            {
-                return Builder
-                    .Register((IComponentContext _, ILifetimeScope scope) =>
-                    {
-                        var subScope = scope
-                            .BeginLifetimeScope(subScopeBuilder =>
-                            {
-                                new ExtendedRegistrationFactoryBuilder<TInstance>(subScopeBuilder)
-                                    .FromNewInstance()
-                                    .SingleInstance();
-
-                                subScopeBuilder
-                                    .RegisterType<TPlaceholderFactory>()
-                                    .SingleInstance()
-                                    .ExternallyOwned();
-                            });
-
-                        var placeholderFactory = subScope.Resolve<TPlaceholderFactory>();
-                        var factory = subScope.Resolve<IFactory<TInstance>>();
-                        placeholderFactory.Nested = factory;
-
-                        subScope
-                            .AddToHarmony(placeholderFactory);
-
-                        return placeholderFactory;
-                    });
-            }
-
-            public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle> FromFunction(Func<ILifetimeScope, TInstance> func)
-            {
-                return Builder
-                    .Register((IComponentContext _, ILifetimeScope scope) =>
-                    {
-                        var subScope = scope
-                            .BeginLifetimeScope(subScopeBuilder =>
-                            {
-                                new ExtendedRegistrationFactoryBuilder<TInstance>(subScopeBuilder)
-                                    .FromFunction(func)
-                                    .SingleInstance();
-
-                                subScopeBuilder
-                                    .RegisterType<TPlaceholderFactory>()
-                                    .SingleInstance()
-                                    .ExternallyOwned();
-                            });
-
-                        var placeholderFactory = subScope.Resolve<TPlaceholderFactory>();
-                        var factory = subScope.Resolve<IFactory<TInstance>>();
-                        placeholderFactory.Nested = factory;
-
-                        subScope
-                            .AddToHarmony(placeholderFactory);
-
-                        return placeholderFactory;
-                    });
-            }
-        }
-
-        public class ExtendedRegistrationPlaceholderFactoryBuilderWithDispose<TInstance, TPlaceholderFactory>
-            : ExtendedRegistrationPlaceholderFactoryBuilder<TInstance, TPlaceholderFactory>,
-                IExtendedRegistrationFactoryBuilderWithDispose<TInstance, TPlaceholderFactory, SimpleActivatorData>
-            where TPlaceholderFactory : PlaceholderFactory<TInstance>
-            where TInstance : class, IDisposable
-        {
-            public ExtendedRegistrationPlaceholderFactoryBuilderWithDispose(ContainerBuilder builder)
-                : base(builder)
-            {
-            }
-
-            public ISubScopeFactoryBuilder<TInstance, TPlaceholderFactory, SimpleActivatorData> FromSubScope()
-            {
-                return new SubScopePlaceholderFactoryBuilder<TInstance, TPlaceholderFactory>(Builder);
-            }
-        }
-
-        public class ExtendedRegistrationFactoryBuilder<TInstance>
-            : IExtendedRegistrationFactoryBuilder<TInstance, IFactory<TInstance>, ConcreteReflectionActivatorData>
-            where TInstance : class
-        {
-            protected readonly ContainerBuilder Builder;
-
-            public ExtendedRegistrationFactoryBuilder(ContainerBuilder builder)
-            {
-                Builder = builder ?? throw new ArgumentNullException(nameof(builder));
-            }
-
-            public IRegistrationBuilder<IFactory<TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle> FromNewInstance()
-            {
-                return Builder
-                    .RegisterType<Entities.Factories.DIExtensions.AutofacCreateInstanceFactory<TInstance>>()
-                    .As<IFactory<TInstance>>();
-            }
-
-            public IRegistrationBuilder<IFactory<TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle> FromFunction(
-                Func<ILifetimeScope, TInstance> func)
-            {
-                return Builder
-                    .RegisterType<Entities.Factories.DIExtensions.AutofacFunctionFactory<TInstance>>()
-                    .WithParameters(TypedParameter.From(func))
-                    .As<IFactory<TInstance>>();
-            }
-        }
-
-        public class ExtendedRegistrationFactoryBuilderWithDispose<TInstance>
-            : ExtendedRegistrationFactoryBuilder<TInstance>,
-                IExtendedRegistrationFactoryBuilderWithDispose<TInstance, IFactory<TInstance>, ConcreteReflectionActivatorData>
-            where TInstance : class, IDisposable
-        {
-            public ExtendedRegistrationFactoryBuilderWithDispose(ContainerBuilder builder)
-                : base(builder)
-            {
-            }
-
-            public ISubScopeFactoryBuilder<TInstance, IFactory<TInstance>, ConcreteReflectionActivatorData> FromSubScope()
-            {
-                return new SubScopeFactoryBuilder<TInstance>(Builder);
-            }
-        }
-
-        public interface ISubScopeFactoryBuilder<out TInstance, out TFactory, out TActivatorData>
-            where TInstance : IDisposable
-            where TFactory : IFactory<TInstance>
-        {
-            IRegistrationBuilder<
-                TFactory,
-                TActivatorData,
-                SingleRegistrationStyle> FromFunction(Action<ContainerBuilder> subScopeInstaller);
-
-            IRegistrationBuilder<
-                TFactory,
-                TActivatorData,
-                SingleRegistrationStyle> FromInstaller<TInstaller>(TInstaller installer)
-                where TInstaller : class, IInstaller;
-        }
-
-        public class SubScopePlaceholderFactoryBuilder<TInstance, TPlaceholderFactory> : ISubScopeFactoryBuilder<TInstance, TPlaceholderFactory, SimpleActivatorData>
-            where TInstance : IDisposable
-            where TPlaceholderFactory : PlaceholderFactory<TInstance>
-        {
-            private readonly ContainerBuilder _builder;
-
-            public SubScopePlaceholderFactoryBuilder(ContainerBuilder builder)
-            {
-                _builder = builder ?? throw new ArgumentNullException(nameof(builder));
-            }
-
-            public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle>
-                FromFunction(Action<ContainerBuilder> subScopeInstaller)
-            {
-                throw new NotImplementedException();
-            }
-
-            public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle>
-                FromInstaller<TInstaller>(TInstaller installer)
-                where TInstaller : class, IInstaller
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public class SubScopeFactoryBuilder<TInstance> : ISubScopeFactoryBuilder<TInstance, IFactory<TInstance>, ConcreteReflectionActivatorData>
-            where TInstance : IDisposable
-        {
-            private readonly ContainerBuilder _builder;
-
-            public SubScopeFactoryBuilder(ContainerBuilder builder)
-            {
-                _builder = builder ?? throw new ArgumentNullException(nameof(builder));
-            }
-
-            public IRegistrationBuilder<IFactory<TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-                FromFunction(
-                Action<ContainerBuilder> subScopeInstaller)
-            {
-                return _builder
-                    .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeFactory<TInstance>>()
-                    .WithParameters(TypedParameter.From(subScopeInstaller))
-                    .As<IFactory<TInstance>>();
-            }
-
-            public IRegistrationBuilder<IFactory<TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-                FromInstaller<TInstaller>(
-                TInstaller installer)
-                where TInstaller : class, IInstaller
-            {
-                return _builder
-                    .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeInstallerFactory<TInstance, TInstaller>>()
-                    .As<IFactory<TInstance>>();
-            }
-        }
+        //
+        // public class SubScopePlaceholderFactoryBuilder<TInstance, TPlaceholderFactory>
+        //     : ISubScopeFactoryBuilder<TInstance, TPlaceholderFactory, SimpleActivatorData>
+        //     where TInstance : class, IDisposable
+        //     where TPlaceholderFactory : PlaceholderFactory<TInstance>
+        // {
+        //     public ContainerBuilder Builder { get; }
+        //
+        //     public SubScopePlaceholderFactoryBuilder(ContainerBuilder builder)
+        //     {
+        //         Builder = builder ?? throw new ArgumentNullException(nameof(builder));
+        //     }
+        //
+        //     public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle>
+        //         FromFunction(Action<ContainerBuilder> subScopeInstaller)
+        //     {
+        //         return Builder
+        //             .Register((IComponentContext _, ILifetimeScope scope) =>
+        //             {
+        //                 var subScope = scope
+        //                     .BeginLifetimeScope(subScopeBuilder =>
+        //                     {
+        //                         subScopeBuilder
+        //                             .RegisterIFactoryExtended<TInstance>()
+        //                             .FromSubScope()
+        //                             .FromFunction(subScopeInstaller)
+        //                             .SingleInstance();
+        //
+        //                         subScopeBuilder
+        //                             .RegisterType<TPlaceholderFactory>()
+        //                             .SingleInstance()
+        //                             .ExternallyOwned();
+        //                     });
+        //
+        //                 var placeholderFactory = subScope.Resolve<TPlaceholderFactory>();
+        //                 var factory = subScope.Resolve<IFactory<TInstance>>();
+        //                 placeholderFactory.Nested = factory;
+        //
+        //                 subScope
+        //                     .AddToHarmony(placeholderFactory);
+        //
+        //                 return placeholderFactory;
+        //             });
+        //     }
+        //
+        //     public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle>
+        //         FromInstaller<TInstaller>(TInstaller installer)
+        //         where TInstaller : class, IInstaller
+        //     {
+        //         return Builder
+        //             .Register((IComponentContext _, ILifetimeScope scope) =>
+        //             {
+        //                 var subScope = scope
+        //                     .BeginLifetimeScope(subScopeBuilder =>
+        //                     {
+        //                         subScopeBuilder
+        //                             .RegisterIFactoryExtended<TInstance>()
+        //                             .FromSubScope()
+        //                             .FromInstaller<TInstaller>()
+        //                             .SingleInstance();
+        //
+        //                         subScopeBuilder
+        //                             .RegisterType<TPlaceholderFactory>()
+        //                             .SingleInstance()
+        //                             .ExternallyOwned();
+        //                     });
+        //
+        //                 var placeholderFactory = subScope.Resolve<TPlaceholderFactory>();
+        //                 var factory = subScope.Resolve<IFactory<TInstance>>();
+        //                 placeholderFactory.Nested = factory;
+        //
+        //                 subScope
+        //                     .AddToHarmony(placeholderFactory);
+        //
+        //                 return placeholderFactory;
+        //             });
+        //     }
+        // }
 
         public static IRegistrationBuilder<TLimit, TReflectionActivatorData, TStyle>
             WithParameters<TLimit, TReflectionActivatorData, TStyle>(

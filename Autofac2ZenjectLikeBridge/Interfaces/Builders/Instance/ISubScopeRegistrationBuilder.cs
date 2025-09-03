@@ -4,7 +4,7 @@ using Autofac.Builder;
 
 namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance
 {
-    public interface ISubScopeRegistrationBuilder<out TComponent> : IExtendedRegistrationBuilderBase
+    public interface ISubScopeRegistrationBuilder<out TComponent> : IExtendedBuilderBase
         where TComponent : class, IDisposable
     {
         IRegistrationBuilder<
@@ -15,7 +15,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance
         IRegistrationBuilder<
             TComponent,
             SimpleActivatorData,
-            SingleRegistrationStyle> FromInstaller<TInstaller>(TInstaller installer)
+            SingleRegistrationStyle> FromInstaller<TInstaller>()
             where TInstaller : class, IInstaller;
     }
 }

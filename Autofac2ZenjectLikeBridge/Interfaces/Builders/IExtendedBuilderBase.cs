@@ -2,7 +2,7 @@
 
 namespace Autofac2ZenjectLikeBridge.Interfaces.Builders
 {
-    public interface IExtendedRegistrationBuilderBase
+    public interface IExtendedBuilderBase
     {
         ContainerBuilder Builder { get; }
     }

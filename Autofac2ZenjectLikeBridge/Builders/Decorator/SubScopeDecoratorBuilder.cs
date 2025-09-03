@@ -23,7 +23,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
                     (context, _, nestedService) => ResolveFromSubScope<TDecorator>(subScopeInstaller, context, nestedService));
         }
 
-        public void FromInstaller<TInstaller>(TInstaller installer)
+        public void FromInstaller<TInstaller>()
             where TInstaller : class, IInstaller
         {
             Builder
@@ -40,7 +40,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
                     toKey);
         }
 
-        public void FromInstaller<TInstaller>(TInstaller installer, object fromKey, object toKey = null)
+        public void FromInstaller<TInstaller>(object fromKey, object toKey = null)
             where TInstaller : class, IInstaller
         {
             Builder

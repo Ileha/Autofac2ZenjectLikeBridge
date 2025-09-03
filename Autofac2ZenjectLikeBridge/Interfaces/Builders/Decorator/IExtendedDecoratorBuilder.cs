@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 
 namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator
 {
-    public interface IExtendedDecoratorBuilder<in TDecorator, out TService> : IExtendedRegistrationBuilderBase
+    public interface IExtendedDecoratorBuilder<in TDecorator, out TService> : IExtendedBuilderBase
         where TDecorator : TService
     {
         void RegisterDecoratorFromFunction(
