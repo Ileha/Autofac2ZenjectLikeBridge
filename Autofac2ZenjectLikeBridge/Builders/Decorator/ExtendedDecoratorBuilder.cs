@@ -4,20 +4,21 @@ using Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator;
 
 namespace Autofac2ZenjectLikeBridge.Builders.Decorator
 {
-    public class ExtendedRegistrationDecoratorBuilder<TDecorator, TService>
-        : IExtendedRegistrationDecoratorBuilder<TDecorator, TService> where TDecorator : TService
+    public class ExtendedDecoratorBuilder<TDecorator, TService>
+        : IExtendedDecoratorBuilder<TDecorator, TService>
+        where TDecorator : TService
         where TService : class
     {
-        private readonly ContainerBuilder _builder;
+        public ContainerBuilder Builder { get; }
 
-        public ExtendedRegistrationDecoratorBuilder(ContainerBuilder builder)
+        public ExtendedDecoratorBuilder(ContainerBuilder builder)
         {
-            _builder = builder ?? throw new ArgumentNullException(nameof(builder));
+            Builder = builder ?? throw new ArgumentNullException(nameof(builder));
         }
 
         public void RegisterDecoratorFromFunction(Func<IComponentContext, TService, TDecorator> createFunction)
         {
-            _builder
+            Builder
                 .RegisterDecorator<TService>((context, _, baseHandler) => createFunction(context, baseHandler));
         }
 
@@ -26,17 +27,11 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
             object fromKey,
             object toKey = null)
         {
-            _builder
+            Builder
                 .RegisterDecorator<TService>(
                     (context, _, baseHandler) => createFunction(context, baseHandler),
                     fromKey,
                     toKey);
-        }
-
-        public ISubScopeDecoratorBuilder<TTDecoratorDisposable, TService> FromSubScope<TTDecoratorDisposable>()
-            where TTDecoratorDisposable : TDecorator, IDisposable
-        {
-            return new SubScopeDecoratorBuilder<TTDecoratorDisposable, TService>(_builder);
         }
     }
 }

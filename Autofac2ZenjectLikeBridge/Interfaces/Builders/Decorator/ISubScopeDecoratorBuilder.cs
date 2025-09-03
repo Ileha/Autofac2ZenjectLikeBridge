@@ -4,8 +4,7 @@ using JetBrains.Annotations;
 
 namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator
 {
-    // ReSharper disable once UnusedTypeParameter
-    public interface ISubScopeDecoratorBuilder<out TDecorator, out TService>
+    public interface ISubScopeDecoratorBuilder<in TDecorator, out TService> : IExtendedRegistrationBuilderBase
         where TDecorator : TService, IDisposable
     {
         void FromFunction(Action<ContainerBuilder, TService> subScopeInstaller);

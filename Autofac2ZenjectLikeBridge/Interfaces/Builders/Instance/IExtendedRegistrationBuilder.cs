@@ -1,20 +1,18 @@
-﻿using System;
+﻿using Autofac.Builder;
 
 namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance
 {
-    public interface IExtendedRegistrationBuilder<in TComponent>
+    public interface IExtendedRegistrationBuilder<TComponent> : IExtendedRegistrationBuilderBase
+        where TComponent : class
     {
-        // IRegistrationBuilder<
-        //     TComponent,
-        //     SimpleActivatorData,
-        //     SingleRegistrationStyle> FromInstance();
-        //
-        // IRegistrationBuilder<
-        //     TComponent,
-        //     SimpleActivatorData,
-        //     SingleRegistrationStyle> FromNewInstance();
+        IRegistrationBuilder<
+            TComponent,
+            SimpleActivatorData,
+            SingleRegistrationStyle> FromInstance(TComponent instance);
 
-        ISubScopeBuilder<TComponentDisposable> FromSubScope<TComponentDisposable>()
-            where TComponentDisposable : TComponent, IDisposable;
+        IRegistrationBuilder<
+            TComponent,
+            SimpleActivatorData,
+            SingleRegistrationStyle> FromNewInstance();
     }
 }

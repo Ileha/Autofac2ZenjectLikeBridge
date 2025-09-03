@@ -292,6 +292,7 @@ namespace Autofac2ZenjectLikeBridge
         }
 
         public static IExtendedRegistrationBuilder<T> RegisterExtended<T>(this ContainerBuilder builder)
+            where T : class
         {
             if (builder is null)
                 throw new ArgumentNullException(nameof(builder));
@@ -306,11 +307,26 @@ namespace Autofac2ZenjectLikeBridge
             SingleRegistrationStyle> RegisterFromSubScope<TComponent>(
             this ContainerBuilder builder,
             Action<ContainerBuilder> subScopeInstaller)
-            where TComponent : IDisposable
+            where TComponent : class, IDisposable
         {
             return RegisterExtended<TComponent>(builder)
-                .FromSubScope<TComponent>()
+                .FromSubScope()
                 .FromFunction(subScopeInstaller);
+        }
+
+        public static ISubScopeRegistrationBuilder<T> FromSubScope<T>(
+            this IExtendedRegistrationBuilder<T> builder)
+            where T : class, IDisposable
+        {
+            return new SubScopeRegistrationBuilder<T>(builder.Builder);
+        }
+
+        public static ISubScopeDecoratorBuilder<TDecorator, TService> FromSubScope<TDecorator, TService>(
+            this IExtendedDecoratorBuilder<TDecorator, TService> builder)
+            where TDecorator : TService, IDisposable
+            where TService : class
+        {
+            return new SubScopeDecoratorBuilder<TDecorator, TService>(builder.Builder);
         }
 
         // ReSharper disable once MemberCanBePrivate.Global
@@ -383,7 +399,7 @@ namespace Autofac2ZenjectLikeBridge
 
         #region RegisterDecorator
 
-        public static IExtendedRegistrationDecoratorBuilder<TDecorator, TService> RegisterDecoratorExtended<TDecorator, TService>(
+        public static IExtendedDecoratorBuilder<TDecorator, TService> RegisterDecoratorExtended<TDecorator, TService>(
             this ContainerBuilder builder)
             where TDecorator : TService
             where TService : class
@@ -391,7 +407,7 @@ namespace Autofac2ZenjectLikeBridge
             if (builder is null)
                 throw new ArgumentNullException(nameof(builder));
 
-            return new ExtendedRegistrationDecoratorBuilder<TDecorator, TService>(builder);
+            return new ExtendedDecoratorBuilder<TDecorator, TService>(builder);
         }
 
         [Obsolete("use RegisterDecoratorExtended")]
@@ -429,7 +445,7 @@ namespace Autofac2ZenjectLikeBridge
         {
             builder
                 .RegisterDecoratorExtended<TDecorator, TService>()
-                .FromSubScope<TDecorator>()
+                .FromSubScope()
                 .FromFunction(subScopeInstaller);
         }
 
@@ -444,7 +460,7 @@ namespace Autofac2ZenjectLikeBridge
         {
             builder
                 .RegisterDecoratorExtended<TDecorator, TService>()
-                .FromSubScope<TDecorator>()
+                .FromSubScope()
                 .FromFunction(subScopeInstaller, fromKey, toKey);
         }
 

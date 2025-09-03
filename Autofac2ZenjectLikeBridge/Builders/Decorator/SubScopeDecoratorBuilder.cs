@@ -9,16 +9,16 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
         where TDecorator : TService, IDisposable
         where TService : class
     {
-        private readonly ContainerBuilder _builder;
+        public ContainerBuilder Builder { get; }
 
         public SubScopeDecoratorBuilder(ContainerBuilder builder)
         {
-            _builder = builder ?? throw new ArgumentNullException(nameof(builder));
+            Builder = builder ?? throw new ArgumentNullException(nameof(builder));
         }
 
         public void FromFunction(Action<ContainerBuilder, TService> subScopeInstaller)
         {
-            _builder
+            Builder
                 .RegisterDecorator<TService>(
                     (context, _, nestedService) => ResolveFromSubScope<TDecorator>(subScopeInstaller, context, nestedService));
         }
@@ -26,14 +26,14 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
         public void FromInstaller<TInstaller>(TInstaller installer)
             where TInstaller : class, IInstaller
         {
-            _builder
+            Builder
                 .RegisterDecorator<TService>(
                     (context, _, nestedService) => ResolveFromSubScopeInstaller<TDecorator, TInstaller>(context, nestedService));
         }
 
         public void FromFunction(Action<ContainerBuilder, TService> subScopeInstaller, object fromKey, object toKey = null)
         {
-            _builder
+            Builder
                 .RegisterDecorator<TService>(
                     (context, _, nestedService) => ResolveFromSubScope<TDecorator>(subScopeInstaller, context, nestedService),
                     fromKey,
@@ -43,7 +43,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
         public void FromInstaller<TInstaller>(TInstaller installer, object fromKey, object toKey = null)
             where TInstaller : class, IInstaller
         {
-            _builder
+            Builder
                 .RegisterDecorator<TService>(
                     (context, _, nestedService) => ResolveFromSubScopeInstaller<TDecorator, TInstaller>(context, nestedService),
                     fromKey,

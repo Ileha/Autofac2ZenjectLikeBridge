@@ -6,19 +6,20 @@ using Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance;
 
 namespace Autofac2ZenjectLikeBridge.Builders.Instance
 {
-    public class SubScopeBuilder<TComponent> : ISubScopeBuilder<TComponent>
-        where TComponent : IDisposable
+    public class SubScopeRegistrationBuilder<TComponent>
+        : ISubScopeRegistrationBuilder<TComponent>
+        where TComponent : class, IDisposable
     {
-        private readonly ContainerBuilder _builder;
+        public ContainerBuilder Builder { get; }
 
-        public SubScopeBuilder(ContainerBuilder builder)
+        public SubScopeRegistrationBuilder(ContainerBuilder builder)
         {
-            _builder = builder ?? throw new ArgumentNullException(nameof(builder));
+            Builder = builder ?? throw new ArgumentNullException(nameof(builder));
         }
 
         public IRegistrationBuilder<TComponent, SimpleActivatorData, SingleRegistrationStyle> FromFunction(Action<ContainerBuilder> subScopeInstaller)
         {
-            return _builder
+            return Builder
                 .Register(
                     (IComponentContext _, ILifetimeScope scope)
                         => scope.ResolveFromSubScope<TComponent>(subScopeInstaller));
@@ -27,7 +28,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Instance
         public IRegistrationBuilder<TComponent, SimpleActivatorData, SingleRegistrationStyle> FromInstaller<TInstaller>(TInstaller installer)
             where TInstaller : class, IInstaller
         {
-            return _builder
+            return Builder
                 .Register(
                     (IComponentContext _, ILifetimeScope scope)
                         => scope.ResolveFromSubScope<TComponent, TInstaller>());
