@@ -1,5 +1,6 @@
 using Autofac;
 using Autofac2ZenjectLikeBridge;
+using Autofac2ZenjectLikeBridge.Entities.Factories;
 using Autofac2ZenjectLikeBridge.Interfaces;
 using NSubstitute;
 
@@ -98,8 +99,11 @@ public class DIExtensionsTests
         // Arrange
         var builder = new ContainerBuilder();
         builder.RegisterType<SimpleService>().As<IService>();
-        builder.RegisterDecoratorFromFunction<ServiceDecorator, IService>((_, baseService) =>
-            new ServiceDecorator(baseService));
+
+        builder
+            .RegisterDecoratorExtended<ServiceDecorator, IService>()
+            .FromFunction((_, baseService) => new ServiceDecorator(baseService));
+
         using var container = builder.Build();
 
         // Act
@@ -124,7 +128,9 @@ public class DIExtensionsTests
             .SingleInstance();
 
         builder
-            .RegisterFromSubScope<ServiceWithDependencyDisposable>(
+            .RegisterExtended<ServiceWithDependencyDisposable>()
+            .FromSubScope()
+            .ByFunction(
                 subContainerBuilder =>
                 {
                     subContainerBuilder
@@ -162,7 +168,9 @@ public class DIExtensionsTests
             .SingleInstance();
 
         builder
-            .RegisterFromSubScope<ServiceWithDependencyDisposable>(
+            .RegisterExtended<ServiceWithDependencyDisposable>()
+            .FromSubScope()
+            .ByFunction(
                 subContainerBuilder =>
                 {
                     subContainerBuilder
@@ -213,7 +221,9 @@ public class DIExtensionsTests
             .SingleInstance();
 
         builder
-            .RegisterDecoratorFromSubScope<ServiceDecoratorDisposable, IService>(
+            .RegisterDecoratorExtended<ServiceDecoratorDisposable, IService>()
+            .FromSubScope()
+            .ByFunction(
                 (subContainerBuilder, service) =>
                 {
                     subContainerBuilder
@@ -256,7 +266,9 @@ public class DIExtensionsTests
             .SingleInstance();
 
         builder
-            .RegisterDecoratorFromSubScope<ServiceDecoratorDisposable, IService>(
+            .RegisterDecoratorExtended<ServiceDecoratorDisposable, IService>()
+            .FromSubScope()
+            .ByFunction(
                 (subContainerBuilder, service) =>
                 {
                     subContainerBuilder
@@ -293,7 +305,10 @@ public class DIExtensionsTests
         var builder = new ContainerBuilder();
         const string expectedParameter = "test_parameter";
 
-        builder.RegisterFactory<string, ServiceWithParameter>();
+        builder
+            .RegisterIFactoryExtended<string, ServiceWithParameter>()
+            .FromNewInstance()
+            .SingleInstance();
 
         using var container = builder.Build();
         var factory = container.Resolve<IFactory<string, ServiceWithParameter>>();
@@ -312,7 +327,10 @@ public class DIExtensionsTests
         var builder = new ContainerBuilder();
         const string expectedParameter = "test_parameter";
 
-        builder.RegisterPlaceholderFactory<string, ServiceWithParameter, Factory<string, ServiceWithParameter>>();
+        builder
+            .RegisterPlaceholderFactoryExtended<string, ServiceWithParameter, Factory<string, ServiceWithParameter>>()
+            .FromNewInstance()
+            .SingleInstance();
 
         using var container = builder.Build();
         var factory = container.Resolve<Factory<string, ServiceWithParameter>>();
@@ -331,10 +349,10 @@ public class DIExtensionsTests
         var builder = new ContainerBuilder();
         const string expectedParameter = "test_parameter";
 
-        builder.RegisterFactoryFromFunction<
-            string, ServiceWithParameter,
-            Factory<string, ServiceWithParameter>>(
-            (_, param) => new ServiceWithParameter(param));
+        builder
+            .RegisterPlaceholderFactoryExtended<string, ServiceWithParameter, Factory<string, ServiceWithParameter>>()
+            .FromFunction((_, param) => new ServiceWithParameter(param))
+            .SingleInstance();
 
         using var container = builder.Build();
         var factory = container.Resolve<Factory<string, ServiceWithParameter>>();
@@ -353,9 +371,10 @@ public class DIExtensionsTests
         var builder = new ContainerBuilder();
         const string expectedParameter = "test_parameter";
 
-        builder.RegisterFactoryFromFunction<
-            string, ServiceWithParameter>(
-            (_, param) => new ServiceWithParameter(param));
+        builder
+            .RegisterIFactoryExtended<string, ServiceWithParameter>()
+            .FromFunction((_, param) => new ServiceWithParameter(param))
+            .SingleInstance();
 
         using var container = builder.Build();
         var factory = container.Resolve<IFactory<string, ServiceWithParameter>>();
@@ -374,14 +393,18 @@ public class DIExtensionsTests
         var builder = new ContainerBuilder();
         const string expectedParameter = "test_parameter";
 
-        builder.RegisterFactoryFromSubScope<
-            string, ServiceWithDependencyAndParameterDisposable,
-            Factory<string, ServiceWithDependencyAndParameterDisposable>>((subContainer, param) =>
-        {
-            subContainer.RegisterType<SimpleService>().AsSelf();
-            subContainer.RegisterType<ServiceWithDependencyAndParameterDisposable>()
-                .WithParameter(new NamedParameter("data", param));
-        });
+        builder
+            .RegisterPlaceholderFactoryExtended<
+                string, ServiceWithDependencyAndParameterDisposable,
+                Factory<string, ServiceWithDependencyAndParameterDisposable>>()
+            .FromSubScope()
+            .ByFunction((subContainer, param) =>
+            {
+                subContainer.RegisterType<SimpleService>().AsSelf();
+                subContainer.RegisterType<ServiceWithDependencyAndParameterDisposable>()
+                    .WithParameter(new NamedParameter("data", param));
+            })
+            .SingleInstance();
 
         using var container = builder.Build();
         var factory = container.Resolve<Factory<string, ServiceWithDependencyAndParameterDisposable>>();
@@ -401,13 +424,16 @@ public class DIExtensionsTests
         var builder = new ContainerBuilder();
         const string expectedParameter = "test_parameter";
 
-        builder.RegisterFactoryFromSubScope<
-            string, ServiceWithDependencyAndParameterDisposable>((subContainer, param) =>
-        {
-            subContainer.RegisterType<SimpleService>().AsSelf();
-            subContainer.RegisterType<ServiceWithDependencyAndParameterDisposable>()
-                .WithParameter(new NamedParameter("data", param));
-        });
+        builder
+            .RegisterIFactoryExtended<string, ServiceWithDependencyAndParameterDisposable>()
+            .FromSubScope()
+            .ByFunction((subContainer, param) =>
+            {
+                subContainer.RegisterType<SimpleService>().AsSelf();
+                subContainer.RegisterType<ServiceWithDependencyAndParameterDisposable>()
+                    .WithParameter(new NamedParameter("data", param));
+            })
+            .SingleInstance();
 
         using var container = builder.Build();
         var factory = container.Resolve<IFactory<string, ServiceWithDependencyAndParameterDisposable>>();
@@ -428,14 +454,18 @@ public class DIExtensionsTests
         var disposable = Substitute.For<IDisposable>();
 
         builder
-            .RegisterFactoryFromSubScope<string, ServiceWithDependencyAndParameterDisposable,
-                Factory<string, ServiceWithDependencyAndParameterDisposable>>((subContainer, param) =>
+            .RegisterPlaceholderFactoryExtended<
+                string, ServiceWithDependencyAndParameterDisposable,
+                Factory<string, ServiceWithDependencyAndParameterDisposable>>()
+            .FromSubScope()
+            .ByFunction((subContainer, param) =>
             {
                 subContainer.RegisterInstance(disposable);
                 subContainer.RegisterType<SimpleService>().AsSelf();
                 subContainer.RegisterType<ServiceWithDependencyAndParameterDisposable>()
                     .WithParameter(new NamedParameter("data", param));
-            });
+            })
+            .SingleInstance();
 
         using var container = builder.Build();
         var factory = container.Resolve<Factory<string, ServiceWithDependencyAndParameterDisposable>>();
@@ -457,14 +487,16 @@ public class DIExtensionsTests
         var disposable = Substitute.For<IDisposable>();
 
         builder
-            .RegisterFactoryFromSubScope<string, ServiceWithDependencyAndParameterDisposable>(
-                (subContainer, param) =>
-                {
-                    subContainer.RegisterInstance(disposable);
-                    subContainer.RegisterType<SimpleService>().AsSelf();
-                    subContainer.RegisterType<ServiceWithDependencyAndParameterDisposable>()
-                        .WithParameter(new NamedParameter("data", param));
-                });
+            .RegisterIFactoryExtended<string, ServiceWithDependencyAndParameterDisposable>()
+            .FromSubScope()
+            .ByFunction((subContainer, param) =>
+            {
+                subContainer.RegisterInstance(disposable);
+                subContainer.RegisterType<SimpleService>().AsSelf();
+                subContainer.RegisterType<ServiceWithDependencyAndParameterDisposable>()
+                    .WithParameter(new NamedParameter("data", param));
+            })
+            .SingleInstance();
 
         using var container = builder.Build();
         var factory = container.Resolve<IFactory<string, ServiceWithDependencyAndParameterDisposable>>();

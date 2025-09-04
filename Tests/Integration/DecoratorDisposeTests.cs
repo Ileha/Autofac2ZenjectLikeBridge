@@ -20,7 +20,9 @@ public class DecoratorDisposeTests
         var decoratedOnceData = $"{SubContainerData}_1";
 
         builder
-            .RegisterFromSubScope<ISampleReturn>(
+            .RegisterExtended<ISampleReturn>()
+            .FromSubScope()
+            .ByFunction(
                 containerBuilder =>
                 {
                     containerBuilder
@@ -35,21 +37,22 @@ public class DecoratorDisposeTests
             .SingleInstance();
 
         builder
-            .RegisterFactoryFromSubScope<Guid, ISampleReturn>(
-                (containerBuilder, guid) =>
-                {
-                    containerBuilder
-                        .RegisterType<SampleReturn>()
-                        .WithParameters(TypedParameter.From($"{SubContainerData}_{guid:N}"))
-                        .As<ISampleReturn>()
-                        .SingleInstance();
+            .RegisterIFactoryExtended<Guid, ISampleReturn>()
+            .FromSubScope()
+            .ByFunction((containerBuilder, guid) =>
+            {
+                containerBuilder
+                    .RegisterType<SampleReturn>()
+                    .WithParameters(TypedParameter.From($"{SubContainerData}_{guid:N}"))
+                    .As<ISampleReturn>()
+                    .SingleInstance();
 
-                    containerBuilder
-                        .RegisterDecorator<SampleReturnDecorator, ISampleReturn>();
+                containerBuilder
+                    .RegisterDecorator<SampleReturnDecorator, ISampleReturn>();
 
-                    containerBuilder
-                        .RegisterDecorator<SampleReturnDecorator, ISampleReturn>();
-                })
+                containerBuilder
+                    .RegisterDecorator<SampleReturnDecorator, ISampleReturn>();
+            })
             .SingleInstance();
 
         using (var container = builder.Build())
@@ -83,7 +86,9 @@ public class DecoratorDisposeTests
             .SingleInstance();
 
         builder
-            .RegisterFactoryFromSubScope<ISampleReturn>(subContainer =>
+            .RegisterIFactoryExtended<ISampleReturn>()
+            .FromSubScope()
+            .ByFunction(subContainer =>
             {
                 subContainer
                     .RegisterType<SampleReturn>()
@@ -120,7 +125,9 @@ public class DecoratorDisposeTests
             .SingleInstance();
 
         builder
-            .RegisterFromSubScope<SubContainerDataExtractor<ISample>>(
+            .RegisterExtended<SubContainerDataExtractor<ISample>>()
+            .FromSubScope()
+            .ByFunction(
                 containerBuilder =>
                 {
                     containerBuilder.RegisterType<LowLevel>()
