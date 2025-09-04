@@ -64,6 +64,30 @@ namespace Autofac2ZenjectLikeBridge
 #>
 #endregion
 
+#region RegisterPlaceholderFactoryExtended
+
+<#
+    for (var i = 0; i <= Constants.GenericParametersCount; i++)
+    {
+#>
+        public static IExtendedFactoryBuilder<
+            <#=string.Join(",\n\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ",\n\t\t\t" #>TInstance,
+            TPlaceholderFactory,
+            SimpleActivatorData> RegisterPlaceholderFactoryExtended<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance, TPlaceholderFactory>(this ContainerBuilder builder)
+            where TInstance : class
+            where TPlaceholderFactory : PlaceholderFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>
+        {
+            if (builder is null)
+                throw new ArgumentNullException(nameof(builder));
+
+            return new ExtendedPlaceholderFactoryBuilder<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance, TPlaceholderFactory>(builder);
+        }
+
+<#
+    }
+#>
+#endregion
+
 #region PlaceholderFactoryFromSubScope
 
 <#
