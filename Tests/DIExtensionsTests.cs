@@ -93,25 +93,7 @@ public class DIExtensionsTests
         Assert.IsInstanceOf<SimpleService>(service);
     }
 
-    [Test]
-    public void RegisterDecoratorFromFunction_WhenRegistered_AppliesDecorator()
-    {
-        // Arrange
-        var builder = new ContainerBuilder();
-        builder.RegisterType<SimpleService>().As<IService>();
-
-        builder
-            .RegisterDecoratorExtended<ServiceDecorator, IService>()
-            .FromFunction((_, baseService) => new ServiceDecorator(baseService));
-
-        using var container = builder.Build();
-
-        // Act
-        var instance = container.Resolve<IService>();
-
-        // Assert
-        Assert.IsInstanceOf<ServiceDecorator>(instance);
-    }
+    #region RegisterExtended
 
     [Test]
     public void RegisterFromSubScope_GotDependencyFromSubScope()
@@ -199,6 +181,134 @@ public class DIExtensionsTests
         // Assert
         mockSubContainerDisposable.Received(1).Dispose();
         mockExternalDisposable.Received(0).Dispose();
+    }
+
+    internal class ServiceWithDependencyInstaller : AutofacInstallerBase
+    {
+        internal static SimpleService Service = null!;
+
+        public ServiceWithDependencyInstaller(ContainerBuilder builder)
+            : base(builder)
+        {
+        }
+
+        public override void Install()
+        {
+            Builder
+                .RegisterType<ServiceWithDependencyDisposable>()
+                .SingleInstance();
+
+            Builder
+                .RegisterInstance(Service)
+                .As<SimpleService>()
+                .SingleInstance();
+        }
+    }
+
+    [Test]
+    public void Register_FromSubScope_ByInstaller()
+    {
+        // Arrange
+        var builder = new ContainerBuilder();
+
+        var externalInstance = new SimpleService();
+        ServiceWithDependencyInstaller.Service = new SimpleService();
+
+        builder
+            .RegisterInstance(externalInstance)
+            .As<SimpleService>()
+            .SingleInstance();
+
+        builder
+            .RegisterExtended<ServiceWithDependencyDisposable>()
+            .FromSubScope()
+            .ByInstaller<ServiceWithDependencyInstaller>()
+            .SingleInstance();
+
+        using var container = builder.Build();
+
+        // Act
+        var instance = container.Resolve<ServiceWithDependencyDisposable>();
+
+        // Assert
+        Assert.That(instance.Dependency, Is.EqualTo(ServiceWithDependencyInstaller.Service));
+    }
+
+    internal class ServiceWithDependencyInstallerWithExternalDependencies : AutofacInstallerBase
+    {
+        private readonly SimpleService _service;
+
+        public ServiceWithDependencyInstallerWithExternalDependencies(
+            SimpleService service,
+            ContainerBuilder builder)
+            : base(builder)
+        {
+            _service = service;
+        }
+
+        public override void Install()
+        {
+            Builder
+                .RegisterType<ServiceWithDependencyDisposable>()
+                .SingleInstance();
+
+            Builder
+                .RegisterInstance(_service)
+                .As<SimpleService>()
+                .SingleInstance();
+        }
+    }
+
+    [Test]
+    public void Register_FromSubScope_ByInstaller_WhenExternalDependencies()
+    {
+        // Arrange
+        var builder = new ContainerBuilder();
+
+        var externalInstance = new SimpleService();
+
+        builder
+            .RegisterInstance(externalInstance)
+            .As<SimpleService>()
+            .SingleInstance();
+
+        builder
+            .RegisterExtended<ServiceWithDependencyDisposable>()
+            .FromSubScope()
+            .ByInstaller<ServiceWithDependencyInstallerWithExternalDependencies>()
+            .SingleInstance();
+
+        using var container = builder.Build();
+
+        // Act
+        var instance = container.Resolve<ServiceWithDependencyDisposable>();
+
+        // Assert
+        Assert.That(instance.Dependency, Is.EqualTo(externalInstance));
+    }
+
+    #endregion
+
+    #region RegisterDecoratorExtended
+
+    [Test]
+    public void RegisterDecoratorFromFunction_WhenRegistered_AppliesDecorator()
+    {
+        // Arrange
+        var builder = new ContainerBuilder();
+        builder.RegisterType<SimpleService>().As<IService>();
+
+        builder
+            .RegisterDecoratorExtended<ServiceDecorator, IService>()
+            .FromFunction((_, baseService) => new ServiceDecorator(baseService));
+
+        using var container = builder.Build();
+
+        // Act
+        var instance = container.Resolve<IService>();
+
+        // Assert
+        Assert.IsInstanceOf<ServiceDecorator>(instance);
     }
 
     [Test]
@@ -298,6 +408,12 @@ public class DIExtensionsTests
         mockExternalDisposable.Received(1).Dispose();
     }
 
+    #endregion
+
+    #region Factories
+
+    #region IFactories
+
     [Test]
     public void RegisterFactory_WhenCalled_ResolvesInstanceWithParameter()
     {
@@ -319,6 +435,92 @@ public class DIExtensionsTests
         // Assert
         Assert.That(instance.Data, Is.EqualTo(expectedParameter));
     }
+
+    [Test]
+    public void RegisterFactoryFromFunction_WhenCalled_ResolvesInstanceWithParameter()
+    {
+        // Arrange
+        var builder = new ContainerBuilder();
+        const string expectedParameter = "test_parameter";
+
+        builder
+            .RegisterIFactoryExtended<string, ServiceWithParameter>()
+            .FromFunction((_, param) => new ServiceWithParameter(param))
+            .SingleInstance();
+
+        using var container = builder.Build();
+        var factory = container.Resolve<IFactory<string, ServiceWithParameter>>();
+
+        // Act
+        var instance = factory.Create(expectedParameter);
+
+        // Assert
+        Assert.That(instance.Data, Is.EqualTo(expectedParameter));
+    }
+
+    [Test]
+    public void RegisterFactoryFromSubScope_WhenCalled_ResolvesInstanceWithParameterAndDependency()
+    {
+        // Arrange
+        var builder = new ContainerBuilder();
+        const string expectedParameter = "test_parameter";
+
+        builder
+            .RegisterIFactoryExtended<string, ServiceWithDependencyAndParameterDisposable>()
+            .FromSubScope()
+            .ByFunction((subContainer, param) =>
+            {
+                subContainer.RegisterType<SimpleService>().AsSelf();
+                subContainer.RegisterType<ServiceWithDependencyAndParameterDisposable>()
+                    .WithParameter(new NamedParameter("data", param));
+            })
+            .SingleInstance();
+
+        using var container = builder.Build();
+        var factory = container.Resolve<IFactory<string, ServiceWithDependencyAndParameterDisposable>>();
+
+        // Act
+        var instance = factory.Create(expectedParameter);
+
+        // Assert
+        Assert.That(instance.Data, Is.EqualTo(expectedParameter));
+        Assert.IsNotNull(instance.Dependency);
+    }
+
+    [Test]
+    public void RegisterFactoryFromSubScope_WhenInstanceDisposed_SubScopeIsDisposed()
+    {
+        // Arrange
+        var builder = new ContainerBuilder();
+        var disposable = Substitute.For<IDisposable>();
+
+        builder
+            .RegisterIFactoryExtended<string, ServiceWithDependencyAndParameterDisposable>()
+            .FromSubScope()
+            .ByFunction((subContainer, param) =>
+            {
+                subContainer.RegisterInstance(disposable);
+                subContainer.RegisterType<SimpleService>().AsSelf();
+                subContainer.RegisterType<ServiceWithDependencyAndParameterDisposable>()
+                    .WithParameter(new NamedParameter("data", param));
+            })
+            .SingleInstance();
+
+        using var container = builder.Build();
+        var factory = container.Resolve<IFactory<string, ServiceWithDependencyAndParameterDisposable>>();
+
+        // Act
+        using (factory.Create("test"))
+        {
+        }
+
+        // Assert
+        disposable.Received(1).Dispose();
+    }
+
+    #endregion
+
+    #region PlaceholderFactories
 
     [Test]
     public void RegisterPlaceholderFactory_WhenCalled_ResolvesInstanceWithParameter()
@@ -365,28 +567,6 @@ public class DIExtensionsTests
     }
 
     [Test]
-    public void RegisterFactoryFromFunction_WhenCalled_ResolvesInstanceWithParameter()
-    {
-        // Arrange
-        var builder = new ContainerBuilder();
-        const string expectedParameter = "test_parameter";
-
-        builder
-            .RegisterIFactoryExtended<string, ServiceWithParameter>()
-            .FromFunction((_, param) => new ServiceWithParameter(param))
-            .SingleInstance();
-
-        using var container = builder.Build();
-        var factory = container.Resolve<IFactory<string, ServiceWithParameter>>();
-
-        // Act
-        var instance = factory.Create(expectedParameter);
-
-        // Assert
-        Assert.That(instance.Data, Is.EqualTo(expectedParameter));
-    }
-
-    [Test]
     public void RegisterFactoryFromSubScope_WhenCalledPlaceholder_ResolvesInstanceWithParameterAndDependency()
     {
         // Arrange
@@ -408,35 +588,6 @@ public class DIExtensionsTests
 
         using var container = builder.Build();
         var factory = container.Resolve<Factory<string, ServiceWithDependencyAndParameterDisposable>>();
-
-        // Act
-        var instance = factory.Create(expectedParameter);
-
-        // Assert
-        Assert.That(instance.Data, Is.EqualTo(expectedParameter));
-        Assert.IsNotNull(instance.Dependency);
-    }
-
-    [Test]
-    public void RegisterFactoryFromSubScope_WhenCalled_ResolvesInstanceWithParameterAndDependency()
-    {
-        // Arrange
-        var builder = new ContainerBuilder();
-        const string expectedParameter = "test_parameter";
-
-        builder
-            .RegisterIFactoryExtended<string, ServiceWithDependencyAndParameterDisposable>()
-            .FromSubScope()
-            .ByFunction((subContainer, param) =>
-            {
-                subContainer.RegisterType<SimpleService>().AsSelf();
-                subContainer.RegisterType<ServiceWithDependencyAndParameterDisposable>()
-                    .WithParameter(new NamedParameter("data", param));
-            })
-            .SingleInstance();
-
-        using var container = builder.Build();
-        var factory = container.Resolve<IFactory<string, ServiceWithDependencyAndParameterDisposable>>();
 
         // Act
         var instance = factory.Create(expectedParameter);
@@ -479,36 +630,9 @@ public class DIExtensionsTests
         disposable.Received(1).Dispose();
     }
 
-    [Test]
-    public void RegisterFactoryFromSubScope_WhenInstanceDisposed_SubScopeIsDisposed()
-    {
-        // Arrange
-        var builder = new ContainerBuilder();
-        var disposable = Substitute.For<IDisposable>();
+    #endregion
 
-        builder
-            .RegisterIFactoryExtended<string, ServiceWithDependencyAndParameterDisposable>()
-            .FromSubScope()
-            .ByFunction((subContainer, param) =>
-            {
-                subContainer.RegisterInstance(disposable);
-                subContainer.RegisterType<SimpleService>().AsSelf();
-                subContainer.RegisterType<ServiceWithDependencyAndParameterDisposable>()
-                    .WithParameter(new NamedParameter("data", param));
-            })
-            .SingleInstance();
-
-        using var container = builder.Build();
-        var factory = container.Resolve<IFactory<string, ServiceWithDependencyAndParameterDisposable>>();
-
-        // Act
-        using (factory.Create("test"))
-        {
-        }
-
-        // Assert
-        disposable.Received(1).Dispose();
-    }
+    #endregion
 
     // Test Classes
     public interface IService
