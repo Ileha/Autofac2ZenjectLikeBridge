@@ -67,20 +67,6 @@ namespace Autofac2ZenjectLikeBridge
             return new ExtendedRegistrationBuilder<T>(builder);
         }
 
-        [Obsolete("use RegisterExtended")]
-        public static IRegistrationBuilder<
-            TComponent,
-            SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFromSubScope<TComponent>(
-            this ContainerBuilder builder,
-            Action<ContainerBuilder> subScopeInstaller)
-            where TComponent : class, IDisposable
-        {
-            return RegisterExtended<TComponent>(builder)
-                .FromSubScope()
-                .ByFunction(subScopeInstaller);
-        }
-
         public static ISubScopeRegistrationBuilder<T> FromSubScope<T>(
             this IExtendedRegistrationBuilder<T> builder)
             where T : class, IDisposable
@@ -104,10 +90,20 @@ namespace Autofac2ZenjectLikeBridge
             builder.RegisterModule(module);
         }
 
+        public static IExtendedDecoratorBuilder<TDecorator, TService> RegisterDecoratorExtended<TDecorator, TService>(
+            this ContainerBuilder builder)
+            where TDecorator : TService
+            where TService : class
+        {
+            if (builder is null)
+                throw new ArgumentNullException(nameof(builder));
+
+            return new ExtendedDecoratorBuilder<TDecorator, TService>(builder);
+        }
+
         public class OverrideExternallyOwnedModule<T> : Module
         {
-            [CanBeNull]
-            private readonly object _tag;
+            [CanBeNull] private readonly object _tag;
 
             public OverrideExternallyOwnedModule([CanBeNull] object tag)
             {
@@ -163,74 +159,5 @@ namespace Autofac2ZenjectLikeBridge
                 return service;
             }
         }
-
-        #region RegisterDecorator
-
-        public static IExtendedDecoratorBuilder<TDecorator, TService> RegisterDecoratorExtended<TDecorator, TService>(
-            this ContainerBuilder builder)
-            where TDecorator : TService
-            where TService : class
-        {
-            if (builder is null)
-                throw new ArgumentNullException(nameof(builder));
-
-            return new ExtendedDecoratorBuilder<TDecorator, TService>(builder);
-        }
-
-        [Obsolete("use RegisterDecoratorExtended")]
-        public static void RegisterDecoratorFromFunction<TDecorator, TService>(
-            this ContainerBuilder builder,
-            Func<IComponentContext, TService, TDecorator> createFunction)
-            where TDecorator : TService
-            where TService : class
-        {
-            builder
-                .RegisterDecoratorExtended<TDecorator, TService>()
-                .FromFunction(createFunction);
-        }
-
-        [Obsolete("use RegisterDecoratorExtended")]
-        public static void RegisterDecoratorFromFunction<TDecorator, TService>(
-            this ContainerBuilder builder,
-            Func<IComponentContext, TService, TDecorator> createFunction,
-            object fromKey,
-            [CanBeNull] object toKey = null)
-            where TDecorator : TService
-            where TService : class
-        {
-            builder
-                .RegisterDecoratorExtended<TDecorator, TService>()
-                .FromFunction(createFunction, fromKey, toKey);
-        }
-
-        [Obsolete("use RegisterDecoratorExtended")]
-        public static void RegisterDecoratorFromSubScope<TDecorator, TService>(
-            this ContainerBuilder builder,
-            Action<ContainerBuilder, TService> subScopeInstaller)
-            where TService : class
-            where TDecorator : TService, IDisposable
-        {
-            builder
-                .RegisterDecoratorExtended<TDecorator, TService>()
-                .FromSubScope()
-                .ByFunction(subScopeInstaller);
-        }
-
-        [Obsolete("use RegisterDecoratorExtended")]
-        public static void RegisterDecoratorFromSubScope<TDecorator, TService>(
-            this ContainerBuilder builder,
-            Action<ContainerBuilder, TService> subScopeInstaller,
-            object fromKey,
-            [CanBeNull] object toKey = null)
-            where TDecorator : TService, IDisposable
-            where TService : class
-        {
-            builder
-                .RegisterDecoratorExtended<TDecorator, TService>()
-                .FromSubScope()
-                .ByFunction(subScopeInstaller, fromKey, toKey);
-        }
-
-        #endregion
     }
 }
