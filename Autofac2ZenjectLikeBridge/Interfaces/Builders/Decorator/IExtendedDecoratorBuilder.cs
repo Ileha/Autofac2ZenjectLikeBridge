@@ -7,10 +7,10 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator
     public interface IExtendedDecoratorBuilder<in TDecorator, out TService> : IExtendedBuilderBase
         where TDecorator : TService
     {
-        void RegisterDecoratorFromFunction(
+        void FromFunction(
                 Func<IComponentContext, TService, TDecorator> createFunction);
 
-        void RegisterDecoratorFromFunction(
+        void FromFunction(
             Func<IComponentContext, TService, TDecorator> createFunction,
             object fromKey,
             [CanBeNull] object toKey = null);

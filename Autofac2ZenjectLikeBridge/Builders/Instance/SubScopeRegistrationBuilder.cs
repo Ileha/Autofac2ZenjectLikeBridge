@@ -17,7 +17,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Instance
             Builder = builder ?? throw new ArgumentNullException(nameof(builder));
         }
 
-        public IRegistrationBuilder<TComponent, SimpleActivatorData, SingleRegistrationStyle> FromFunction(Action<ContainerBuilder> subScopeInstaller)
+        public IRegistrationBuilder<TComponent, SimpleActivatorData, SingleRegistrationStyle> ByFunction(Action<ContainerBuilder> subScopeInstaller)
         {
             return Builder
                 .Register(
@@ -25,7 +25,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Instance
                         => scope.ResolveFromSubScope<TComponent>(subScopeInstaller));
         }
 
-        public IRegistrationBuilder<TComponent, SimpleActivatorData, SingleRegistrationStyle> FromInstaller<TInstaller>()
+        public IRegistrationBuilder<TComponent, SimpleActivatorData, SingleRegistrationStyle> ByInstaller<TInstaller>()
             where TInstaller : class, IInstaller
         {
             return Builder

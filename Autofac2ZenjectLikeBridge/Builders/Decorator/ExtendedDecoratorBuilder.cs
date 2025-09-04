@@ -16,13 +16,13 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
             Builder = builder ?? throw new ArgumentNullException(nameof(builder));
         }
 
-        public void RegisterDecoratorFromFunction(Func<IComponentContext, TService, TDecorator> createFunction)
+        public void FromFunction(Func<IComponentContext, TService, TDecorator> createFunction)
         {
             Builder
                 .RegisterDecorator<TService>((context, _, baseHandler) => createFunction(context, baseHandler));
         }
 
-        public void RegisterDecoratorFromFunction(
+        public void FromFunction(
             Func<IComponentContext, TService, TDecorator> createFunction,
             object fromKey,
             object toKey = null)

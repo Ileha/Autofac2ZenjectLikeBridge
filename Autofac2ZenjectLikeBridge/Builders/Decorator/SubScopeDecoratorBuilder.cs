@@ -16,14 +16,14 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
             Builder = builder ?? throw new ArgumentNullException(nameof(builder));
         }
 
-        public void FromFunction(Action<ContainerBuilder, TService> subScopeInstaller)
+        public void ByFunction(Action<ContainerBuilder, TService> subScopeInstaller)
         {
             Builder
                 .RegisterDecorator<TService>(
                     (context, _, nestedService) => ResolveFromSubScope<TDecorator>(subScopeInstaller, context, nestedService));
         }
 
-        public void FromInstaller<TInstaller>()
+        public void ByInstaller<TInstaller>()
             where TInstaller : class, IInstaller
         {
             Builder
@@ -31,7 +31,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
                     (context, _, nestedService) => ResolveFromSubScopeInstaller<TDecorator, TInstaller>(context, nestedService));
         }
 
-        public void FromFunction(Action<ContainerBuilder, TService> subScopeInstaller, object fromKey, object toKey = null)
+        public void ByFunction(Action<ContainerBuilder, TService> subScopeInstaller, object fromKey, object toKey = null)
         {
             Builder
                 .RegisterDecorator<TService>(
@@ -40,7 +40,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
                     toKey);
         }
 
-        public void FromInstaller<TInstaller>(object fromKey, object toKey = null)
+        public void ByInstaller<TInstaller>(object fromKey, object toKey = null)
             where TInstaller : class, IInstaller
         {
             Builder

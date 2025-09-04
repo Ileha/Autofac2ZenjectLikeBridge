@@ -10,12 +10,12 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance
         IRegistrationBuilder<
             TComponent,
             SimpleActivatorData,
-            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder> subScopeInstaller);
+            SingleRegistrationStyle> ByFunction(Action<ContainerBuilder> subScopeInstaller);
 
         IRegistrationBuilder<
             TComponent,
             SimpleActivatorData,
-            SingleRegistrationStyle> FromInstaller<TInstaller>()
+            SingleRegistrationStyle> ByInstaller<TInstaller>()
             where TInstaller : class, IInstaller;
     }
 }

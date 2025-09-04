@@ -33,7 +33,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromFunction(
+            ByFunction(
             Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> subScopeInstaller)
         {
             return Builder
@@ -43,7 +43,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromInstaller<TInstaller>()
+            ByInstaller<TInstaller>()
             where TInstaller : class, IInstaller
         {
             return Builder

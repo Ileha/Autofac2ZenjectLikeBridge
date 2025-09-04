@@ -33,7 +33,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle>
-            FromFunction(Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> subScopeInstaller)
+            ByFunction(Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> subScopeInstaller)
         {
             return Builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -44,7 +44,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                             subScopeBuilder
                                 .RegisterIFactoryExtended<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>()
                                 .FromSubScope()
-                                .FromFunction(subScopeInstaller)
+                                .ByFunction(subScopeInstaller)
                                 .SingleInstance();
 
                             subScopeBuilder
@@ -65,7 +65,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle>
-            FromInstaller<TInstaller>()
+            ByInstaller<TInstaller>()
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -77,7 +77,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                             subScopeBuilder
                                 .RegisterIFactoryExtended<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>()
                                 .FromSubScope()
-                                .FromInstaller<TInstaller>()
+                                .ByInstaller<TInstaller>()
                                 .SingleInstance();
 
                             subScopeBuilder

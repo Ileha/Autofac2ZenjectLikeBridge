@@ -23,7 +23,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromFunction(
+            ByFunction(
             Action<ContainerBuilder> subScopeInstaller)
         {
             return Builder
@@ -33,7 +33,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromInstaller<TInstaller>()
+            ByInstaller<TInstaller>()
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -58,7 +58,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromFunction(
+            ByFunction(
             Action<ContainerBuilder, TP0> subScopeInstaller)
         {
             return Builder
@@ -68,7 +68,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromInstaller<TInstaller>()
+            ByInstaller<TInstaller>()
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -93,7 +93,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromFunction(
+            ByFunction(
             Action<ContainerBuilder, TP0, TP1> subScopeInstaller)
         {
             return Builder
@@ -103,7 +103,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromInstaller<TInstaller>()
+            ByInstaller<TInstaller>()
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -128,7 +128,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromFunction(
+            ByFunction(
             Action<ContainerBuilder, TP0, TP1, TP2> subScopeInstaller)
         {
             return Builder
@@ -138,7 +138,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromInstaller<TInstaller>()
+            ByInstaller<TInstaller>()
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -163,7 +163,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromFunction(
+            ByFunction(
             Action<ContainerBuilder, TP0, TP1, TP2, TP3> subScopeInstaller)
         {
             return Builder
@@ -173,7 +173,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromInstaller<TInstaller>()
+            ByInstaller<TInstaller>()
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -198,7 +198,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromFunction(
+            ByFunction(
             Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4> subScopeInstaller)
         {
             return Builder
@@ -208,7 +208,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromInstaller<TInstaller>()
+            ByInstaller<TInstaller>()
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -233,7 +233,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromFunction(
+            ByFunction(
             Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5> subScopeInstaller)
         {
             return Builder
@@ -243,7 +243,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromInstaller<TInstaller>()
+            ByInstaller<TInstaller>()
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -268,7 +268,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromFunction(
+            ByFunction(
             Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6> subScopeInstaller)
         {
             return Builder
@@ -278,7 +278,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromInstaller<TInstaller>()
+            ByInstaller<TInstaller>()
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -303,7 +303,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromFunction(
+            ByFunction(
             Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7> subScopeInstaller)
         {
             return Builder
@@ -313,7 +313,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromInstaller<TInstaller>()
+            ByInstaller<TInstaller>()
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -338,7 +338,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromFunction(
+            ByFunction(
             Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8> subScopeInstaller)
         {
             return Builder
@@ -348,7 +348,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromInstaller<TInstaller>()
+            ByInstaller<TInstaller>()
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -373,7 +373,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromFunction(
+            ByFunction(
             Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9> subScopeInstaller)
         {
             return Builder
@@ -383,7 +383,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            FromInstaller<TInstaller>()
+            ByInstaller<TInstaller>()
             where TInstaller : class, IInstaller
         {
             return Builder

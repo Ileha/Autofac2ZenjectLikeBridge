@@ -78,7 +78,7 @@ namespace Autofac2ZenjectLikeBridge
         {
             return RegisterExtended<TComponent>(builder)
                 .FromSubScope()
-                .FromFunction(subScopeInstaller);
+                .ByFunction(subScopeInstaller);
         }
 
         public static ISubScopeRegistrationBuilder<T> FromSubScope<T>(
@@ -186,7 +186,7 @@ namespace Autofac2ZenjectLikeBridge
         {
             builder
                 .RegisterDecoratorExtended<TDecorator, TService>()
-                .RegisterDecoratorFromFunction(createFunction);
+                .FromFunction(createFunction);
         }
 
         [Obsolete("use RegisterDecoratorExtended")]
@@ -200,7 +200,7 @@ namespace Autofac2ZenjectLikeBridge
         {
             builder
                 .RegisterDecoratorExtended<TDecorator, TService>()
-                .RegisterDecoratorFromFunction(createFunction, fromKey, toKey);
+                .FromFunction(createFunction, fromKey, toKey);
         }
 
         [Obsolete("use RegisterDecoratorExtended")]
@@ -213,7 +213,7 @@ namespace Autofac2ZenjectLikeBridge
             builder
                 .RegisterDecoratorExtended<TDecorator, TService>()
                 .FromSubScope()
-                .FromFunction(subScopeInstaller);
+                .ByFunction(subScopeInstaller);
         }
 
         [Obsolete("use RegisterDecoratorExtended")]
@@ -228,7 +228,7 @@ namespace Autofac2ZenjectLikeBridge
             builder
                 .RegisterDecoratorExtended<TDecorator, TService>()
                 .FromSubScope()
-                .FromFunction(subScopeInstaller, fromKey, toKey);
+                .ByFunction(subScopeInstaller, fromKey, toKey);
         }
 
         #endregion
