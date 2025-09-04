@@ -7,6 +7,7 @@
 using System;
 using Autofac;
 using Autofac.Builder;
+using Autofac2ZenjectLikeBridge.Entities.Factories;
 using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
 using Autofac2ZenjectLikeBridge.Interfaces;
 using Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory;
@@ -40,7 +41,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterIFactoryExtended<TInstance>()
+                                .RegisterIFactoryExtended<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>()
                                 .FromNewInstance()
                                 .SingleInstance();
 
@@ -61,7 +62,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                 });
         }
 
-        public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle> FromFunction(Func<ILifetimeScope, TInstance> func)
+        public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle> FromFunction(Func<ILifetimeScope, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance> func)
         {
             return Builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -70,7 +71,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                         .BeginLifetimeScope(subScopeBuilder =>
                         {
                             subScopeBuilder
-                                .RegisterIFactoryExtended<TInstance>()
+                                .RegisterIFactoryExtended<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>()
                                 .FromFunction(func)
                                 .SingleInstance();
 

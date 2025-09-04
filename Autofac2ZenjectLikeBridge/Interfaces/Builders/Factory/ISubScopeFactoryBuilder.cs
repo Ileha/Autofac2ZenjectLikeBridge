@@ -23,7 +23,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
             where TInstaller : class, IInstaller;
     }
 
-    public interface ISubScopeFactoryBuilder<TP0, out TInstance, out TFactory, out TActivatorData>
+    public interface ISubScopeFactoryBuilder<out TP0, out TInstance, out TFactory, out TActivatorData>
         : IExtendedBuilderBase
         where TInstance : class, IDisposable
         where TFactory : IFactory<TP0, TInstance>
@@ -31,7 +31,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder> subScopeInstaller);
+            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder, TP0> subScopeInstaller);
 
         IRegistrationBuilder<
             TFactory,
@@ -40,7 +40,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
             where TInstaller : class, IInstaller;
     }
 
-    public interface ISubScopeFactoryBuilder<TP0, TP1, out TInstance, out TFactory, out TActivatorData>
+    public interface ISubScopeFactoryBuilder<out TP0, out TP1, out TInstance, out TFactory, out TActivatorData>
         : IExtendedBuilderBase
         where TInstance : class, IDisposable
         where TFactory : IFactory<TP0, TP1, TInstance>
@@ -48,7 +48,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder> subScopeInstaller);
+            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder, TP0, TP1> subScopeInstaller);
 
         IRegistrationBuilder<
             TFactory,
@@ -57,7 +57,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
             where TInstaller : class, IInstaller;
     }
 
-    public interface ISubScopeFactoryBuilder<TP0, TP1, TP2, out TInstance, out TFactory, out TActivatorData>
+    public interface ISubScopeFactoryBuilder<out TP0, out TP1, out TP2, out TInstance, out TFactory, out TActivatorData>
         : IExtendedBuilderBase
         where TInstance : class, IDisposable
         where TFactory : IFactory<TP0, TP1, TP2, TInstance>
@@ -65,7 +65,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder> subScopeInstaller);
+            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder, TP0, TP1, TP2> subScopeInstaller);
 
         IRegistrationBuilder<
             TFactory,
@@ -74,7 +74,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
             where TInstaller : class, IInstaller;
     }
 
-    public interface ISubScopeFactoryBuilder<TP0, TP1, TP2, TP3, out TInstance, out TFactory, out TActivatorData>
+    public interface ISubScopeFactoryBuilder<out TP0, out TP1, out TP2, out TP3, out TInstance, out TFactory, out TActivatorData>
         : IExtendedBuilderBase
         where TInstance : class, IDisposable
         where TFactory : IFactory<TP0, TP1, TP2, TP3, TInstance>
@@ -82,7 +82,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder> subScopeInstaller);
+            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder, TP0, TP1, TP2, TP3> subScopeInstaller);
 
         IRegistrationBuilder<
             TFactory,
@@ -91,7 +91,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
             where TInstaller : class, IInstaller;
     }
 
-    public interface ISubScopeFactoryBuilder<TP0, TP1, TP2, TP3, TP4, out TInstance, out TFactory, out TActivatorData>
+    public interface ISubScopeFactoryBuilder<out TP0, out TP1, out TP2, out TP3, out TP4, out TInstance, out TFactory, out TActivatorData>
         : IExtendedBuilderBase
         where TInstance : class, IDisposable
         where TFactory : IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>
@@ -99,7 +99,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder> subScopeInstaller);
+            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4> subScopeInstaller);
 
         IRegistrationBuilder<
             TFactory,
@@ -108,7 +108,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
             where TInstaller : class, IInstaller;
     }
 
-    public interface ISubScopeFactoryBuilder<TP0, TP1, TP2, TP3, TP4, TP5, out TInstance, out TFactory, out TActivatorData>
+    public interface ISubScopeFactoryBuilder<out TP0, out TP1, out TP2, out TP3, out TP4, out TP5, out TInstance, out TFactory, out TActivatorData>
         : IExtendedBuilderBase
         where TInstance : class, IDisposable
         where TFactory : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>
@@ -116,7 +116,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder> subScopeInstaller);
+            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5> subScopeInstaller);
 
         IRegistrationBuilder<
             TFactory,
@@ -125,7 +125,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
             where TInstaller : class, IInstaller;
     }
 
-    public interface ISubScopeFactoryBuilder<TP0, TP1, TP2, TP3, TP4, TP5, TP6, out TInstance, out TFactory, out TActivatorData>
+    public interface ISubScopeFactoryBuilder<out TP0, out TP1, out TP2, out TP3, out TP4, out TP5, out TP6, out TInstance, out TFactory, out TActivatorData>
         : IExtendedBuilderBase
         where TInstance : class, IDisposable
         where TFactory : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>
@@ -133,7 +133,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder> subScopeInstaller);
+            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6> subScopeInstaller);
 
         IRegistrationBuilder<
             TFactory,
@@ -142,7 +142,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
             where TInstaller : class, IInstaller;
     }
 
-    public interface ISubScopeFactoryBuilder<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, out TInstance, out TFactory, out TActivatorData>
+    public interface ISubScopeFactoryBuilder<out TP0, out TP1, out TP2, out TP3, out TP4, out TP5, out TP6, out TP7, out TInstance, out TFactory, out TActivatorData>
         : IExtendedBuilderBase
         where TInstance : class, IDisposable
         where TFactory : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>
@@ -150,7 +150,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder> subScopeInstaller);
+            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7> subScopeInstaller);
 
         IRegistrationBuilder<
             TFactory,
@@ -159,7 +159,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
             where TInstaller : class, IInstaller;
     }
 
-    public interface ISubScopeFactoryBuilder<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, out TInstance, out TFactory, out TActivatorData>
+    public interface ISubScopeFactoryBuilder<out TP0, out TP1, out TP2, out TP3, out TP4, out TP5, out TP6, out TP7, out TP8, out TInstance, out TFactory, out TActivatorData>
         : IExtendedBuilderBase
         where TInstance : class, IDisposable
         where TFactory : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>
@@ -167,7 +167,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder> subScopeInstaller);
+            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8> subScopeInstaller);
 
         IRegistrationBuilder<
             TFactory,
@@ -176,7 +176,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
             where TInstaller : class, IInstaller;
     }
 
-    public interface ISubScopeFactoryBuilder<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, out TInstance, out TFactory, out TActivatorData>
+    public interface ISubScopeFactoryBuilder<out TP0, out TP1, out TP2, out TP3, out TP4, out TP5, out TP6, out TP7, out TP8, out TP9, out TInstance, out TFactory, out TActivatorData>
         : IExtendedBuilderBase
         where TInstance : class, IDisposable
         where TFactory : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>
@@ -184,7 +184,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder> subScopeInstaller);
+            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9> subScopeInstaller);
 
         IRegistrationBuilder<
             TFactory,

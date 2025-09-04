@@ -16,7 +16,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
     for (var i = 0; i <= Constants.GenericParametersCount; i++)
     {
 #>
-    public interface ISubScopeFactoryBuilder<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>out TInstance, out TFactory, out TActivatorData>
+    public interface ISubScopeFactoryBuilder<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"out TP{j}")) #><#= i == 0 ? "" : ", " #>out TInstance, out TFactory, out TActivatorData>
         : IExtendedBuilderBase
         where TInstance : class, IDisposable
         where TFactory : IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>
@@ -24,7 +24,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder> subScopeInstaller);
+            SingleRegistrationStyle> FromFunction(Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> subScopeInstaller);
 
         IRegistrationBuilder<
             TFactory,

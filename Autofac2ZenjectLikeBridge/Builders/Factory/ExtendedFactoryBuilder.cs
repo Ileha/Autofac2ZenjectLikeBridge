@@ -61,7 +61,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle> FromFunction(
-            Func<ILifetimeScope, TInstance> func)
+            Func<ILifetimeScope, TP0, TInstance> func)
         {
             return Builder
                 .RegisterType<Entities.Factories.DIExtensions.AutofacFunctionFactory<TP0, TInstance>>()
@@ -92,7 +92,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle> FromFunction(
-            Func<ILifetimeScope, TInstance> func)
+            Func<ILifetimeScope, TP0, TP1, TInstance> func)
         {
             return Builder
                 .RegisterType<Entities.Factories.DIExtensions.AutofacFunctionFactory<TP0, TP1, TInstance>>()
@@ -123,7 +123,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle> FromFunction(
-            Func<ILifetimeScope, TInstance> func)
+            Func<ILifetimeScope, TP0, TP1, TP2, TInstance> func)
         {
             return Builder
                 .RegisterType<Entities.Factories.DIExtensions.AutofacFunctionFactory<TP0, TP1, TP2, TInstance>>()
@@ -154,7 +154,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle> FromFunction(
-            Func<ILifetimeScope, TInstance> func)
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TInstance> func)
         {
             return Builder
                 .RegisterType<Entities.Factories.DIExtensions.AutofacFunctionFactory<TP0, TP1, TP2, TP3, TInstance>>()
@@ -185,7 +185,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle> FromFunction(
-            Func<ILifetimeScope, TInstance> func)
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TInstance> func)
         {
             return Builder
                 .RegisterType<Entities.Factories.DIExtensions.AutofacFunctionFactory<TP0, TP1, TP2, TP3, TP4, TInstance>>()
@@ -216,7 +216,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle> FromFunction(
-            Func<ILifetimeScope, TInstance> func)
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TInstance> func)
         {
             return Builder
                 .RegisterType<Entities.Factories.DIExtensions.AutofacFunctionFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>>()
@@ -247,7 +247,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle> FromFunction(
-            Func<ILifetimeScope, TInstance> func)
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance> func)
         {
             return Builder
                 .RegisterType<Entities.Factories.DIExtensions.AutofacFunctionFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>>()
@@ -278,7 +278,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle> FromFunction(
-            Func<ILifetimeScope, TInstance> func)
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance> func)
         {
             return Builder
                 .RegisterType<Entities.Factories.DIExtensions.AutofacFunctionFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>>()
@@ -309,7 +309,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle> FromFunction(
-            Func<ILifetimeScope, TInstance> func)
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance> func)
         {
             return Builder
                 .RegisterType<Entities.Factories.DIExtensions.AutofacFunctionFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>>()
@@ -340,7 +340,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle> FromFunction(
-            Func<ILifetimeScope, TInstance> func)
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance> func)
         {
             return Builder
                 .RegisterType<Entities.Factories.DIExtensions.AutofacFunctionFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>>()

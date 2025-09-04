@@ -40,7 +40,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle> FromFunction(
-            Func<ILifetimeScope, TInstance> func)
+            Func<ILifetimeScope, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance> func)
         {
             return Builder
                 .RegisterType<Entities.Factories.DIExtensions.AutofacFunctionFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>()

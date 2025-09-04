@@ -75,6 +75,10 @@
           <Generator>TextTemplatingFileGenerator</Generator>
           <LastGenOutput>SubScopePlaceholderFactoryBuilder.cs</LastGenOutput>
         </None>
+        <None Update="Entities\Factories\PlaceholderFactory.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>PlaceholderFactory.cs</LastGenOutput>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -85,26 +89,15 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="DIExtensionsFactories.tt">
-            <Generator>TextTemplatingFileGenerator</Generator>
-            <LastGenOutput>DIExtensionsFactories.cs</LastGenOutput>
-        </None>
         <None Update="Interfaces\IFactory.tt">
             <Generator>TextTemplatingFileGenerator</Generator>
             <LastGenOutput>IFactory.cs</LastGenOutput>
-        </None>
-        <None Update="PlaceholderFactory.tt">
-            <Generator>TextTemplatingFileGenerator</Generator>
-            <LastGenOutput>PlaceholderFactory.cs</LastGenOutput>
         </None>
     </ItemGroup>
 
     <ItemGroup>
         <Compile Update="Interfaces\IFactory.cs">
             <DependentUpon>IFactory.tt</DependentUpon>
-        </Compile>
-        <Compile Update="PlaceholderFactory.cs">
-            <DependentUpon>PlaceholderFactory.tt</DependentUpon>
         </Compile>
         <Compile Update="Entities\Factories\AutofacFunctionFactories.cs">
           <AutoGen>True</AutoGen>
@@ -121,11 +114,6 @@
           <DesignTime>True</DesignTime>
           <DependentUpon>DIExtensionsSubScope.tt</DependentUpon>
         </Compile>
-        <Compile Update="DIExtensionsFactories.cs">
-          <AutoGen>True</AutoGen>
-          <DesignTime>True</DesignTime>
-          <DependentUpon>DIExtensionsFactories.tt</DependentUpon>
-        </Compile>
         <Compile Update="Entities\Factories\AutofacSubScopeFactories.cs">
           <AutoGen>True</AutoGen>
           <DesignTime>True</DesignTime>
@@ -136,15 +124,18 @@
           <DesignTime>True</DesignTime>
           <DependentUpon>IExtendedFactoryBuilder.tt</DependentUpon>
         </Compile>
-        <Compile Update="Builders\Factory\ExtendedFactoryBuilder.cs">
-          <AutoGen>True</AutoGen>
-          <DesignTime>True</DesignTime>
-          <DependentUpon>ExtendedFactoryBuilder.tt</DependentUpon>
+        <Compile Update="Entities\Factories\PlaceholderFactory.cs">
+          <DependentUpon>PlaceholderFactory.tt</DependentUpon>
         </Compile>
         <Compile Update="Interfaces\Builders\Factory\ISubScopeFactoryBuilder.cs">
           <AutoGen>True</AutoGen>
           <DesignTime>True</DesignTime>
           <DependentUpon>ISubScopeFactoryBuilder.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Builders\Factory\ExtendedFactoryBuilder.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>ExtendedFactoryBuilder.tt</DependentUpon>
         </Compile>
         <Compile Update="Builders\Factory\SubScopeFactoryBuilder.cs">
           <AutoGen>True</AutoGen>

@@ -2,6 +2,7 @@
 using Autofac;
 using Autofac.Builder;
 using Autofac2ZenjectLikeBridge.Builders.Factory;
+using Autofac2ZenjectLikeBridge.Entities.Factories;
 using Autofac2ZenjectLikeBridge.Interfaces;
 using Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory;
 
