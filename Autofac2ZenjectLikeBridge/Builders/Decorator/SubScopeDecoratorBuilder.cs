@@ -2,6 +2,7 @@
 using Autofac;
 using Autofac2ZenjectLikeBridge.Interfaces;
 using Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator;
+using JetBrains.Annotations;
 
 namespace Autofac2ZenjectLikeBridge.Builders.Decorator
 {
@@ -23,12 +24,13 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
                     (context, _, nestedService) => ResolveFromSubScope<TDecorator>(subScopeInstaller, context, nestedService));
         }
 
-        public void ByInstaller<TInstaller>()
+        public void ByInstaller<TInstaller>(
+            Func<ContainerBuilder, TService, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
         {
             Builder
                 .RegisterDecorator<TService>(
-                    (context, _, nestedService) => ResolveFromSubScopeInstaller<TDecorator, TInstaller>(context, nestedService));
+                    (context, _, nestedService) => ResolveFromSubScopeInstaller<TDecorator, TInstaller>(context, nestedService, installerFactory));
         }
 
         public void ByFunction(Action<ContainerBuilder, TService> subScopeInstaller, object fromKey, object toKey = null)
@@ -40,12 +42,15 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
                     toKey);
         }
 
-        public void ByInstaller<TInstaller>(object fromKey, object toKey = null)
+        public void ByInstaller<TInstaller>(
+            object fromKey,
+            object toKey = null,
+            Func<ContainerBuilder, TService, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
         {
             Builder
                 .RegisterDecorator<TService>(
-                    (context, _, nestedService) => ResolveFromSubScopeInstaller<TDecorator, TInstaller>(context, nestedService),
+                    (context, _, nestedService) => ResolveFromSubScopeInstaller<TDecorator, TInstaller>(context, nestedService, installerFactory),
                     fromKey,
                     toKey);
         }
@@ -60,12 +65,15 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
             return scope.ResolveFromSubScope<TService, TComponent>(subScopeInstaller, nestedService);
         }
 
-        private static TComponent ResolveFromSubScopeInstaller<TComponent, TInstaller>(IComponentContext context, TService nestedService)
+        private static TComponent ResolveFromSubScopeInstaller<TComponent, TInstaller>(
+            IComponentContext context,
+            TService nestedService,
+            [CanBeNull] Func<ContainerBuilder, TService, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
             where TComponent : IDisposable
         {
             var scope = context.Resolve<ILifetimeScope>();
-            return scope.ResolveFromSubScope<TService, TComponent, TInstaller>(nestedService);
+            return scope.ResolveFromSubScope<TService, TComponent, TInstaller>(nestedService, installerFactory);
         }
     }
 }

@@ -1,9 +1,7 @@
 ﻿<#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ assembly name="System.Core" #>
-<#@ assembly name="$(TargetPath)" #>
 <#@ output extension=".cs" #>
 <#@ import namespace="System.Linq" #>
-<#@ import namespace="Autofac2ZenjectLikeBridge" #>
 using System;
 using Autofac;
 using Autofac.Builder;
@@ -14,7 +12,7 @@ using Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory;
 
 namespace Autofac2ZenjectLikeBridge.Builders.Factory
 {
-    //generated amount <#= Constants.GenericParametersCount #>
+    //generated amount <#@ include file="../../Constants.ttinclude" #><#= Constants.GenericParametersCount #>
 
 <#
     for (var i = 0; i <= Constants.GenericParametersCount; i++)
@@ -65,7 +63,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>()
+            ByInstaller<TInstaller>(Func<ContainerBuilder, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -77,7 +75,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                             subScopeBuilder
                                 .RegisterIFactoryExtended<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>()
                                 .FromSubScope()
-                                .ByInstaller<TInstaller>()
+                                .ByInstaller(installerFactory)
                                 .SingleInstance();
 
                             subScopeBuilder

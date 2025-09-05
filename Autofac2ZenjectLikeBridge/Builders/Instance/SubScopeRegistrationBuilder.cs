@@ -25,13 +25,14 @@ namespace Autofac2ZenjectLikeBridge.Builders.Instance
                         => scope.ResolveFromSubScope<TComponent>(subScopeInstaller));
         }
 
-        public IRegistrationBuilder<TComponent, SimpleActivatorData, SingleRegistrationStyle> ByInstaller<TInstaller>()
+        public IRegistrationBuilder<TComponent, SimpleActivatorData, SingleRegistrationStyle> ByInstaller<TInstaller>(
+            Func<ContainerBuilder, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
         {
             return Builder
                 .Register(
                     (IComponentContext _, ILifetimeScope scope)
-                        => scope.ResolveFromSubScope<TComponent, TInstaller>());
+                        => scope.ResolveFromSubScope<TComponent, TInstaller>(installerFactory));
         }
     }
 }

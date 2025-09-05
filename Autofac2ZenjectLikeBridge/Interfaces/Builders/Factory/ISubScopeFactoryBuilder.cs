@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using Autofac.Builder;
+using JetBrains.Annotations;
 
 namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
 {
@@ -19,7 +20,8 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>()
+            SingleRegistrationStyle> ByInstaller<TInstaller>(
+            [CanBeNull] Func<ContainerBuilder, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller;
     }
 
@@ -36,7 +38,8 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>()
+            SingleRegistrationStyle> ByInstaller<TInstaller>(
+            [CanBeNull] Func<ContainerBuilder, TP0, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller;
     }
 
@@ -53,7 +56,8 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>()
+            SingleRegistrationStyle> ByInstaller<TInstaller>(
+            [CanBeNull] Func<ContainerBuilder, TP0, TP1, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller;
     }
 
@@ -70,7 +74,8 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>()
+            SingleRegistrationStyle> ByInstaller<TInstaller>(
+            [CanBeNull] Func<ContainerBuilder, TP0, TP1, TP2, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller;
     }
 
@@ -87,7 +92,8 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>()
+            SingleRegistrationStyle> ByInstaller<TInstaller>(
+            [CanBeNull] Func<ContainerBuilder, TP0, TP1, TP2, TP3, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller;
     }
 
@@ -104,7 +110,8 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>()
+            SingleRegistrationStyle> ByInstaller<TInstaller>(
+            [CanBeNull] Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller;
     }
 
@@ -121,7 +128,8 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>()
+            SingleRegistrationStyle> ByInstaller<TInstaller>(
+            [CanBeNull] Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller;
     }
 
@@ -138,7 +146,8 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>()
+            SingleRegistrationStyle> ByInstaller<TInstaller>(
+            [CanBeNull] Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller;
     }
 
@@ -155,7 +164,8 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>()
+            SingleRegistrationStyle> ByInstaller<TInstaller>(
+            [CanBeNull] Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller;
     }
 
@@ -172,7 +182,8 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>()
+            SingleRegistrationStyle> ByInstaller<TInstaller>(
+            [CanBeNull] Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller;
     }
 
@@ -189,7 +200,8 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>()
+            SingleRegistrationStyle> ByInstaller<TInstaller>(
+            [CanBeNull] Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller;
     }
 

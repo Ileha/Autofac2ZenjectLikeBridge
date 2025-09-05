@@ -1,9 +1,7 @@
-﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ assembly name="System.Core" #>
-<#@ assembly name="$(TargetPath)" #>
 <#@ output extension=".cs" #>
 <#@ import namespace="System.Linq" #>
-<#@ import namespace="Autofac2ZenjectLikeBridge" #>
 using System;
 using Autofac;
 using Autofac.Builder;
@@ -16,7 +14,7 @@ namespace Autofac2ZenjectLikeBridge
 {
     public static partial class DIExtensions
     {
-        //generated amount <#= Constants.GenericParametersCount #>
+        //generated amount <#@ include file="Constants.ttinclude" #><#= Constants.GenericParametersCount #>
 
 #region RegisterIFactoryExtended
 

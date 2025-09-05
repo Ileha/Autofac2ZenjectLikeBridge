@@ -98,6 +98,8 @@
     <ItemGroup>
         <Compile Update="Interfaces\IFactory.cs">
             <DependentUpon>IFactory.tt</DependentUpon>
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
         </Compile>
         <Compile Update="Entities\Factories\AutofacFunctionFactories.cs">
           <AutoGen>True</AutoGen>
@@ -126,6 +128,8 @@
         </Compile>
         <Compile Update="Entities\Factories\PlaceholderFactory.cs">
           <DependentUpon>PlaceholderFactory.tt</DependentUpon>
+          <DesignTime>True</DesignTime>
+          <AutoGen>True</AutoGen>
         </Compile>
         <Compile Update="Interfaces\Builders\Factory\ISubScopeFactoryBuilder.cs">
           <AutoGen>True</AutoGen>
@@ -136,11 +140,6 @@
           <AutoGen>True</AutoGen>
           <DesignTime>True</DesignTime>
           <DependentUpon>ExtendedFactoryBuilder.tt</DependentUpon>
-        </Compile>
-        <Compile Update="Builders\Factory\SubScopeFactoryBuilder.cs">
-          <AutoGen>True</AutoGen>
-          <DesignTime>True</DesignTime>
-          <DependentUpon>SubScopeFactoryBuilder.tt</DependentUpon>
         </Compile>
         <Compile Update="DIExtensionsSubScopeFactories.cs">
           <AutoGen>True</AutoGen>
@@ -156,6 +155,11 @@
           <AutoGen>True</AutoGen>
           <DesignTime>True</DesignTime>
           <DependentUpon>SubScopePlaceholderFactoryBuilder.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Builders\Factory\SubScopeFactoryBuilder.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>SubScopeFactoryBuilder.tt</DependentUpon>
         </Compile>
     </ItemGroup>
 
