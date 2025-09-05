@@ -23,7 +23,7 @@
         <PackageReleaseNotes>initial implementation</PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <TargetFrameworks>net6.0;net8.0;netstandard2.1;netstandard2.0</TargetFrameworks>
+        <TargetFrameworks>net6.0;net8.0;netstandard2.0;netstandard2.1</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -82,10 +82,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Autofac" Version="8.4.0"/>
+        <PackageReference Include="Autofac" Version="8.4.0" />
         <PackageReference Include="JetBrains.Annotations" Version="2025.2.1" />
-        <PackageReference Include="Lib.Harmony" Version="2.4.1"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8"/>
+        <PackageReference Include="Lib.Harmony" Version="2.4.1" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
     </ItemGroup>
 
     <ItemGroup>
@@ -157,6 +157,10 @@
           <DesignTime>True</DesignTime>
           <DependentUpon>SubScopePlaceholderFactoryBuilder.tt</DependentUpon>
         </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
     </ItemGroup>
 
 </Project>
