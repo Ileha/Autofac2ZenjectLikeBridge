@@ -25,7 +25,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
         }
 
         public void ByInstaller<TInstaller>(
-            Func<ContainerBuilder, TService, TInstaller> installerFactory = null)
+            Func<ILifetimeScope, ContainerBuilder, TService, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
         {
             Builder
@@ -45,7 +45,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
         public void ByInstaller<TInstaller>(
             object fromKey,
             object toKey = null,
-            Func<ContainerBuilder, TService, TInstaller> installerFactory = null)
+            Func<ILifetimeScope, ContainerBuilder, TService, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
         {
             Builder
@@ -68,7 +68,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
         private static TComponent ResolveFromSubScopeInstaller<TComponent, TInstaller>(
             IComponentContext context,
             TService nestedService,
-            [CanBeNull] Func<ContainerBuilder, TService, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TService, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
             where TComponent : IDisposable
         {

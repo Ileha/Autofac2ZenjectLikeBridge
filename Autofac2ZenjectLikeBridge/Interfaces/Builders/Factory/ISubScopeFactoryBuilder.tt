@@ -29,7 +29,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
             TFactory,
             TActivatorData,
             SingleRegistrationStyle> ByInstaller<TInstaller>(
-            [CanBeNull] Func<ContainerBuilder, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller;
     }
 

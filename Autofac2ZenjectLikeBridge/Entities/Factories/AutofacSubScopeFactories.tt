@@ -53,11 +53,11 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstaller : class, IInstaller
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ContainerBuilder, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstaller> _installerFactory;
 
             public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ContainerBuilder, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstaller> installerFactory = null)
+                Func<ILifetimeScope, ContainerBuilder, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstaller> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;

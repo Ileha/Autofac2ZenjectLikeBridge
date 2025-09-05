@@ -8,6 +8,66 @@ namespace Tests;
 
 public class DIExtensionsFactoryTests
 {
+    private class Factory<TParam, T> : PlaceholderFactory<TParam, T>
+    {
+    }
+
+    // Test Classes
+    public interface IService
+    {
+        string GetData();
+    }
+
+    public class SimpleService : IService
+    {
+        public string GetData()
+        {
+            return nameof(SimpleService);
+        }
+    }
+
+    public class ServiceWithParameter
+    {
+        public ServiceWithParameter(string data)
+        {
+            Data = data;
+        }
+
+        public string Data { get; }
+    }
+
+    public class ServiceWithDependency
+    {
+        public ServiceWithDependency(SimpleService dependency)
+        {
+            Dependency = dependency;
+        }
+
+        public SimpleService Dependency { get; }
+    }
+
+    public class ServiceWithDependencyDisposable : ServiceWithDependency, IDisposable
+    {
+        public ServiceWithDependencyDisposable(SimpleService dependency)
+            : base(dependency)
+        {
+        }
+
+        public void Dispose()
+        {
+        }
+    }
+
+    public class ServiceWithDependencyAndParameterDisposable : ServiceWithDependencyDisposable
+    {
+        public ServiceWithDependencyAndParameterDisposable(SimpleService dependency, string data) : base(dependency)
+        {
+            Data = data;
+        }
+
+        public string Data { get; }
+    }
+
     #region IFactories
 
     [Test]
@@ -227,64 +287,4 @@ public class DIExtensionsFactoryTests
     }
 
     #endregion
-
-    private class Factory<TParam, T> : PlaceholderFactory<TParam, T>
-    {
-    }
-
-    // Test Classes
-    public interface IService
-    {
-        string GetData();
-    }
-
-    public class SimpleService : IService
-    {
-        public string GetData()
-        {
-            return nameof(SimpleService);
-        }
-    }
-
-    public class ServiceWithParameter
-    {
-        public ServiceWithParameter(string data)
-        {
-            Data = data;
-        }
-
-        public string Data { get; }
-    }
-
-    public class ServiceWithDependency
-    {
-        public ServiceWithDependency(SimpleService dependency)
-        {
-            Dependency = dependency;
-        }
-
-        public SimpleService Dependency { get; }
-    }
-
-    public class ServiceWithDependencyDisposable : ServiceWithDependency, IDisposable
-    {
-        public ServiceWithDependencyDisposable(SimpleService dependency)
-            : base(dependency)
-        {
-        }
-
-        public void Dispose()
-        {
-        }
-    }
-
-    public class ServiceWithDependencyAndParameterDisposable : ServiceWithDependencyDisposable
-    {
-        public ServiceWithDependencyAndParameterDisposable(SimpleService dependency, string data) : base(dependency)
-        {
-            Data = data;
-        }
-
-        public string Data { get; }
-    }
 }

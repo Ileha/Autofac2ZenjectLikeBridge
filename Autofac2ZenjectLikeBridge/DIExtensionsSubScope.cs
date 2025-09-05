@@ -388,7 +388,7 @@ namespace Autofac2ZenjectLikeBridge
 
         public static TComponent ResolveFromSubScope<TComponent, TInstaller>(
             this ILifetimeScope scope,
-            [CanBeNull] Func<ContainerBuilder, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TInstaller> installerFactory = null)
             where TComponent : IDisposable
             where TInstaller : class, IInstaller
         {
@@ -402,7 +402,7 @@ namespace Autofac2ZenjectLikeBridge
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
                         var installerInstance = installerFactory == null
                             ? scope.CreateInstance<TInstaller>(scopeBuilder)
-                            : installerFactory.Invoke(scopeBuilder);
+                            : installerFactory.Invoke(scope, scopeBuilder);
                         installerInstance.Install();
                     });
 
@@ -418,7 +418,7 @@ namespace Autofac2ZenjectLikeBridge
         public static TComponent ResolveFromSubScope<TP0, TComponent, TInstaller>(
             this ILifetimeScope scope,
 			TP0 param0,
-            [CanBeNull] Func<ContainerBuilder, TP0, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TInstaller> installerFactory = null)
             where TComponent : IDisposable
             where TInstaller : class, IInstaller
         {
@@ -433,7 +433,7 @@ namespace Autofac2ZenjectLikeBridge
                         var installerInstance = installerFactory == null
                             ? scope.CreateInstance<TInstaller>(scopeBuilder,
 							param0)
-                            : installerFactory.Invoke(scopeBuilder, param0);
+                            : installerFactory.Invoke(scope, scopeBuilder, param0);
                         installerInstance.Install();
                     });
 
@@ -450,7 +450,7 @@ namespace Autofac2ZenjectLikeBridge
             this ILifetimeScope scope,
 			TP0 param0,
 			TP1 param1,
-            [CanBeNull] Func<ContainerBuilder, TP0, TP1, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TInstaller> installerFactory = null)
             where TComponent : IDisposable
             where TInstaller : class, IInstaller
         {
@@ -466,7 +466,7 @@ namespace Autofac2ZenjectLikeBridge
                             ? scope.CreateInstance<TInstaller>(scopeBuilder,
 							param0,
 							param1)
-                            : installerFactory.Invoke(scopeBuilder, param0, param1);
+                            : installerFactory.Invoke(scope, scopeBuilder, param0, param1);
                         installerInstance.Install();
                     });
 
@@ -484,7 +484,7 @@ namespace Autofac2ZenjectLikeBridge
 			TP0 param0,
 			TP1 param1,
 			TP2 param2,
-            [CanBeNull] Func<ContainerBuilder, TP0, TP1, TP2, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TInstaller> installerFactory = null)
             where TComponent : IDisposable
             where TInstaller : class, IInstaller
         {
@@ -501,7 +501,7 @@ namespace Autofac2ZenjectLikeBridge
 							param0,
 							param1,
 							param2)
-                            : installerFactory.Invoke(scopeBuilder, param0, param1, param2);
+                            : installerFactory.Invoke(scope, scopeBuilder, param0, param1, param2);
                         installerInstance.Install();
                     });
 
@@ -520,7 +520,7 @@ namespace Autofac2ZenjectLikeBridge
 			TP1 param1,
 			TP2 param2,
 			TP3 param3,
-            [CanBeNull] Func<ContainerBuilder, TP0, TP1, TP2, TP3, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TInstaller> installerFactory = null)
             where TComponent : IDisposable
             where TInstaller : class, IInstaller
         {
@@ -538,7 +538,7 @@ namespace Autofac2ZenjectLikeBridge
 							param1,
 							param2,
 							param3)
-                            : installerFactory.Invoke(scopeBuilder, param0, param1, param2, param3);
+                            : installerFactory.Invoke(scope, scopeBuilder, param0, param1, param2, param3);
                         installerInstance.Install();
                     });
 
@@ -558,7 +558,7 @@ namespace Autofac2ZenjectLikeBridge
 			TP2 param2,
 			TP3 param3,
 			TP4 param4,
-            [CanBeNull] Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TInstaller> installerFactory = null)
             where TComponent : IDisposable
             where TInstaller : class, IInstaller
         {
@@ -577,7 +577,7 @@ namespace Autofac2ZenjectLikeBridge
 							param2,
 							param3,
 							param4)
-                            : installerFactory.Invoke(scopeBuilder, param0, param1, param2, param3, param4);
+                            : installerFactory.Invoke(scope, scopeBuilder, param0, param1, param2, param3, param4);
                         installerInstance.Install();
                     });
 
@@ -598,7 +598,7 @@ namespace Autofac2ZenjectLikeBridge
 			TP3 param3,
 			TP4 param4,
 			TP5 param5,
-            [CanBeNull] Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TInstaller> installerFactory = null)
             where TComponent : IDisposable
             where TInstaller : class, IInstaller
         {
@@ -618,7 +618,7 @@ namespace Autofac2ZenjectLikeBridge
 							param3,
 							param4,
 							param5)
-                            : installerFactory.Invoke(scopeBuilder, param0, param1, param2, param3, param4, param5);
+                            : installerFactory.Invoke(scope, scopeBuilder, param0, param1, param2, param3, param4, param5);
                         installerInstance.Install();
                     });
 
@@ -640,7 +640,7 @@ namespace Autofac2ZenjectLikeBridge
 			TP4 param4,
 			TP5 param5,
 			TP6 param6,
-            [CanBeNull] Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstaller> installerFactory = null)
             where TComponent : IDisposable
             where TInstaller : class, IInstaller
         {
@@ -661,7 +661,7 @@ namespace Autofac2ZenjectLikeBridge
 							param4,
 							param5,
 							param6)
-                            : installerFactory.Invoke(scopeBuilder, param0, param1, param2, param3, param4, param5, param6);
+                            : installerFactory.Invoke(scope, scopeBuilder, param0, param1, param2, param3, param4, param5, param6);
                         installerInstance.Install();
                     });
 
@@ -684,7 +684,7 @@ namespace Autofac2ZenjectLikeBridge
 			TP5 param5,
 			TP6 param6,
 			TP7 param7,
-            [CanBeNull] Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstaller> installerFactory = null)
             where TComponent : IDisposable
             where TInstaller : class, IInstaller
         {
@@ -706,7 +706,7 @@ namespace Autofac2ZenjectLikeBridge
 							param5,
 							param6,
 							param7)
-                            : installerFactory.Invoke(scopeBuilder, param0, param1, param2, param3, param4, param5, param6, param7);
+                            : installerFactory.Invoke(scope, scopeBuilder, param0, param1, param2, param3, param4, param5, param6, param7);
                         installerInstance.Install();
                     });
 
@@ -730,7 +730,7 @@ namespace Autofac2ZenjectLikeBridge
 			TP6 param6,
 			TP7 param7,
 			TP8 param8,
-            [CanBeNull] Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstaller> installerFactory = null)
             where TComponent : IDisposable
             where TInstaller : class, IInstaller
         {
@@ -753,7 +753,7 @@ namespace Autofac2ZenjectLikeBridge
 							param6,
 							param7,
 							param8)
-                            : installerFactory.Invoke(scopeBuilder, param0, param1, param2, param3, param4, param5, param6, param7, param8);
+                            : installerFactory.Invoke(scope, scopeBuilder, param0, param1, param2, param3, param4, param5, param6, param7, param8);
                         installerInstance.Install();
                     });
 
@@ -778,7 +778,7 @@ namespace Autofac2ZenjectLikeBridge
 			TP7 param7,
 			TP8 param8,
 			TP9 param9,
-            [CanBeNull] Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstaller> installerFactory = null)
             where TComponent : IDisposable
             where TInstaller : class, IInstaller
         {
@@ -802,7 +802,7 @@ namespace Autofac2ZenjectLikeBridge
 							param7,
 							param8,
 							param9)
-                            : installerFactory.Invoke(scopeBuilder, param0, param1, param2, param3, param4, param5, param6, param7, param8, param9);
+                            : installerFactory.Invoke(scope, scopeBuilder, param0, param1, param2, param3, param4, param5, param6, param7, param8, param9);
                         installerInstance.Install();
                     });
 

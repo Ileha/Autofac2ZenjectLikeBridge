@@ -17,7 +17,7 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance
             TComponent,
             SimpleActivatorData,
             SingleRegistrationStyle> ByInstaller<TInstaller>(
-            [CanBeNull] Func<ContainerBuilder, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller;
     }
 }

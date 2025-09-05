@@ -33,7 +33,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ContainerBuilder, TInstaller> installerFactory = null)
+            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -69,7 +69,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ContainerBuilder, TP0, TInstaller> installerFactory = null)
+            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -105,7 +105,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ContainerBuilder, TP0, TP1, TInstaller> installerFactory = null)
+            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -141,7 +141,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ContainerBuilder, TP0, TP1, TP2, TInstaller> installerFactory = null)
+            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -177,7 +177,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ContainerBuilder, TP0, TP1, TP2, TP3, TInstaller> installerFactory = null)
+            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -213,7 +213,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TInstaller> installerFactory = null)
+            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -249,7 +249,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TInstaller> installerFactory = null)
+            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -285,7 +285,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstaller> installerFactory = null)
+            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -321,7 +321,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstaller> installerFactory = null)
+            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -357,7 +357,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstaller> installerFactory = null)
+            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
         {
             return Builder
@@ -393,7 +393,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstaller> installerFactory = null)
+            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
         {
             return Builder

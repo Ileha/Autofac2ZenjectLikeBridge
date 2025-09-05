@@ -26,7 +26,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Instance
         }
 
         public IRegistrationBuilder<TComponent, SimpleActivatorData, SingleRegistrationStyle> ByInstaller<TInstaller>(
-            Func<ContainerBuilder, TInstaller> installerFactory = null)
+            Func<ILifetimeScope, ContainerBuilder, TInstaller> installerFactory = null)
             where TInstaller : class, IInstaller
         {
             return Builder

@@ -346,11 +346,11 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstaller : class, IInstaller
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ContainerBuilder, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TInstaller> _installerFactory;
 
             public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ContainerBuilder, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, ContainerBuilder, TInstaller> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -369,11 +369,11 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstaller : class, IInstaller
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ContainerBuilder, TP0, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TInstaller> _installerFactory;
 
             public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ContainerBuilder, TP0, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, ContainerBuilder, TP0, TInstaller> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -394,11 +394,11 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstaller : class, IInstaller
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ContainerBuilder, TP0, TP1, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TInstaller> _installerFactory;
 
             public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ContainerBuilder, TP0, TP1, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TInstaller> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -421,11 +421,11 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstaller : class, IInstaller
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ContainerBuilder, TP0, TP1, TP2, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TInstaller> _installerFactory;
 
             public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ContainerBuilder, TP0, TP1, TP2, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TInstaller> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -450,11 +450,11 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstaller : class, IInstaller
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ContainerBuilder, TP0, TP1, TP2, TP3, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TInstaller> _installerFactory;
 
             public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ContainerBuilder, TP0, TP1, TP2, TP3, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TInstaller> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -481,11 +481,11 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstaller : class, IInstaller
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TInstaller> _installerFactory;
 
             public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TInstaller> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -514,11 +514,11 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstaller : class, IInstaller
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TInstaller> _installerFactory;
 
             public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TInstaller> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -549,11 +549,11 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstaller : class, IInstaller
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstaller> _installerFactory;
 
             public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstaller> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -586,11 +586,11 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstaller : class, IInstaller
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstaller> _installerFactory;
 
             public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstaller> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -625,11 +625,11 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstaller : class, IInstaller
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstaller> _installerFactory;
 
             public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstaller> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -666,11 +666,11 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstaller : class, IInstaller
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstaller> _installerFactory;
 
             public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstaller> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
