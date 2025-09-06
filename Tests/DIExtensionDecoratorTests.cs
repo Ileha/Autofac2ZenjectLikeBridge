@@ -35,50 +35,13 @@ public class DIExtensionDecoratorTests
         var externalInstance = Guid.NewGuid().ToString("N");
         var subScopeInstance = Guid.NewGuid().ToString("N");
 
+        var mockSubContainerDisposable = Substitute.For<IDisposable>();
+        var mockExternalDisposable = Substitute.For<IDisposable>();
+
         builder
             .RegisterInstance(externalInstance)
             .As<string>()
             .SingleInstance();
-
-        builder
-            .RegisterType<SimpleService>()
-            .As<IService>()
-            .SingleInstance();
-
-        builder
-            .RegisterDecoratorExtended<ServiceDecoratorDisposable, IService>()
-            .FromSubScope()
-            .ByFunction(
-                (subContainerBuilder, service) =>
-                {
-                    subContainerBuilder
-                        .RegisterType<ServiceDecoratorDisposable>()
-                        .WithParameters(TypedParameter.From(service))
-                        .SingleInstance();
-
-                    subContainerBuilder
-                        .RegisterInstance(subScopeInstance)
-                        .As<string>()
-                        .SingleInstance();
-                });
-
-        using var container = builder.Build();
-
-        // Act
-        var instance = container.Resolve<IService>();
-
-        // Assert
-        Assert.That(instance.GetData(), Is.EqualTo($"{nameof(SimpleService)}.{subScopeInstance}"));
-    }
-
-    [Test]
-    public void RegisterDecoratorFromSubScope_SubContainerDisposedWithInstance()
-    {
-        // Arrange
-        var builder = new ContainerBuilder();
-
-        var mockSubContainerDisposable = Substitute.For<IDisposable>();
-        var mockExternalDisposable = Substitute.For<IDisposable>();
 
         builder
             .RegisterType<SimpleService>()
@@ -102,7 +65,7 @@ public class DIExtensionDecoratorTests
                         .SingleInstance();
 
                     subContainerBuilder
-                        .RegisterInstance(Guid.NewGuid().ToString("N"))
+                        .RegisterInstance(subScopeInstance)
                         .As<string>()
                         .SingleInstance();
 
@@ -115,12 +78,91 @@ public class DIExtensionDecoratorTests
         using (var container = builder.Build())
         {
             // Act
-            var _ = container.Resolve<IService>();
+            var instance = container.Resolve<IService>();
+
+            // Assert
+            Assert.That(instance.GetData(), Is.EqualTo($"{nameof(SimpleService)}.{subScopeInstance}"));
         }
 
-        // Assert
         mockSubContainerDisposable.Received(1).Dispose();
         mockExternalDisposable.Received(1).Dispose();
+    }
+
+    [Test]
+    public void RegisterDecoratorExtended_FromSubScope_ByInstaller()
+    {
+        // Arrange
+        var builder = new ContainerBuilder();
+
+        var mockSubContainerDisposable = Substitute.For<IDisposable>();
+        var mockExternalDisposable = Substitute.For<IDisposable>();
+        var data = Guid.NewGuid();
+
+        builder
+            .RegisterType<SimpleService>()
+            .As<IService>()
+            .SingleInstance();
+
+        builder
+            .RegisterInstance(mockExternalDisposable)
+            .As<IDisposable>()
+            .SingleInstance();
+
+        builder
+            .RegisterDecoratorExtended<ServiceDecoratorDisposable, IService>()
+            .FromSubScope()
+            .ByInstaller(
+                (scope, containerBuilder, arg3) => scope
+                    .CreateInstance<ServiceWithDependencyInstaller>(containerBuilder, arg3, mockSubContainerDisposable, data));
+
+        using (var container = builder.Build())
+        {
+            // Act
+            var instance = container.Resolve<IService>();
+
+            // Assert
+            Assert.That(instance.GetData(), Is.EqualTo($"{nameof(SimpleService)}.{data:N}"));
+        }
+
+
+        mockSubContainerDisposable.Received(1).Dispose();
+        mockExternalDisposable.Received(1).Dispose();
+    }
+
+    internal class ServiceWithDependencyInstaller : AutofacInstallerBase
+    {
+        private readonly Guid _data;
+        private readonly IDisposable _containerDisposable;
+        private readonly IService _service;
+
+        public ServiceWithDependencyInstaller(
+            Guid data,
+            ContainerBuilder builder,
+            IDisposable containerDisposable,
+            IService service)
+            : base(builder)
+        {
+            _data = data;
+            _containerDisposable = containerDisposable ?? throw new ArgumentNullException(nameof(containerDisposable));
+            _service = service ?? throw new ArgumentNullException(nameof(service));
+        }
+
+        public override void Install()
+        {
+            Builder
+                .RegisterType<ServiceDecoratorDisposable>()
+                .WithParameters(TypedParameter.From(_service))
+                .SingleInstance();
+
+            Builder
+                .RegisterInstance(_data.ToString("N"))
+                .As<string>()
+                .SingleInstance();
+
+            Builder
+                .RegisterInstance(_containerDisposable)
+                .SingleInstance();
+        }
     }
 
     public interface IService

@@ -255,15 +255,10 @@ public class DIExtensionsTests
     // Test Classes
     public interface IService
     {
-        string GetData();
     }
 
     public class SimpleService : IService
     {
-        public string GetData()
-        {
-            return nameof(SimpleService);
-        }
     }
 
     public class ServiceWithParameter

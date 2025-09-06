@@ -68,6 +68,38 @@ public class DIExtensionsFactoryTests
         public string Data { get; }
     }
 
+    internal class ServiceWithDependencyAndParameterInstaller : AutofacInstallerBase
+    {
+        private readonly string _data;
+        private readonly IDisposable _containerDisposable;
+
+        public ServiceWithDependencyAndParameterInstaller(
+            string data,
+            ContainerBuilder builder,
+            IDisposable containerDisposable)
+            : base(builder)
+        {
+            _data = data;
+            _containerDisposable = containerDisposable ?? throw new ArgumentNullException(nameof(containerDisposable));
+        }
+
+        public override void Install()
+        {
+            Builder
+                .RegisterInstance(_containerDisposable)
+                .SingleInstance();
+
+            Builder
+                .RegisterType<SimpleService>()
+                .SingleInstance();
+
+            Builder
+                .RegisterType<ServiceWithDependencyAndParameterDisposable>()
+                .WithParameter(new NamedParameter("data", _data))
+                .SingleInstance();
+        }
+    }
+
     #region IFactories
 
     [Test]
@@ -168,6 +200,37 @@ public class DIExtensionsFactoryTests
         // Act
         using (factory.Create("test"))
         {
+        }
+
+        // Assert
+        disposable.Received(1).Dispose();
+    }
+
+    [Test]
+    public void RegisterIFactoryExtended_FromSubScope_ByInstaller()
+    {
+        // Arrange
+        var builder = new ContainerBuilder();
+        var disposable = Substitute.For<IDisposable>();
+        var stringData = Guid.NewGuid().ToString("N");
+
+        builder
+            .RegisterIFactoryExtended<string, ServiceWithDependencyAndParameterDisposable>()
+            .FromSubScope()
+            .ByInstaller<ServiceWithDependencyAndParameterInstaller>(
+                (scope, containerBuilder, arg3)
+                    => scope
+                        .CreateInstance<ServiceWithDependencyAndParameterInstaller>(containerBuilder, arg3, disposable))
+            .SingleInstance();
+
+        using var container = builder.Build();
+        var factory = container.Resolve<IFactory<string, ServiceWithDependencyAndParameterDisposable>>();
+
+        // Act
+        using (var instance = factory.Create(stringData))
+        {
+            // Assert
+            Assert.That(instance.Data, Is.EqualTo(stringData));
         }
 
         // Assert
@@ -286,5 +349,37 @@ public class DIExtensionsFactoryTests
         disposable.Received(1).Dispose();
     }
 
+    [Test]
+    public void RegisterPlaceholderFactoryExtended_FromSubScope_ByInstaller()
+    {
+        // Arrange
+        var builder = new ContainerBuilder();
+        var disposable = Substitute.For<IDisposable>();
+        var stringData = Guid.NewGuid().ToString("N");
+
+        builder
+            .RegisterPlaceholderFactoryExtended<
+                string, ServiceWithDependencyAndParameterDisposable,
+                Factory<string, ServiceWithDependencyAndParameterDisposable>>()
+            .FromSubScope()
+            .ByInstaller<ServiceWithDependencyAndParameterInstaller>(
+                (scope, containerBuilder, arg3)
+                    => scope
+                        .CreateInstance<ServiceWithDependencyAndParameterInstaller>(containerBuilder, arg3, disposable))
+            .SingleInstance();
+
+        using var container = builder.Build();
+        var factory = container.Resolve<Factory<string, ServiceWithDependencyAndParameterDisposable>>();
+
+        // Act
+        using (var instance = factory.Create(stringData))
+        {
+            // Assert
+            Assert.That(instance.Data, Is.EqualTo(stringData));
+        }
+
+        // Assert
+        disposable.Received(1).Dispose();
+    }
     #endregion
 }
