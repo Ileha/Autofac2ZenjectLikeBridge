@@ -17,7 +17,7 @@ namespace Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher
             new ConditionalWeakTable<IDisposable, CompositeDisposable>();
 
         private static readonly HashSet<Type> PatchedTypes = new HashSet<Type>();
-        private static readonly object Locker = new object();
+        private static readonly object PatchLocker = new object();
         private static readonly Harmony Harmony = new Harmony(PatchId);
 
         private static readonly HarmonyMethod PrefixMethod =
@@ -25,7 +25,7 @@ namespace Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher
 
         public static void PatchNonLazy()
         {
-            lock (Locker)
+            lock (PatchLocker)
             {
                 var methods2Patch = AppDomain.CurrentDomain.GetAssemblies()
                     .SelectMany(assembly =>
@@ -60,7 +60,7 @@ namespace Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher
 
         public static void EnsurePatched(Type type)
         {
-            lock (Locker)
+            lock (PatchLocker)
             {
                 if (!type.IsClass || type.IsAbstract || PatchedTypes.Contains(type))
                     return;
@@ -78,7 +78,7 @@ namespace Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher
 
         public static void PatchMethod([CanBeNull] MethodBase method)
         {
-            lock (Locker)
+            lock (PatchLocker)
                 PatchMethodLockFree(method, PrefixMethod);
         }
 
@@ -115,11 +115,7 @@ namespace Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher
 
             EnsurePatched(composite.GetType());
 
-            if (!DisposeData.TryGetValue(composite, out var value))
-            {
-                value = new CompositeDisposable();
-                DisposeData.Add(composite, value);
-            }
+            var value = DisposeData.GetOrCreateValue(composite);
 
             disposable
                 .AddTo(value);
