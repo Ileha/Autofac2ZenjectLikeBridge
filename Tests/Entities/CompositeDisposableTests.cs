@@ -1,3 +1,4 @@
+using Autofac2ZenjectLikeBridge.Extensions;
 using NSubstitute;
 using CustomCompositeDisposable = Autofac2ZenjectLikeBridge.Entities.CompositeDisposable;
 using ReferencedCompositeDisposable = System.Reactive.Disposables.CompositeDisposable;
@@ -17,7 +18,15 @@ public class CompositeDisposableTests
     [Test]
     public void Should_be_empty_when_created_with_default_ctor()
     {
-        var sut = new CustomCompositeDisposable();
+        using var sut = new CustomCompositeDisposable();
+
+        Assert.That(sut.Count, Is.EqualTo(0));
+    }
+
+    [Test]
+    public void Should_be_empty_when_created_with_capacity_ctor()
+    {
+        using var sut = new CustomCompositeDisposable(64);
 
         Assert.That(sut.Count, Is.EqualTo(0));
     }
@@ -25,7 +34,7 @@ public class CompositeDisposableTests
     [Test]
     public void Should_contain_disposables_when_created_with_params()
     {
-        var sut = new CustomCompositeDisposable(new[] {_disposable1, _disposable2});
+        var sut = new CustomCompositeDisposable([_disposable1, _disposable2]);
 
         Assert.That(sut.Count, Is.EqualTo(2));
     }
@@ -33,7 +42,10 @@ public class CompositeDisposableTests
     [Test]
     public void Should_throw_when_created_with_null_enumerable()
     {
-        Assert.Throws<ArgumentNullException>(() => new CustomCompositeDisposable(null));
+        Assert.Throws<ArgumentNullException>(() =>
+        {
+            using var _ = new CustomCompositeDisposable(null);
+        });
     }
 
     [Test]
@@ -49,7 +61,7 @@ public class CompositeDisposableTests
     [Test]
     public void Should_throw_when_adding_null_disposable()
     {
-        var sut = new CustomCompositeDisposable();
+        using var sut = new CustomCompositeDisposable();
 
         Assert.Throws<ArgumentNullException>(() => sut.Add(null));
     }
@@ -99,7 +111,7 @@ public class CompositeDisposableTests
     [Test]
     public void Should_dispose_removed_disposable()
     {
-        var sut = new CustomCompositeDisposable(new[] {_disposable1});
+        using var sut = new CustomCompositeDisposable(new[] {_disposable1});
 
         sut.Remove(_disposable1);
 
@@ -109,7 +121,7 @@ public class CompositeDisposableTests
     [Test]
     public void Should_throw_when_removing_null_disposable()
     {
-        var sut = new CustomCompositeDisposable();
+        using var sut = new CustomCompositeDisposable();
 
         Assert.Throws<ArgumentNullException>(() => sut.Remove(null));
     }
@@ -139,7 +151,7 @@ public class CompositeDisposableTests
     [Test]
     public void Should_dispose_cleared_disposables()
     {
-        var sut = new CustomCompositeDisposable(new[] {_disposable1, _disposable2});
+        using var sut = new CustomCompositeDisposable(new[] {_disposable1, _disposable2});
 
         sut.Clear();
 
@@ -150,7 +162,7 @@ public class CompositeDisposableTests
     [Test]
     public void Reference_Should_dispose_cleared_disposables()
     {
-        var sut = new ReferencedCompositeDisposable(new[] {_disposable1, _disposable2});
+        using var sut = new ReferencedCompositeDisposable(new[] {_disposable1, _disposable2});
 
         sut.Clear();
 
@@ -193,6 +205,7 @@ public class CompositeDisposableTests
         var sut = new CustomCompositeDisposable(new[] {_disposable1, _disposable2});
 
         var disposables = new List<IDisposable>();
+
         foreach (var disposable in sut)
             disposables.Add(disposable);
 
@@ -217,6 +230,41 @@ public class CompositeDisposableTests
         newDisposable1.Received(1).Dispose();
         newDisposable2.Received(1).Dispose();
     }
+
+    [Test]
+    public void Dispose_WhenCalledShouldDisposeInnerDisposable()
+    {
+        var custom = new CustomCompositeDisposable();
+
+        _disposable1
+            .AddTo(custom);
+
+        _disposable2
+            .AddTo(custom);
+
+        custom.Dispose();
+
+        _disposable1.Received(1).Dispose();
+        _disposable1.Received(1).Dispose();
+    }
+
+    [Test]
+    public void Reference_Dispose_WhenCalledShouldDisposeInnerDisposable()
+    {
+        var custom = new ReferencedCompositeDisposable();
+
+        _disposable1
+            .AddTo(custom);
+
+        _disposable2
+            .AddTo(custom);
+
+        custom.Dispose();
+
+        _disposable1.Received(1).Dispose();
+        _disposable1.Received(1).Dispose();
+    }
+
 #pragma warning disable NUnit1032
     private IDisposable _disposable1;
     private IDisposable _disposable2;

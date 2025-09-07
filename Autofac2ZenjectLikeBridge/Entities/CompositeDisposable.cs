@@ -15,6 +15,11 @@ namespace Autofac2ZenjectLikeBridge.Entities
             _disposables = new List<IDisposable>();
         }
 
+        public CompositeDisposable(int capacity)
+        {
+            _disposables = new List<IDisposable>(capacity);
+        }
+
         public CompositeDisposable(IEnumerable<IDisposable> disposables)
         {
             if (disposables is null)
