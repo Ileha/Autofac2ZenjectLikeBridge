@@ -21,6 +21,7 @@
         <PackageReference Include="NUnit.Analyzers" Version="3.9.0"/>
         <PackageReference Include="NUnit3TestAdapter" Version="4.5.0"/>
         <PackageReference Include="ReportGenerator" Version="5.4.12"/>
+        <PackageReference Include="System.Reactive" Version="6.0.2" />
     </ItemGroup>
 
     <ItemGroup>
