@@ -4,7 +4,10 @@ using Autofac;
 using Autofac.Builder;
 using Autofac.Core;
 using Autofac.Core.Registration;
-using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
+using Autofac2ZenjectLikeBridge.Builders.Decorator;
+using Autofac2ZenjectLikeBridge.Builders.Instance;
+using Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator;
+using Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Module = Autofac.Module;
@@ -55,42 +58,28 @@ namespace Autofac2ZenjectLikeBridge
             return scope.AsServiceProvider().CreateInstance<T>(parameters);
         }
 
-        public static IRegistrationBuilder<
-            TComponent,
-            SimpleActivatorData,
-            SingleRegistrationStyle> RegisterFromSubScope<TComponent>(
-            this ContainerBuilder builder,
-            Action<ContainerBuilder> subScopeInstaller)
-            where TComponent : IDisposable
+        public static IExtendedRegistrationBuilder<T> RegisterExtended<T>(this ContainerBuilder builder)
+            where T : class
         {
             if (builder is null)
                 throw new ArgumentNullException(nameof(builder));
 
-            if (subScopeInstaller is null)
-                throw new ArgumentNullException(nameof(subScopeInstaller));
+            return new ExtendedRegistrationBuilder<T>(builder);
+        }
 
-            return builder
-                .Register(
-                    (IComponentContext _, ILifetimeScope scope) =>
-                    {
-                        var guid = Guid.NewGuid();
+        public static ISubScopeRegistrationBuilder<T> FromSubScope<T>(
+            this IExtendedRegistrationBuilder<T> builder)
+            where T : class, IDisposable
+        {
+            return new SubScopeRegistrationBuilder<T>(builder.Builder);
+        }
 
-                        var subScope = scope
-                            .BeginLifetimeScope(
-                                guid,
-                                scopeBuilder =>
-                                {
-                                    scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                                    subScopeInstaller(scopeBuilder);
-                                });
-
-                        var service = subScope.Resolve<TComponent>();
-
-                        subScope
-                            .AddToHarmony(service);
-
-                        return service;
-                    });
+        public static ISubScopeDecoratorBuilder<TDecorator, TService> FromSubScope<TDecorator, TService>(
+            this IExtendedDecoratorBuilder<TDecorator, TService> builder)
+            where TDecorator : TService, IDisposable
+            where TService : class
+        {
+            return new SubScopeDecoratorBuilder<TDecorator, TService>(builder.Builder);
         }
 
         // ReSharper disable once MemberCanBePrivate.Global
@@ -101,10 +90,20 @@ namespace Autofac2ZenjectLikeBridge
             builder.RegisterModule(module);
         }
 
+        public static IExtendedDecoratorBuilder<TDecorator, TService> RegisterDecoratorExtended<TDecorator, TService>(
+            this ContainerBuilder builder)
+            where TDecorator : TService
+            where TService : class
+        {
+            if (builder is null)
+                throw new ArgumentNullException(nameof(builder));
+
+            return new ExtendedDecoratorBuilder<TDecorator, TService>(builder);
+        }
+
         public class OverrideExternallyOwnedModule<T> : Module
         {
-            [CanBeNull]
-            private readonly object _tag;
+            [CanBeNull] private readonly object _tag;
 
             public OverrideExternallyOwnedModule([CanBeNull] object tag)
             {
@@ -160,98 +159,5 @@ namespace Autofac2ZenjectLikeBridge
                 return service;
             }
         }
-
-        #region RegisterDecorator
-
-        public static void RegisterDecoratorFromFunction<TDecorator, TService>(
-            this ContainerBuilder builder,
-            Func<IComponentContext, TService, TDecorator> createFunction)
-            where TDecorator : TService
-            where TService : class
-        {
-            builder
-                .RegisterDecorator<TService>((context, _, baseHandler) => createFunction(context, baseHandler));
-        }
-
-        public static void RegisterDecoratorFromFunction<TDecorator, TService>(
-            this ContainerBuilder builder,
-            Func<IComponentContext, TService, TDecorator> createFunction,
-            object fromKey,
-            [CanBeNull] object toKey = null)
-            where TDecorator : TService
-        {
-            builder
-                .RegisterDecorator<TService>(
-                    (context, _, baseHandler) => createFunction(context, baseHandler),
-                    fromKey,
-                    toKey);
-        }
-
-        public static void RegisterDecoratorFromSubScope<TDecorator, TService>(
-            this ContainerBuilder builder,
-            Action<ContainerBuilder, TService> subScopeInstaller)
-            where TService : class
-            where TDecorator : TService, IDisposable
-        {
-            builder
-                .RegisterDecorator<TService>(
-                    (context, _, nestedService) =>
-                    {
-                        var scope = context.Resolve<ILifetimeScope>();
-                        var guid = Guid.NewGuid();
-
-                        var subScope = scope.BeginLifetimeScope(
-                            guid,
-                            subScopeBuilder =>
-                            {
-                                subScopeBuilder.OverrideExternallyOwnedInScope<TDecorator>(guid);
-
-                                subScopeInstaller(subScopeBuilder, nestedService);
-                            });
-
-                        var instance = subScope.Resolve<TDecorator>();
-
-                        subScope
-                            .AddToHarmony(instance);
-
-                        return instance;
-                    });
-        }
-
-        public static void RegisterDecoratorFromSubScope<TDecorator, TService>(
-            this ContainerBuilder builder,
-            Action<ContainerBuilder, TService> subScopeInstaller,
-            object fromKey,
-            [CanBeNull] object toKey = null)
-            where TDecorator : TService, IDisposable
-        {
-            builder
-                .RegisterDecorator<TService>(
-                    (context, nestedService) =>
-                    {
-                        var scope = context.Resolve<ILifetimeScope>();
-                        var guid = Guid.NewGuid();
-
-                        var subScope = scope.BeginLifetimeScope(
-                            guid,
-                            subScopeBuilder =>
-                            {
-                                subScopeBuilder.OverrideExternallyOwnedInScope<TDecorator>(guid);
-
-                                subScopeInstaller(subScopeBuilder, nestedService);
-                            });
-
-                        var instance = subScope.Resolve<TDecorator>();
-
-                        subScope
-                            .AddToHarmony(instance);
-
-                        return instance;
-                    },
-                    fromKey,
-                    toKey);
-        }
-
-        #endregion
     }
 }

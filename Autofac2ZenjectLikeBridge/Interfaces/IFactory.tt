@@ -1,12 +1,10 @@
 ﻿<#@ template debug="false" hostspecific="false" language="C#" #>
 <#@ assembly name="System.Core" #>
-<#@ assembly name="$(TargetPath)" #>
 <#@ output extension=".cs" #>
 <#@ import namespace="System.Linq" #>
-<#@ import namespace="Autofac2ZenjectLikeBridge" #>
 namespace Autofac2ZenjectLikeBridge.Interfaces
 {
-    //generated amount <#= Constants.GenericParametersCount #>
+    //generated amount <#@ include file="../Constants.ttinclude" #><#= Constants.GenericParametersCount #>
 
 <#
     for (var i = 0; i <= Constants.GenericParametersCount; i++)

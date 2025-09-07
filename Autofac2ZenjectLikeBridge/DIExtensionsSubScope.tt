@@ -1,0 +1,87 @@
+<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ output extension=".cs" #>
+<#@ import namespace="System.Linq" #>
+using System;
+using Autofac;
+using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
+using Autofac2ZenjectLikeBridge.Interfaces;
+using JetBrains.Annotations;
+
+namespace Autofac2ZenjectLikeBridge
+{
+    public static partial class DIExtensions
+    {
+        //generated amount <#@ include file="Constants.ttinclude" #><#= Constants.GenericParametersCount #>
+
+<#
+    for (var i = 0; i <= Constants.GenericParametersCount; i++)
+    {
+#>
+        public static TComponent ResolveFromSubScope<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TComponent>(
+            this ILifetimeScope scope,
+            Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> subScopeInstaller<#= i == 0 ? "" : ",\n\t\t\t" #><#=string.Join(",\n\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j} param{j}")) #>)
+            where TComponent : IDisposable
+        {
+            var guid = Guid.NewGuid();
+
+            var subScope = scope
+                .BeginLifetimeScope(
+                    guid,
+                    scopeBuilder =>
+                    {
+                        scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
+                        subScopeInstaller(scopeBuilder<#= i == 0 ? "" : ",\n\t\t\t\t\t\t\t" #><#=string.Join(",\n\t\t\t\t\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"param{j}")) #>);
+                    });
+
+            var service = subScope.Resolve<TComponent>();
+
+            subScope
+                .AddToHarmony(service);
+
+            return service;
+        }
+
+<#
+    }
+#>
+
+<#
+    for (var i = 0; i <= Constants.GenericParametersCount; i++)
+    {
+#>
+
+        public static TComponent ResolveFromSubScope<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TComponent, TInstaller>(
+            this ILifetimeScope scope<#= i == 0 ? "" : ",\n\t\t\t" #><#=string.Join(",\n\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j} param{j}")) #>,
+            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstaller> installerFactory = null)
+            where TComponent : IDisposable
+            where TInstaller : class, IInstaller
+        {
+            var guid = Guid.NewGuid();
+
+            var subScope = scope
+                .BeginLifetimeScope(
+                    guid,
+                    scopeBuilder =>
+                    {
+                        scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
+                        var installerInstance = installerFactory == null
+                            ? scope.CreateInstance<TInstaller>(scopeBuilder<#= i == 0 ? "" : ",\n\t\t\t\t\t\t\t" #><#=string.Join(",\n\t\t\t\t\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"param{j}")) #>)
+                            : installerFactory.Invoke(scope, scopeBuilder<#= i == 0 ? "" : ", " #><#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"param{j}")) #>);
+                        installerInstance.Install();
+                    });
+
+            var service = subScope.Resolve<TComponent>();
+
+            subScope
+                .AddToHarmony(service);
+
+            return service;
+        }
+
+<#
+    }
+#>
+
+    }
+}

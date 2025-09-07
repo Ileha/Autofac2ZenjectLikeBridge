@@ -23,7 +23,7 @@
         <PackageReleaseNotes>initial implementation</PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
-        <TargetFrameworks>net6.0;net8.0;netstandard2.1;netstandard2.0</TargetFrameworks>
+        <TargetFrameworks>net6.0;net8.0;netstandard2.0;netstandard2.1</TargetFrameworks>
     </PropertyGroup>
 
     <ItemGroup>
@@ -31,40 +31,140 @@
             <Pack>True</Pack>
             <PackagePath>\</PackagePath>
         </None>
-    </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Autofac" Version="8.4.0"/>
-        <PackageReference Include="JetBrains.Annotations" Version="2025.2.1" />
-        <PackageReference Include="Lib.Harmony" Version="2.4.1"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Update="DIExtensionsFactories.tt">
-            <Generator>TextTemplatingFileGenerator</Generator>
-            <LastGenOutput>DIExtensionsFactories.cs</LastGenOutput>
+        <None Update="Entities\Factories\AutofacFunctionFactories.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>AutofacFunctionFactories.cs</LastGenOutput>
         </None>
+        <None Update="Entities\Factories\AutofacSubScopeFactories.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>AutofacSubScopeFactories.cs</LastGenOutput>
+        </None>
+        <None Update="Entities\Factories\AutofacCreateInstanceFactories.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>AutofacCreateInstanceFactories.cs</LastGenOutput>
+        </None>
+        <None Update="DIExtensionsSubScope.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>DIExtensionsSubScope.cs</LastGenOutput>
+        </None>
+        <None Update="Interfaces\Builders\Factory\IExtendedFactoryBuilder.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>IExtendedFactoryBuilder.cs</LastGenOutput>
+        </None>
+        <None Update="Interfaces\Builders\Factory\ISubScopeFactoryBuilder.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>ISubScopeFactoryBuilder.cs</LastGenOutput>
+        </None>
+        <None Update="Builders\Factory\ExtendedFactoryBuilder.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>ExtendedFactoryBuilder.cs</LastGenOutput>
+        </None>
+        <None Update="Builders\Factory\SubScopeFactoryBuilder.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>SubScopeFactoryBuilder.cs</LastGenOutput>
+        </None>
+        <None Update="DIExtensionsSubScopeFactories.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>DIExtensionsSubScopeFactories.cs</LastGenOutput>
+        </None>
+        <None Update="Builders\Factory\ExtendedPlaceholderFactoryBuilder.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>ExtendedPlaceholderFactoryBuilder.cs</LastGenOutput>
+        </None>
+        <None Update="Builders\Factory\SubScopePlaceholderFactoryBuilder.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>SubScopePlaceholderFactoryBuilder.cs</LastGenOutput>
+        </None>
+        <None Update="Entities\Factories\PlaceholderFactory.tt">
+          <Generator>TextTemplatingFileGenerator</Generator>
+          <LastGenOutput>PlaceholderFactory.cs</LastGenOutput>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Autofac" Version="8.4.0" />
+        <PackageReference Include="JetBrains.Annotations" Version="2025.2.1" />
+        <PackageReference Include="Lib.Harmony" Version="2.4.1" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
+    </ItemGroup>
+
+    <ItemGroup>
         <None Update="Interfaces\IFactory.tt">
             <Generator>TextTemplatingFileGenerator</Generator>
             <LastGenOutput>IFactory.cs</LastGenOutput>
         </None>
-        <None Update="PlaceholderFactory.tt">
-            <Generator>TextTemplatingFileGenerator</Generator>
-            <LastGenOutput>PlaceholderFactory.cs</LastGenOutput>
-        </None>
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Update="DIExtensionsFactories.cs">
-            <DependentUpon>DIExtensionsFactories.tt</DependentUpon>
-        </Compile>
         <Compile Update="Interfaces\IFactory.cs">
             <DependentUpon>IFactory.tt</DependentUpon>
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
         </Compile>
-        <Compile Update="PlaceholderFactory.cs">
-            <DependentUpon>PlaceholderFactory.tt</DependentUpon>
+        <Compile Update="Entities\Factories\AutofacFunctionFactories.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>AutofacFunctionFactories.tt</DependentUpon>
         </Compile>
+        <Compile Update="Entities\Factories\AutofacCreateInstanceFactories.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>AutofacCreateInstanceFactories.tt</DependentUpon>
+        </Compile>
+        <Compile Update="DIExtensionsSubScope.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>DIExtensionsSubScope.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Entities\Factories\AutofacSubScopeFactories.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>AutofacSubScopeFactories.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Interfaces\Builders\Factory\IExtendedFactoryBuilder.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>IExtendedFactoryBuilder.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Entities\Factories\PlaceholderFactory.cs">
+          <DependentUpon>PlaceholderFactory.tt</DependentUpon>
+          <DesignTime>True</DesignTime>
+          <AutoGen>True</AutoGen>
+        </Compile>
+        <Compile Update="Interfaces\Builders\Factory\ISubScopeFactoryBuilder.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>ISubScopeFactoryBuilder.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Builders\Factory\ExtendedFactoryBuilder.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>ExtendedFactoryBuilder.tt</DependentUpon>
+        </Compile>
+        <Compile Update="DIExtensionsSubScopeFactories.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>DIExtensionsSubScopeFactories.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Builders\Factory\ExtendedPlaceholderFactoryBuilder.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>ExtendedPlaceholderFactoryBuilder.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Builders\Factory\SubScopePlaceholderFactoryBuilder.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>SubScopePlaceholderFactoryBuilder.tt</DependentUpon>
+        </Compile>
+        <Compile Update="Builders\Factory\SubScopeFactoryBuilder.cs">
+          <AutoGen>True</AutoGen>
+          <DesignTime>True</DesignTime>
+          <DependentUpon>SubScopeFactoryBuilder.tt</DependentUpon>
+        </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
     </ItemGroup>
 
 </Project>

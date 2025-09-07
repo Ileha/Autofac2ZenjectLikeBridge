@@ -1,0 +1,97 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ output extension=".cs" #>
+<#@ import namespace="System.Linq" #>
+using System;
+using Autofac;
+using Autofac.Builder;
+using Autofac2ZenjectLikeBridge.Entities.Factories;
+using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
+using Autofac2ZenjectLikeBridge.Interfaces;
+using Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory;
+
+namespace Autofac2ZenjectLikeBridge.Builders.Factory
+{
+    //generated amount <#@ include file="../../Constants.ttinclude" #><#= Constants.GenericParametersCount #>
+
+<#
+    for (var i = 0; i <= Constants.GenericParametersCount; i++)
+    {
+#>
+    public class ExtendedPlaceholderFactoryBuilder<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance, TPlaceholderFactory>
+        : IExtendedFactoryBuilder<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance, TPlaceholderFactory, SimpleActivatorData>
+        where TPlaceholderFactory : PlaceholderFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>
+        where TInstance : class
+    {
+        public ContainerBuilder Builder { get; }
+
+        public ExtendedPlaceholderFactoryBuilder(ContainerBuilder builder)
+        {
+            Builder = builder;
+        }
+
+        public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle> FromNewInstance()
+        {
+            return Builder
+                .Register((IComponentContext _, ILifetimeScope scope) =>
+                {
+                    var subScope = scope
+                        .BeginLifetimeScope(subScopeBuilder =>
+                        {
+                            subScopeBuilder
+                                .RegisterIFactoryExtended<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>()
+                                .FromNewInstance()
+                                .SingleInstance();
+
+                            subScopeBuilder
+                                .RegisterType<TPlaceholderFactory>()
+                                .SingleInstance()
+                                .ExternallyOwned();
+                        });
+
+                    var placeholderFactory = subScope.Resolve<TPlaceholderFactory>();
+                    var factory = subScope.Resolve<IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>();
+                    placeholderFactory.Nested = factory;
+
+                    subScope
+                        .AddToHarmony(placeholderFactory);
+
+                    return placeholderFactory;
+                });
+        }
+
+        public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle> FromFunction(Func<ILifetimeScope, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance> func)
+        {
+            return Builder
+                .Register((IComponentContext _, ILifetimeScope scope) =>
+                {
+                    var subScope = scope
+                        .BeginLifetimeScope(subScopeBuilder =>
+                        {
+                            subScopeBuilder
+                                .RegisterIFactoryExtended<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>()
+                                .FromFunction(func)
+                                .SingleInstance();
+
+                            subScopeBuilder
+                                .RegisterType<TPlaceholderFactory>()
+                                .SingleInstance()
+                                .ExternallyOwned();
+                        });
+
+                    var placeholderFactory = subScope.Resolve<TPlaceholderFactory>();
+                    var factory = subScope.Resolve<IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>();
+                    placeholderFactory.Nested = factory;
+
+                    subScope
+                        .AddToHarmony(placeholderFactory);
+
+                    return placeholderFactory;
+                });
+        }
+    }
+
+<#
+    }
+#>
+}

@@ -1,0 +1,57 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ output extension=".cs" #>
+<#@ import namespace="System.Linq" #>
+using System;
+using Autofac;
+using Autofac.Builder;
+using Autofac2ZenjectLikeBridge.Interfaces;
+using Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory;
+
+namespace Autofac2ZenjectLikeBridge.Builders.Factory
+{
+    //generated amount <#@ include file="../../Constants.ttinclude" #><#= Constants.GenericParametersCount #>
+
+<#
+    for (var i = 0; i <= Constants.GenericParametersCount; i++)
+    {
+#>
+    public class SubScopeFactoryBuilder<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>
+        : ISubScopeFactoryBuilder<
+            <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ",\n\t\t\t" #>TInstance,
+            IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>,
+            ConcreteReflectionActivatorData>
+        where TInstance : class, IDisposable
+    {
+        public ContainerBuilder Builder { get; }
+
+        public SubScopeFactoryBuilder(ContainerBuilder builder)
+        {
+            Builder = builder ?? throw new ArgumentNullException(nameof(builder));
+        }
+
+        public IRegistrationBuilder<IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
+            ByFunction(
+            Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> subScopeInstaller)
+        {
+            return Builder
+                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>()
+                .WithParameters(TypedParameter.From(subScopeInstaller))
+                .As<IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>();
+        }
+
+        public IRegistrationBuilder<IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
+            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstaller> installerFactory = null)
+            where TInstaller : class, IInstaller
+        {
+            return Builder
+                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeInstallerFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance, TInstaller>>()
+                .WithParameter(TypedParameter.From(installerFactory))
+                .As<IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>();
+        }
+    }
+
+<#
+    }
+#>
+}
