@@ -17,27 +17,27 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
             Builder = builder ?? throw new ArgumentNullException(nameof(builder));
         }
 
-        public void ByFunction(Action<ContainerBuilder, TService> subScopeInstaller)
+        public void ByFunction(Action<ContainerBuilder, TService> subScopeLoader)
         {
             Builder
                 .RegisterDecorator<TService>(
-                    (context, _, nestedService) => ResolveFromSubScope<TDecorator>(subScopeInstaller, context, nestedService));
+                    (context, _, nestedService) => ResolveFromSubScope<TDecorator>(subScopeLoader, context, nestedService));
         }
 
         public void ByModule<TModule>(
-            Func<ILifetimeScope, TService, TModule> installerFactory = null)
+            Func<ILifetimeScope, TService, TModule> moduleFactory = null)
             where TModule : class, IModule
         {
             Builder
                 .RegisterDecorator<TService>(
-                    (context, _, nestedService) => ResolveFromSubScopeModule<TDecorator, TModule>(context, nestedService, installerFactory));
+                    (context, _, nestedService) => ResolveFromSubScopeModule<TDecorator, TModule>(context, nestedService, moduleFactory));
         }
 
-        public void ByFunction(Action<ContainerBuilder, TService> subScopeInstaller, object fromKey, object toKey = null)
+        public void ByFunction(Action<ContainerBuilder, TService> subScopeLoader, object fromKey, object toKey = null)
         {
             Builder
                 .RegisterDecorator<TService>(
-                    (context, _, nestedService) => ResolveFromSubScope<TDecorator>(subScopeInstaller, context, nestedService),
+                    (context, _, nestedService) => ResolveFromSubScope<TDecorator>(subScopeLoader, context, nestedService),
                     fromKey,
                     toKey);
         }
@@ -45,35 +45,35 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
         public void ByModule<TModule>(
             object fromKey,
             object toKey = null,
-            Func<ILifetimeScope, TService, TModule> installerFactory = null)
+            Func<ILifetimeScope, TService, TModule> moduleFactory = null)
             where TModule : class, IModule
         {
             Builder
                 .RegisterDecorator<TService>(
-                    (context, _, nestedService) => ResolveFromSubScopeModule<TDecorator, TModule>(context, nestedService, installerFactory),
+                    (context, _, nestedService) => ResolveFromSubScopeModule<TDecorator, TModule>(context, nestedService, moduleFactory),
                     fromKey,
                     toKey);
         }
 
         private static TComponent ResolveFromSubScope<TComponent>(
-            Action<ContainerBuilder, TService> subScopeInstaller,
+            Action<ContainerBuilder, TService> subScopeLoader,
             IComponentContext context,
             TService nestedService)
             where TComponent : IDisposable
         {
             var scope = context.Resolve<ILifetimeScope>();
-            return scope.ResolveFromSubScope<TService, TComponent>(subScopeInstaller, nestedService);
+            return scope.ResolveFromSubScope<TService, TComponent>(subScopeLoader, nestedService);
         }
 
         private static TComponent ResolveFromSubScopeModule<TComponent, TModule>(
             IComponentContext context,
             TService nestedService,
-            [CanBeNull] Func<ILifetimeScope, TService, TModule> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, TService, TModule> moduleFactory = null)
             where TModule : class, IModule
             where TComponent : IDisposable
         {
             var scope = context.Resolve<ILifetimeScope>();
-            return scope.ResolveFromModuleSubScope<TService, TComponent, TModule>(nestedService, installerFactory);
+            return scope.ResolveFromSubScope<TService, TComponent, TModule>(nestedService, moduleFactory);
         }
     }
 }

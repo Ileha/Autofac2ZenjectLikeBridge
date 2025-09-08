@@ -33,11 +33,11 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
 
         public IRegistrationBuilder<IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
             ByFunction(
-            Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> subScopeInstaller)
+            Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> subScopeLoader)
         {
             return Builder
                 .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>()
-                .WithParameters(TypedParameter.From(subScopeInstaller))
+                .WithParameters(TypedParameter.From(subScopeLoader))
                 .As<IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>();
         }
 
@@ -45,12 +45,12 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
             IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>,
             ConcreteReflectionActivatorData,
             SingleRegistrationStyle> ByModule<TModule>(
-            Func<ILifetimeScope, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TModule> installerFactory = null)
+            Func<ILifetimeScope, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TModule> moduleFactory = null)
             where TModule : class, IModule
         {
             return Builder
                 .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeModuleFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance, TModule>>()
-                .WithParameter(TypedParameter.From(installerFactory))
+                .WithParameter(TypedParameter.From(moduleFactory))
                 .As<IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>();
         }
     }

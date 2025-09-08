@@ -24,18 +24,18 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
         {
             private readonly ILifetimeScope _scope;
             private readonly Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=
-            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> _subScopeInstaller;
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> _subScopeLoader;
 
             public AutofacSubScopeFactory(ILifetimeScope scope,
-                Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> subScopeInstaller)
+                Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> subScopeLoader)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
-                _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
+                _subScopeLoader = subScopeLoader ?? throw new ArgumentNullException(nameof(subScopeLoader));
             }
 
             public TInstance Create(<#= i == 0 ? "" : "\n\t\t\t\t" #><#=string.Join(",\n\t\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j} param{j}")) #>)
             {
-                return _scope.ResolveFromSubScope<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>(_subScopeInstaller<#= i == 0 ? "" : ",\n\t\t\t\t\t" #><#=
+                return _scope.ResolveFromSubScope<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>(_subScopeLoader<#= i == 0 ? "" : ",\n\t\t\t\t\t" #><#=
             string.Join(",\n\t\t\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"param{j}")) #>);
             }
         }
@@ -54,21 +54,21 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TModule : class, IModule
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ILifetimeScope, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TModule> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TModule> _moduleFactory;
 
             public AutofacSubScopeModuleFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ILifetimeScope, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TModule> installerFactory = null)
+                Func<ILifetimeScope, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TModule> moduleFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
-                _installerFactory = installerFactory;
+                _moduleFactory = moduleFactory;
             }
 
             public TInstance Create(<#= i == 0 ? "" : "\n\t\t\t\t" #><#=string.Join(",\n\t\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j} param{j}")) #>)
             {
-                return _scope.ResolveFromModuleSubScope<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance, TModule>(<#= i == 0 ? "" : "\n\t\t\t\t\t" #><#=
+                return _scope.ResolveFromSubScope<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance, TModule>(<#= i == 0 ? "" : "\n\t\t\t\t\t" #><#=
             string.Join(",\n\t\t\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"param{j}")) #><#= i == 0 ? "" : ", " #>
-                    _installerFactory);
+                    _moduleFactory);
             }
         }
 

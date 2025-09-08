@@ -32,7 +32,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle>
-            ByFunction(Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> subScopeInstaller)
+            ByFunction(Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> subScopeLoader)
         {
             return Builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -43,7 +43,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                             subScopeBuilder
                                 .RegisterIFactoryExtended<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>()
                                 .FromSubScope()
-                                .ByFunction(subScopeInstaller)
+                                .ByFunction(subScopeLoader)
                                 .SingleInstance();
 
                             subScopeBuilder

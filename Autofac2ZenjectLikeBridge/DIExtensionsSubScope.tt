@@ -21,7 +21,7 @@ namespace Autofac2ZenjectLikeBridge
 #>
         public static TComponent ResolveFromSubScope<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TComponent>(
             this ILifetimeScope scope,
-            Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> subScopeInstaller<#= i == 0 ? "" : ",\n\t\t\t" #><#=string.Join(",\n\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j} param{j}")) #>)
+            Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> subScopeLoader<#= i == 0 ? "" : ",\n\t\t\t" #><#=string.Join(",\n\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j} param{j}")) #>)
             where TComponent : IDisposable
         {
             var guid = Guid.NewGuid();
@@ -32,7 +32,7 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        subScopeInstaller(scopeBuilder<#= i == 0 ? "" : ",\n\t\t\t\t\t\t\t" #><#=string.Join(",\n\t\t\t\t\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"param{j}")) #>);
+                        subScopeLoader(scopeBuilder<#= i == 0 ? "" : ",\n\t\t\t\t\t\t\t" #><#=string.Join(",\n\t\t\t\t\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"param{j}")) #>);
                     });
 
             var service = subScope.Resolve<TComponent>();
@@ -51,7 +51,7 @@ namespace Autofac2ZenjectLikeBridge
     for (var i = 0; i <= Constants.GenericParametersCount; i++)
     {
 #>
-        public static TComponent ResolveFromModuleSubScope<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TComponent, TModule>(
+        public static TComponent ResolveFromSubScope<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TComponent, TModule>(
             this ILifetimeScope scope<#= i == 0 ? "" : ",\n\t\t\t" #><#=string.Join(",\n\t\t\t", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j} param{j}")) #>,
             [CanBeNull] Func<ILifetimeScope, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TModule> moduleFactory = null)
             where TComponent : IDisposable

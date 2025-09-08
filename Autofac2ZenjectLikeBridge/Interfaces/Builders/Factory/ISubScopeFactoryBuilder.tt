@@ -24,13 +24,13 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByFunction(Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> subScopeInstaller);
+            SingleRegistrationStyle> ByFunction(Action<ContainerBuilder<#= i == 0 ? "" : ", " #><#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #>> subScopeLoader);
 
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
             SingleRegistrationStyle> ByModule<TModule>(
-            [CanBeNull] Func<ILifetimeScope, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TModule> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TModule> moduleFactory = null)
             where TModule : class, IModule;
     }
 
