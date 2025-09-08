@@ -94,7 +94,7 @@ See [Quick Start](#-quick-start) for code sample.
  - [Decorators:](#decorators)
 
     - [from function](#from-function)
-    - [from subScope:](#with-subcontainer)
+    - [from subScope](#with-subcontainer):
         - [by function](#byfunction)
         - by installer
 
@@ -102,16 +102,16 @@ See [Quick Start](#-quick-start) for code sample.
 
     - [IFactory<P0, P1, ... , PN, TInstance>](#ifactory)
         - from new instance
-        - from function
-        - from subScope:
-            - by function
+        - [from function](#from-functions)
+        - [from subScope](#from-subcontainers):
+            - [by function](#by-function)
             - by installer
 
-    - PlaceholderFactory<P0, P1, ... , PN, TInstance>
+    - [PlaceholderFactory<P0, P1, ... , PN, TInstance>](#placeholders-factories)
         - from new instance
-        - from function
-        - from subScope:
-            - by function
+        - [from function](#from-functions-1)
+        - [from subScope](#from-subcontainers-1):
+            - [by function](#by-function-1)
             - by installer
 
 ### Decorators
@@ -178,7 +178,7 @@ Provides interface `IFactory<parameter1, parameter2, ... , parameterN, Iinstance
 
 ##### From Functions
 
-Use function to register IFactory<Iinstance> in DI:
+Use function to register `IFactory<Iinstance>` in DI:
 
 ```csharp
 builder
@@ -190,7 +190,7 @@ builder
         });
 ```
 
-Use function to register IFactory<Guid, Iinstance> in DI:
+Use function to register `IFactory<Guid, Iinstance>` in DI:
 
 ```csharp
 builder
@@ -206,6 +206,8 @@ builder
 
 Use subcontainer to create factory `IFactory<Iinstance>`, new subcontainer will be created when factory's `Create`
 method is called:
+
+###### By Function
 
 ```csharp
 builder
@@ -272,6 +274,8 @@ class MyCustomFactory : PlaceholderFactory<Iinstance>
 }
 ```
 
+##### From Functions
+
 Placeholders Factories registration is available from function:
 
 ```csharp
@@ -283,8 +287,13 @@ builder
             Data = Guid.NewGuid()
         });
 ```
+##### From Subcontainers
 
 and for subcontainers:
+
+###### By Function
+
+via function
 
 ```csharp
 builder
