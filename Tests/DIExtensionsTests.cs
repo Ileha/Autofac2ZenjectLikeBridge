@@ -171,23 +171,21 @@ public class DIExtensionsTests
         mockExternalDisposable.Received(0).Dispose();
     }
 
-    internal class ServiceWithDependencyInstaller : AutofacInstallerBase
+    internal class ServiceWithDependencyInstaller : Module
     {
         private readonly SimpleService _service;
 
-        public ServiceWithDependencyInstaller(ContainerBuilder builder, SimpleService service)
-            : base(builder)
+        public ServiceWithDependencyInstaller(SimpleService service)
         {
             _service = service ?? throw new ArgumentNullException(nameof(service));
         }
 
-        public override void Install()
+        protected override void Load(ContainerBuilder builder)
         {
-            Builder
+            builder
                 .RegisterType<ServiceWithDependencyDisposable>()
                 .SingleInstance();
-
-            Builder
+            builder
                 .RegisterInstance(_service)
                 .As<SimpleService>()
                 .SingleInstance();
@@ -211,8 +209,8 @@ public class DIExtensionsTests
         builder
             .RegisterExtended<ServiceWithDependencyDisposable>()
             .FromSubScope()
-            .ByInstaller<ServiceWithDependencyInstaller>((scope, subScopeBuilder)
-                => scope.CreateInstance<ServiceWithDependencyInstaller>(subScopeBuilder, internalService))
+            .ByInstaller<ServiceWithDependencyInstaller>((scope)
+                => scope.CreateInstance<ServiceWithDependencyInstaller>(internalService))
             .SingleInstance();
 
         using var container = builder.Build();
