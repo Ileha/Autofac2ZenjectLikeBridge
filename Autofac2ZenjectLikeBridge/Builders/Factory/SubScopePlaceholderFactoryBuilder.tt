@@ -5,6 +5,7 @@
 using System;
 using Autofac;
 using Autofac.Builder;
+using Autofac.Core;
 using Autofac2ZenjectLikeBridge.Entities.Factories;
 using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
 using Autofac2ZenjectLikeBridge.Interfaces;
@@ -63,8 +64,9 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
         }
 
         public IRegistrationBuilder<TPlaceholderFactory, SimpleActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller
+            ByModule<TModule>(
+                Func<ILifetimeScope, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TModule> moduleFactory = null)
+            where TModule : class, IModule
         {
             return Builder
                 .Register((IComponentContext _, ILifetimeScope scope) =>
@@ -75,7 +77,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                             subScopeBuilder
                                 .RegisterIFactoryExtended<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>()
                                 .FromSubScope()
-                                .ByInstaller(installerFactory)
+                                .ByModule(moduleFactory)
                                 .SingleInstance();
 
                             subScopeBuilder

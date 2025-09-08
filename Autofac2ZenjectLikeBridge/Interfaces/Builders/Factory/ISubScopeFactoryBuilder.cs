@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using Autofac.Builder;
+using Autofac.Core;
 using JetBrains.Annotations;
 
 namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
@@ -20,9 +21,9 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>(
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller;
+            SingleRegistrationStyle> ByModule<TModule>(
+            [CanBeNull] Func<ILifetimeScope, TModule> installerFactory = null)
+            where TModule : class, IModule;
     }
 
     public interface ISubScopeFactoryBuilder<out TP0, out TInstance, out TFactory, out TActivatorData>
@@ -38,9 +39,9 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>(
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller;
+            SingleRegistrationStyle> ByModule<TModule>(
+            [CanBeNull] Func<ILifetimeScope, TP0, TModule> installerFactory = null)
+            where TModule : class, IModule;
     }
 
     public interface ISubScopeFactoryBuilder<out TP0, out TP1, out TInstance, out TFactory, out TActivatorData>
@@ -56,9 +57,9 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>(
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller;
+            SingleRegistrationStyle> ByModule<TModule>(
+            [CanBeNull] Func<ILifetimeScope, TP0, TP1, TModule> installerFactory = null)
+            where TModule : class, IModule;
     }
 
     public interface ISubScopeFactoryBuilder<out TP0, out TP1, out TP2, out TInstance, out TFactory, out TActivatorData>
@@ -74,9 +75,9 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>(
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller;
+            SingleRegistrationStyle> ByModule<TModule>(
+            [CanBeNull] Func<ILifetimeScope, TP0, TP1, TP2, TModule> installerFactory = null)
+            where TModule : class, IModule;
     }
 
     public interface ISubScopeFactoryBuilder<out TP0, out TP1, out TP2, out TP3, out TInstance, out TFactory, out TActivatorData>
@@ -92,9 +93,9 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>(
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller;
+            SingleRegistrationStyle> ByModule<TModule>(
+            [CanBeNull] Func<ILifetimeScope, TP0, TP1, TP2, TP3, TModule> installerFactory = null)
+            where TModule : class, IModule;
     }
 
     public interface ISubScopeFactoryBuilder<out TP0, out TP1, out TP2, out TP3, out TP4, out TInstance, out TFactory, out TActivatorData>
@@ -110,9 +111,9 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>(
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller;
+            SingleRegistrationStyle> ByModule<TModule>(
+            [CanBeNull] Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TModule> installerFactory = null)
+            where TModule : class, IModule;
     }
 
     public interface ISubScopeFactoryBuilder<out TP0, out TP1, out TP2, out TP3, out TP4, out TP5, out TInstance, out TFactory, out TActivatorData>
@@ -128,9 +129,9 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>(
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller;
+            SingleRegistrationStyle> ByModule<TModule>(
+            [CanBeNull] Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TModule> installerFactory = null)
+            where TModule : class, IModule;
     }
 
     public interface ISubScopeFactoryBuilder<out TP0, out TP1, out TP2, out TP3, out TP4, out TP5, out TP6, out TInstance, out TFactory, out TActivatorData>
@@ -146,9 +147,9 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>(
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller;
+            SingleRegistrationStyle> ByModule<TModule>(
+            [CanBeNull] Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TModule> installerFactory = null)
+            where TModule : class, IModule;
     }
 
     public interface ISubScopeFactoryBuilder<out TP0, out TP1, out TP2, out TP3, out TP4, out TP5, out TP6, out TP7, out TInstance, out TFactory, out TActivatorData>
@@ -164,9 +165,9 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>(
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller;
+            SingleRegistrationStyle> ByModule<TModule>(
+            [CanBeNull] Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TModule> installerFactory = null)
+            where TModule : class, IModule;
     }
 
     public interface ISubScopeFactoryBuilder<out TP0, out TP1, out TP2, out TP3, out TP4, out TP5, out TP6, out TP7, out TP8, out TInstance, out TFactory, out TActivatorData>
@@ -182,9 +183,9 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>(
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller;
+            SingleRegistrationStyle> ByModule<TModule>(
+            [CanBeNull] Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TModule> installerFactory = null)
+            where TModule : class, IModule;
     }
 
     public interface ISubScopeFactoryBuilder<out TP0, out TP1, out TP2, out TP3, out TP4, out TP5, out TP6, out TP7, out TP8, out TP9, out TInstance, out TFactory, out TActivatorData>
@@ -200,9 +201,9 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
         IRegistrationBuilder<
             TFactory,
             TActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>(
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller;
+            SingleRegistrationStyle> ByModule<TModule>(
+            [CanBeNull] Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TModule> installerFactory = null)
+            where TModule : class, IModule;
     }
 
 }

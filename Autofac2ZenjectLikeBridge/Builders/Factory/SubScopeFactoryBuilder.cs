@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using Autofac.Builder;
+using Autofac.Core;
 using Autofac2ZenjectLikeBridge.Interfaces;
 using Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory;
 
@@ -32,12 +33,15 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                 .As<IFactory<TInstance>>();
         }
 
-        public IRegistrationBuilder<IFactory<TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller
+        public IRegistrationBuilder<
+            IFactory<TInstance>,
+            ConcreteReflectionActivatorData,
+            SingleRegistrationStyle> ByModule<TModule>(
+            Func<ILifetimeScope, TModule> installerFactory = null)
+            where TModule : class, IModule
         {
             return Builder
-                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeInstallerFactory<TInstance, TInstaller>>()
+                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeModuleFactory<TInstance, TModule>>()
                 .WithParameter(TypedParameter.From(installerFactory))
                 .As<IFactory<TInstance>>();
         }
@@ -68,12 +72,15 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                 .As<IFactory<TP0, TInstance>>();
         }
 
-        public IRegistrationBuilder<IFactory<TP0, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller
+        public IRegistrationBuilder<
+            IFactory<TP0, TInstance>,
+            ConcreteReflectionActivatorData,
+            SingleRegistrationStyle> ByModule<TModule>(
+            Func<ILifetimeScope, TP0, TModule> installerFactory = null)
+            where TModule : class, IModule
         {
             return Builder
-                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeInstallerFactory<TP0, TInstance, TInstaller>>()
+                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeModuleFactory<TP0, TInstance, TModule>>()
                 .WithParameter(TypedParameter.From(installerFactory))
                 .As<IFactory<TP0, TInstance>>();
         }
@@ -104,12 +111,15 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                 .As<IFactory<TP0, TP1, TInstance>>();
         }
 
-        public IRegistrationBuilder<IFactory<TP0, TP1, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller
+        public IRegistrationBuilder<
+            IFactory<TP0, TP1, TInstance>,
+            ConcreteReflectionActivatorData,
+            SingleRegistrationStyle> ByModule<TModule>(
+            Func<ILifetimeScope, TP0, TP1, TModule> installerFactory = null)
+            where TModule : class, IModule
         {
             return Builder
-                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeInstallerFactory<TP0, TP1, TInstance, TInstaller>>()
+                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeModuleFactory<TP0, TP1, TInstance, TModule>>()
                 .WithParameter(TypedParameter.From(installerFactory))
                 .As<IFactory<TP0, TP1, TInstance>>();
         }
@@ -140,12 +150,15 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                 .As<IFactory<TP0, TP1, TP2, TInstance>>();
         }
 
-        public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller
+        public IRegistrationBuilder<
+            IFactory<TP0, TP1, TP2, TInstance>,
+            ConcreteReflectionActivatorData,
+            SingleRegistrationStyle> ByModule<TModule>(
+            Func<ILifetimeScope, TP0, TP1, TP2, TModule> installerFactory = null)
+            where TModule : class, IModule
         {
             return Builder
-                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TInstance, TInstaller>>()
+                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeModuleFactory<TP0, TP1, TP2, TInstance, TModule>>()
                 .WithParameter(TypedParameter.From(installerFactory))
                 .As<IFactory<TP0, TP1, TP2, TInstance>>();
         }
@@ -176,12 +189,15 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                 .As<IFactory<TP0, TP1, TP2, TP3, TInstance>>();
         }
 
-        public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller
+        public IRegistrationBuilder<
+            IFactory<TP0, TP1, TP2, TP3, TInstance>,
+            ConcreteReflectionActivatorData,
+            SingleRegistrationStyle> ByModule<TModule>(
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TModule> installerFactory = null)
+            where TModule : class, IModule
         {
             return Builder
-                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TInstance, TInstaller>>()
+                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeModuleFactory<TP0, TP1, TP2, TP3, TInstance, TModule>>()
                 .WithParameter(TypedParameter.From(installerFactory))
                 .As<IFactory<TP0, TP1, TP2, TP3, TInstance>>();
         }
@@ -212,12 +228,15 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                 .As<IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>>();
         }
 
-        public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller
+        public IRegistrationBuilder<
+            IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>,
+            ConcreteReflectionActivatorData,
+            SingleRegistrationStyle> ByModule<TModule>(
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TModule> installerFactory = null)
+            where TModule : class, IModule
         {
             return Builder
-                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TP4, TInstance, TInstaller>>()
+                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeModuleFactory<TP0, TP1, TP2, TP3, TP4, TInstance, TModule>>()
                 .WithParameter(TypedParameter.From(installerFactory))
                 .As<IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>>();
         }
@@ -248,12 +267,15 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                 .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>>();
         }
 
-        public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller
+        public IRegistrationBuilder<
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>,
+            ConcreteReflectionActivatorData,
+            SingleRegistrationStyle> ByModule<TModule>(
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TModule> installerFactory = null)
+            where TModule : class, IModule
         {
             return Builder
-                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance, TInstaller>>()
+                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeModuleFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance, TModule>>()
                 .WithParameter(TypedParameter.From(installerFactory))
                 .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>>();
         }
@@ -284,12 +306,15 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                 .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>>();
         }
 
-        public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller
+        public IRegistrationBuilder<
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>,
+            ConcreteReflectionActivatorData,
+            SingleRegistrationStyle> ByModule<TModule>(
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TModule> installerFactory = null)
+            where TModule : class, IModule
         {
             return Builder
-                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance, TInstaller>>()
+                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeModuleFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance, TModule>>()
                 .WithParameter(TypedParameter.From(installerFactory))
                 .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>>();
         }
@@ -320,12 +345,15 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                 .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>>();
         }
 
-        public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller
+        public IRegistrationBuilder<
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>,
+            ConcreteReflectionActivatorData,
+            SingleRegistrationStyle> ByModule<TModule>(
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TModule> installerFactory = null)
+            where TModule : class, IModule
         {
             return Builder
-                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance, TInstaller>>()
+                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeModuleFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance, TModule>>()
                 .WithParameter(TypedParameter.From(installerFactory))
                 .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>>();
         }
@@ -356,12 +384,15 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                 .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>>();
         }
 
-        public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller
+        public IRegistrationBuilder<
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>,
+            ConcreteReflectionActivatorData,
+            SingleRegistrationStyle> ByModule<TModule>(
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TModule> installerFactory = null)
+            where TModule : class, IModule
         {
             return Builder
-                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance, TInstaller>>()
+                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeModuleFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance, TModule>>()
                 .WithParameter(TypedParameter.From(installerFactory))
                 .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>>();
         }
@@ -392,12 +423,15 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                 .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>>();
         }
 
-        public IRegistrationBuilder<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller
+        public IRegistrationBuilder<
+            IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>,
+            ConcreteReflectionActivatorData,
+            SingleRegistrationStyle> ByModule<TModule>(
+            Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TModule> installerFactory = null)
+            where TModule : class, IModule
         {
             return Builder
-                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance, TInstaller>>()
+                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeModuleFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance, TModule>>()
                 .WithParameter(TypedParameter.From(installerFactory))
                 .As<IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>>();
         }

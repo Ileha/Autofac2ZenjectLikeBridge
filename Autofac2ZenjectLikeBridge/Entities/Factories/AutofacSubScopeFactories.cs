@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac;
+using Autofac.Core;
 using Autofac2ZenjectLikeBridge.Interfaces;
 using JetBrains.Annotations;
 
@@ -340,17 +341,17 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
         }
 
 
-        internal class AutofacSubScopeInstallerFactory<TInstance, TInstaller>
+        internal class AutofacSubScopeModuleFactory<TInstance, TModule>
             : IFactory<TInstance>
             where TInstance : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, TModule> _installerFactory;
 
-            public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
+            public AutofacSubScopeModuleFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ILifetimeScope, ContainerBuilder, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, TModule> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -358,22 +359,22 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
 
             public TInstance Create()
             {
-                return _scope.ResolveFromSubScope<TInstance, TInstaller>(
+                return _scope.ResolveFromModuleSubScope<TInstance, TModule>(
                     _installerFactory);
             }
         }
 
-        internal class AutofacSubScopeInstallerFactory<TP0, TInstance, TInstaller>
+        internal class AutofacSubScopeModuleFactory<TP0, TInstance, TModule>
             : IFactory<TP0, TInstance>
             where TInstance : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, TP0, TModule> _installerFactory;
 
-            public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
+            public AutofacSubScopeModuleFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ILifetimeScope, ContainerBuilder, TP0, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, TP0, TModule> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -382,23 +383,23 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             public TInstance Create(
 				TP0 param0)
             {
-                return _scope.ResolveFromSubScope<TP0, TInstance, TInstaller>(
+                return _scope.ResolveFromModuleSubScope<TP0, TInstance, TModule>(
 					param0, 
                     _installerFactory);
             }
         }
 
-        internal class AutofacSubScopeInstallerFactory<TP0, TP1, TInstance, TInstaller>
+        internal class AutofacSubScopeModuleFactory<TP0, TP1, TInstance, TModule>
             : IFactory<TP0, TP1, TInstance>
             where TInstance : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, TP0, TP1, TModule> _installerFactory;
 
-            public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
+            public AutofacSubScopeModuleFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, TP0, TP1, TModule> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -408,24 +409,24 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
 				TP0 param0,
 				TP1 param1)
             {
-                return _scope.ResolveFromSubScope<TP0, TP1, TInstance, TInstaller>(
+                return _scope.ResolveFromModuleSubScope<TP0, TP1, TInstance, TModule>(
 					param0,
 					param1, 
                     _installerFactory);
             }
         }
 
-        internal class AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TInstance, TInstaller>
+        internal class AutofacSubScopeModuleFactory<TP0, TP1, TP2, TInstance, TModule>
             : IFactory<TP0, TP1, TP2, TInstance>
             where TInstance : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, TP0, TP1, TP2, TModule> _installerFactory;
 
-            public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
+            public AutofacSubScopeModuleFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, TP0, TP1, TP2, TModule> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -436,7 +437,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
 				TP1 param1,
 				TP2 param2)
             {
-                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TInstance, TInstaller>(
+                return _scope.ResolveFromModuleSubScope<TP0, TP1, TP2, TInstance, TModule>(
 					param0,
 					param1,
 					param2, 
@@ -444,17 +445,17 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        internal class AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TInstance, TInstaller>
+        internal class AutofacSubScopeModuleFactory<TP0, TP1, TP2, TP3, TInstance, TModule>
             : IFactory<TP0, TP1, TP2, TP3, TInstance>
             where TInstance : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TModule> _installerFactory;
 
-            public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
+            public AutofacSubScopeModuleFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TModule> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -466,7 +467,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
 				TP2 param2,
 				TP3 param3)
             {
-                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TInstance, TInstaller>(
+                return _scope.ResolveFromModuleSubScope<TP0, TP1, TP2, TP3, TInstance, TModule>(
 					param0,
 					param1,
 					param2,
@@ -475,17 +476,17 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        internal class AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TP4, TInstance, TInstaller>
+        internal class AutofacSubScopeModuleFactory<TP0, TP1, TP2, TP3, TP4, TInstance, TModule>
             : IFactory<TP0, TP1, TP2, TP3, TP4, TInstance>
             where TInstance : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TModule> _installerFactory;
 
-            public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
+            public AutofacSubScopeModuleFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TModule> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -498,7 +499,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
 				TP3 param3,
 				TP4 param4)
             {
-                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TInstance, TInstaller>(
+                return _scope.ResolveFromModuleSubScope<TP0, TP1, TP2, TP3, TP4, TInstance, TModule>(
 					param0,
 					param1,
 					param2,
@@ -508,17 +509,17 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        internal class AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance, TInstaller>
+        internal class AutofacSubScopeModuleFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance, TModule>
             : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TInstance>
             where TInstance : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TModule> _installerFactory;
 
-            public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
+            public AutofacSubScopeModuleFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TModule> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -532,7 +533,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
 				TP4 param4,
 				TP5 param5)
             {
-                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TInstance, TInstaller>(
+                return _scope.ResolveFromModuleSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TInstance, TModule>(
 					param0,
 					param1,
 					param2,
@@ -543,17 +544,17 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        internal class AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance, TInstaller>
+        internal class AutofacSubScopeModuleFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance, TModule>
             : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance>
             where TInstance : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TModule> _installerFactory;
 
-            public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
+            public AutofacSubScopeModuleFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TModule> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -568,7 +569,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
 				TP5 param5,
 				TP6 param6)
             {
-                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance, TInstaller>(
+                return _scope.ResolveFromModuleSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance, TModule>(
 					param0,
 					param1,
 					param2,
@@ -580,17 +581,17 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        internal class AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance, TInstaller>
+        internal class AutofacSubScopeModuleFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance, TModule>
             : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance>
             where TInstance : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TModule> _installerFactory;
 
-            public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
+            public AutofacSubScopeModuleFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TModule> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -606,7 +607,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
 				TP6 param6,
 				TP7 param7)
             {
-                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance, TInstaller>(
+                return _scope.ResolveFromModuleSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance, TModule>(
 					param0,
 					param1,
 					param2,
@@ -619,17 +620,17 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        internal class AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance, TInstaller>
+        internal class AutofacSubScopeModuleFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance, TModule>
             : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance>
             where TInstance : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TModule> _installerFactory;
 
-            public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
+            public AutofacSubScopeModuleFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TModule> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -646,7 +647,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
 				TP7 param7,
 				TP8 param8)
             {
-                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance, TInstaller>(
+                return _scope.ResolveFromModuleSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance, TModule>(
 					param0,
 					param1,
 					param2,
@@ -660,17 +661,17 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             }
         }
 
-        internal class AutofacSubScopeInstallerFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance, TInstaller>
+        internal class AutofacSubScopeModuleFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance, TModule>
             : IFactory<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance>
             where TInstance : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             private readonly ILifetimeScope _scope;
-            [CanBeNull] private readonly Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstaller> _installerFactory;
+            [CanBeNull] private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TModule> _installerFactory;
 
-            public AutofacSubScopeInstallerFactory(ILifetimeScope scope,
+            public AutofacSubScopeModuleFactory(ILifetimeScope scope,
                 [CanBeNull]
-                Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstaller> installerFactory = null)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TModule> installerFactory = null)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
                 _installerFactory = installerFactory;
@@ -688,7 +689,7 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
 				TP8 param8,
 				TP9 param9)
             {
-                return _scope.ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance, TInstaller>(
+                return _scope.ResolveFromModuleSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance, TModule>(
 					param0,
 					param1,
 					param2,

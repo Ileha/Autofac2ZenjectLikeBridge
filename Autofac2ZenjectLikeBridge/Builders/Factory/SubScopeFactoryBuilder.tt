@@ -5,6 +5,7 @@
 using System;
 using Autofac;
 using Autofac.Builder;
+using Autofac.Core;
 using Autofac2ZenjectLikeBridge.Interfaces;
 using Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory;
 
@@ -40,12 +41,15 @@ namespace Autofac2ZenjectLikeBridge.Builders.Factory
                 .As<IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>();
         }
 
-        public IRegistrationBuilder<IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>, ConcreteReflectionActivatorData, SingleRegistrationStyle>
-            ByInstaller<TInstaller>(Func<ILifetimeScope, ContainerBuilder, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller
+        public IRegistrationBuilder<
+            IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>,
+            ConcreteReflectionActivatorData,
+            SingleRegistrationStyle> ByModule<TModule>(
+            Func<ILifetimeScope, <#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TModule> installerFactory = null)
+            where TModule : class, IModule
         {
             return Builder
-                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeInstallerFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance, TInstaller>>()
+                .RegisterType<Entities.Factories.DIExtensions.AutofacSubScopeModuleFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance, TModule>>()
                 .WithParameter(TypedParameter.From(installerFactory))
                 .As<IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>>();
         }
