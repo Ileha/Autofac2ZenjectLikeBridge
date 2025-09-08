@@ -209,7 +209,7 @@ public class DIExtensionsTests
         builder
             .RegisterExtended<ServiceWithDependencyDisposable>()
             .FromSubScope()
-            .ByInstaller<ServiceWithDependencyInstaller>((scope)
+            .ByModule<ServiceWithDependencyInstaller>((scope)
                 => scope.CreateInstance<ServiceWithDependencyInstaller>(internalService))
             .SingleInstance();
 
@@ -238,7 +238,7 @@ public class DIExtensionsTests
         builder
             .RegisterExtended<ServiceWithDependencyDisposable>()
             .FromSubScope()
-            .ByInstaller<ServiceWithDependencyInstaller>()
+            .ByModule<ServiceWithDependencyInstaller>()
             .SingleInstance();
 
         using var container = builder.Build();

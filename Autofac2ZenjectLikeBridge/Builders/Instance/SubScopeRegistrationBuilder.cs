@@ -25,7 +25,7 @@ namespace Autofac2ZenjectLikeBridge.Builders.Instance
                         => scope.ResolveFromSubScope<TComponent>(subScopeInstaller));
         }
 
-        public IRegistrationBuilder<TComponent, SimpleActivatorData, SingleRegistrationStyle> ByInstaller<TModule>(
+        public IRegistrationBuilder<TComponent, SimpleActivatorData, SingleRegistrationStyle> ByModule<TModule>(
             Func<ILifetimeScope, TModule> installerFactory = null) where TModule : class, IModule
         {
             return Builder
