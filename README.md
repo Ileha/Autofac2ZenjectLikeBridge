@@ -82,6 +82,13 @@ container.Resolve<ISampleService>();
 Create isolated subcontainers for instance. Based on Autofac's lifetime scope. Scope will inherit all dependencies from
 parent scope(s). In the same time scope could have own dependencies, that will be available only in this scope.
 See [Quick Start](#-quick-start) for code sample.
+When `FromSubScope()` called it supposed to create new nested `ILifetimeScope` register required type and all it dependencies and resolve that type form created subcontainer. In other words target type have to be registred in subcontainer installer and implements `IDisposable`
+
+### Installer
+
+Installer is a special entity to register some dependencies to builder. It could be responsible for some independent part of the program like debug, statistic.
+Installers have to implement `IInstaller` interface. The `AutofacInstallerBase` is available for inheritance as a preferred way.
+
 
 ### Overall structure
 
@@ -287,9 +294,10 @@ builder
             Data = Guid.NewGuid()
         });
 ```
+
 ##### From Subcontainers
 
-and for subcontainers:
+and for subcontainers, new subcontainer will be created and installer called to register all content in subcontainer
 
 ###### By Function
 
@@ -305,7 +313,7 @@ builder
     .ByFunction((subcontainerBuilder, parameter) =>
     {
         // Register service in the subcontainer
-        // registred type should match type in RegisterFactoryFromSubScope
+        // registred type should match type in RegisterPlaceholderFactoryExtended
         subcontainerBuilder
             .RegisterType<Iinstance>()
             .WithParameters(TypedParameter.From(parameter))
