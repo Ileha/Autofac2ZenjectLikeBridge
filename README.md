@@ -10,10 +10,11 @@ and subcontainers but want to leverage Autofac's robust dependency injection cap
 ## 🚀 Key Features
 
 - **Zenject-inspired subcontainer syntax** for Autofac
+- Subcontainer lifetime management
 - Seamless integration of Zenject's scoping patterns
 - Simplified decorator registration with isolated scopes
-- Cross-container dependency management
 - Full compatibility with existing Autofac applications
+- `IFactory<...>` and `PlaceholderFactory<...>` for factory registration with subcontainer support
 
 ## 💡 Why Use Autofac2ZenjectLikeBridge?
 
