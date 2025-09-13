@@ -50,10 +50,10 @@ builder
     .RegisterExtended<ISampleService>()
     .FromSubScope()
     .ByFunction(
-        subContainerBuilder =>
+        subcontainerBuilder =>
         {
             // Register service in the subcontainer
-            // registred type should match type in RegisterFromSubScope
+            // registered type should match type in RegisterFromSubScope
             subcontainerBuilder
                 .RegisterType<SampleService>()
                 .As<ISampleService>()
@@ -117,8 +117,8 @@ When `FromSubScope()` called it supposed to create new nested `ILifetimeScope` r
 
 ### Modules
 
-[Autofac's modules](https://autofac.readthedocs.io/en/latest/configuration/modules.html) could be used to register types in subcontainers.  
-Module sample:  
+[Autofac's modules](https://autofac.readthedocs.io/en/latest/configuration/modules.html) could be used to register types in subcontainers.
+Module sample:
 
 ```csharp
 class SampleServiceModule : Module
@@ -195,7 +195,7 @@ builder
         (subcontainerBuilder, baseService) =>
         {
             // Register service in the subcontainer
-            // registred type should match type in RegisterFromSubScope
+            // registered type should match type in RegisterFromSubScope
             subcontainerBuilder
                 .RegisterType<ServiceDecorator>()
                 .WithParameters(TypedParameter.From(baseService))
@@ -211,8 +211,8 @@ builder
 
 ##### By Module
 As well instances could be created from module, decorator could also be created from module:
-In that case decoratable service will be passed to module constructor.  
-Module sample:  
+In that case decoratable service will be passed to module constructor.
+Module sample:
 
 ```csharp
 class ServiceDecoratorModule : Module
@@ -296,7 +296,7 @@ builder
     .ByFunction(subcontainerBuilder =>
     {
         // Register service in the subcontainer
-        // registred type should match type in RegisterFactoryFromSubScope
+        // registered type should match type in RegisterFactoryFromSubScope
         subcontainerBuilder
             .RegisterType<Iinstance>()
             .SingleInstance();
@@ -306,7 +306,7 @@ builder
         subcontainerBuilder
             .RegisterType<SampleDependency>()
             .SingleInstance();
-    })
+    });
 ```
 
 Parameters edition:
@@ -318,7 +318,7 @@ builder
     .ByFunction((subcontainerBuilder, parameter) =>
     {
         // Register service in the subcontainer
-        // registred type should match type in RegisterFactoryFromSubScope
+        // registered type should match type in RegisterFactoryFromSubScope
         subcontainerBuilder
             .RegisterType<Iinstance>()
             .WithParameters(TypedParameter.From(parameter))
@@ -329,11 +329,11 @@ builder
         subcontainerBuilder
             .RegisterType<SampleDependency>()
             .SingleInstance();
-    })
+    });
 ```
 
 ###### By Module
-Registration factories to resolve from module. All parameters will be passed to module's constructor.  
+Registration factories to resolve from module. All parameters will be passed to module's constructor.
 Module sample:
 
 ```csharp
@@ -426,7 +426,7 @@ builder
     .ByFunction((subcontainerBuilder, parameter) =>
     {
         // Register service in the subcontainer
-        // registred type should match type in RegisterPlaceholderFactoryExtended
+        // registered type should match type in RegisterPlaceholderFactoryExtended
         subcontainerBuilder
             .RegisterType<Iinstance>()
             .WithParameters(TypedParameter.From(parameter))
@@ -437,12 +437,12 @@ builder
         subcontainerBuilder
             .RegisterType<SampleDependency>()
             .SingleInstance();
-    })
+    });
 ```
 
 ###### By Module
-For module sample see [by module section in `IFactory` registration](#by-module-1).  
-The registration is similar to `IFactory` registration. And could reuse same modules.  
+For module sample see [by module section in `IFactory` registration](#by-module-1).
+The registration is similar to `IFactory` registration. And could reuse same modules.
 
 Registration sample:
 ```csharp
