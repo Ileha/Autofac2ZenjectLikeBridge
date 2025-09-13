@@ -63,8 +63,7 @@ builder
             subcontainerBuilder
                 .RegisterType<SampleDependency>()
                 .SingleInstance();
-        })
-    .SingleInstance();
+        });
 
 // ...
 
@@ -359,8 +358,7 @@ Registration sample:
 builder
     .RegisterIFactoryExtended<string, IService>()
     .FromSubScope()
-    .ByModule<ServiceModule>()
-    .SingleInstance();
+    .ByModule<ServiceModule>();
 ```
 
 Registration sample with extra parameters via [service provider](#icomponentcontextcreateinstance):
@@ -370,8 +368,7 @@ builder
     .FromSubScope()
     .ByModule<ServiceModule>(
         (scope, arg3)
-            => scope.CreateInstance<ServiceModule>(arg3, extraParameter))
-    .SingleInstance();
+            => scope.CreateInstance<ServiceModule>(arg3, extraParameter));
 ```
 
 #### Placeholders Factories
@@ -451,8 +448,7 @@ Registration sample:
 builder
     .RegisterPlaceholderFactoryExtended<string, IService, MyCustomServiceFactory>()
     .FromSubScope()
-    .ByModule<ServiceModule>()
-    .SingleInstance();
+    .ByModule<ServiceModule>();
 ```
 
 Registration sample with extra parameters via [service provider](#icomponentcontextcreateinstance):
@@ -462,8 +458,7 @@ builder
     .FromSubScope()
     .ByModule<ServiceModule>(
         (scope, arg3)
-            => scope.CreateInstance<ServiceModule>(arg3, extraParameter))
-    .SingleInstance();
+            => scope.CreateInstance<ServiceModule>(arg3, extraParameter));
 ```
 where placeholder factory type is
 ```csharp
