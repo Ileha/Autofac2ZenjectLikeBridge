@@ -10,10 +10,11 @@ and subcontainers but want to leverage Autofac's robust dependency injection cap
 ## 🚀 Key Features
 
 - **Zenject-inspired subcontainer syntax** for Autofac
+- Subcontainer lifetime management
 - Seamless integration of Zenject's scoping patterns
 - Simplified decorator registration with isolated scopes
-- Cross-container dependency management
 - Full compatibility with existing Autofac applications
+- `IFactory<...>` and `PlaceholderFactory<...>` for factory registration with subcontainer support
 
 ## 💡 Why Use Autofac2ZenjectLikeBridge?
 
@@ -46,11 +47,13 @@ var builder = new ContainerBuilder();
 
 // Register your service from subcontainer
 builder
-    .RegisterFromSubScope<ISampleService>(
+    .RegisterExtended<ISampleService>()
+    .FromSubScope()
+    .ByFunction(
         subcontainerBuilder =>
         {
             // Register service in the subcontainer
-            // registred type should match type in RegisterFromSubScope
+            // registered type should match type in RegisterFromSubScope
             subcontainerBuilder
                 .RegisterType<SampleService>()
                 .As<ISampleService>()
@@ -61,27 +64,95 @@ builder
             subcontainerBuilder
                 .RegisterType<SampleDependency>()
                 .SingleInstance();
-        })
-    .SingleInstance();
+        });
 
-    //...
+// ...
 
-    using var container = builder.Build()
+using var container = builder.Build();
 
-    container.Resolve<ISampleService>();
+container.Resolve<ISampleService>();
 ```
 
 ## 📚 Documentation
 
-> ℹ️ **Info**: All instances resolved from subcontainers have to be implement `IDisposable` and
-`ICollection<IDisposable>` interfaces. This needed limit subcontainers lifetime. When instance is disposed, it's
-> subcontainer will be disposed too. See [BaseCompositeDisposable](#basecompositedisposable) approach for more details.
+> ℹ️ **Info**: All instances resolved from subcontainers have to implement `IDisposable` interface. This needed to limit subcontainers lifetime. When instance is disposed, it's subcontainer will be disposed too. Instance's `Dispose` method will be called patched via [Harmony](https://github.com/pardeike/Harmony) library
 
 ### Creating Subcontainers
 
 Create isolated subcontainers for instance. Based on Autofac's lifetime scope. Scope will inherit all dependencies from
 parent scope(s). In the same time scope could have own dependencies, that will be available only in this scope.
-See [Quick Start](#️-quick-start) for code sample.
+See [Quick Start](#-quick-start) for code sample.
+When `FromSubScope()` called it supposed to create new nested `ILifetimeScope` register required type and all it dependencies and resolve that type form created subcontainer. In other words target type have to be registered in subcontainer installer and implements `IDisposable`
+
+### Overall structure
+
+ - Type registration:
+
+    - from subScope:
+        - [by function](#-quick-start)
+        - [by module](#simple-registrations)
+
+ - [Decorators:](#decorators)
+
+    - [from function](#from-function)
+    - [from subScope](#with-subcontainer):
+        - [by function](#byfunction)
+        - [by module](#by-module)
+
+ - [Factories:](#factories)
+
+    - [IFactory<P0, P1, ... , PN, TInstance>](#ifactory)
+        - from new instance
+        - [from function](#from-functions)
+        - [from subScope](#from-subcontainers):
+            - [by function](#by-function)
+            - [by module](#by-module-1)
+
+    - [PlaceholderFactory<P0, P1, ... , PN, TInstance>](#placeholders-factories)
+        - from new instance
+        - [from function](#from-functions-1)
+        - [from subScope](#from-subcontainers-1):
+            - [by function](#by-function-1)
+            - [by module](#by-module-2)
+
+### Modules
+
+[Autofac's modules](https://autofac.readthedocs.io/en/latest/configuration/modules.html) could be used to register types in subcontainers.
+Module sample:
+
+```csharp
+class SampleServiceModule : Module
+{
+    private readonly object _data;
+
+    //pass all parameters to module's constructor as well as extra parameters or dependencies
+    //from parent DI container(s)
+    public SampleServiceModule(object data)
+    {
+        _data = data;
+    }
+
+    protected override void Load(ContainerBuilder builder)
+    {
+        //do ISampleService registration here
+    }
+}
+```
+
+#### Simple registrations:
+```csharp
+builder
+    .RegisterExtended<ISampleService>()
+    .FromSubScope()
+    .ByModule<SampleServiceModule>();
+```
+or even create module with using [service provider](#icomponentcontextcreateinstance). In that case module will be created in subcontainer and all dependencies from current scope will be available in the module.
+```csharp
+builder
+    .RegisterExtended<ISampleService>()
+    .FromSubScope()
+    .ByModule<SampleServiceModule>((scope) => scope.CreateInstance<SampleServiceModule>(parameter));
+```
 
 ### Decorators
 
@@ -100,7 +171,8 @@ Use function to create decorator instance:
 
 ```csharp
 builder
-    .RegisterDecoratorFromFunction<ServiceDecorator, IService>(
+    .RegisterDecoratorExtended<ServiceDecorator, IService>()
+    .FromFunction(
         (context, baseService) =>
         {
             var parameters = new Parameters();
@@ -111,15 +183,19 @@ builder
 
 #### With Subcontainer
 
+##### ByFunction
+
 Use subcontainer to create decorator:
 
 ```csharp
 builder
-    .RegisterDecoratorFromSubScope<ServiceDecorator, IService>(
+    .RegisterDecoratorExtended<ServiceDecorator, IService>()
+    .FromSubScope()
+    .ByFunction(
         (subcontainerBuilder, baseService) =>
         {
             // Register service in the subcontainer
-            // registred type should match type in RegisterFromSubScope
+            // registered type should match type in RegisterFromSubScope
             subcontainerBuilder
                 .RegisterType<ServiceDecorator>()
                 .WithParameters(TypedParameter.From(baseService))
@@ -133,90 +209,183 @@ builder
         });
 ```
 
+##### By Module
+As well instances could be created from module, decorator could also be created from module:
+In that case decoratable service will be passed to module constructor.
+Module sample:
+
+```csharp
+class ServiceDecoratorModule : Module
+{
+    private readonly object _data;
+    private readonly IService _service;
+
+    //pass all parameters and decoratable service to module's constructor as well as extra parameters or dependencies
+    //from parent DI container(s)
+    public ServiceDecoratorModule(IService service, object data)
+    {
+        _data = data;
+        _service = service;
+    }
+
+    protected override void Load(ContainerBuilder builder)
+    {
+        //do ServiceDecorator registration here
+    }
+}
+```
+registration sample:
+```csharp
+builder
+    .RegisterDecoratorExtended<ServiceDecorator, IService>()
+    .FromSubScope()
+    .ByModule<ServiceDecoratorModule>();
+```
+registration via [service provider](#icomponentcontextcreateinstance):
+```csharp
+builder
+    .RegisterDecoratorExtended<ServiceDecorator, IService>()
+    .FromSubScope()
+    .ByModule((scope, service) => scope.CreateInstance<ServiceDecoratorModule>(service, parameter));
+```
+
 ### Factories
+
+#### IFactory
 
 Provides interface `IFactory<parameter1, parameter2, ... , parameterN, Iinstance>` where
 `parameter1, parameter2, ... , parameterN` are parameters for factory creation and `Iinstance` is instance type.
 
-#### From Functions
+##### From Functions
 
-Use function to register IFactory<Iinstance> in DI:
+Use function to register `IFactory<Iinstance>` in DI:
 
 ```csharp
 builder
-    .RegisterFactoryFromFunction<Iinstance>(
+    .RegisterIFactoryExtended<Iinstance>()
+    .FromFunction(
         scope => new Instance
         {
             Data = Guid.NewGuid()
-        })
+        });
 ```
 
-Use function to register IFactory<Guid, Iinstance> in DI:
+Use function to register `IFactory<Guid, Iinstance>` in DI:
 
 ```csharp
 builder
-    .RegisterFactoryFromFunction<Guid, Iinstance>(
+    .RegisterIFactoryExtended<Guid, Iinstance>()
+    .FromFunction(
         (scope, parameter) => new Instance
         {
             Data = parameter
-        })
+        });
 ```
 
-#### From Subcontainers
+##### From Subcontainers
 
 Use subcontainer to create factory `IFactory<Iinstance>`, new subcontainer will be created when factory's `Create`
 method is called:
 
+###### By Function
+
 ```csharp
 builder
-    .RegisterFactoryFromSubScope<Iinstance>(
-        (subcontainerBuilder) =>
-        {
-            // Register service in the subcontainer
-            // registred type should match type in RegisterFactoryFromSubScope
-            subcontainerBuilder
-                .RegisterType<Iinstance>()
-                .SingleInstance();
+    .RegisterIFactoryExtended<Iinstance>()
+    .FromSubScope()
+    .ByFunction(subcontainerBuilder =>
+    {
+        // Register service in the subcontainer
+        // registered type should match type in RegisterFactoryFromSubScope
+        subcontainerBuilder
+            .RegisterType<Iinstance>()
+            .SingleInstance();
 
-            // Register dependencies in the subcontainer
-            // needed to run Iinstance
-            subcontainerBuilder
-                .RegisterType<SampleDependency>()
-                .SingleInstance();
-        })
+        // Register dependencies in the subcontainer
+        // needed to run Iinstance
+        subcontainerBuilder
+            .RegisterType<SampleDependency>()
+            .SingleInstance();
+    });
 ```
 
 Parameters edition:
 
 ```csharp
 builder
-    .RegisterFactoryFromSubScope<Guid, Iinstance>(
-        (subcontainerBuilder, parameter) =>
-        {
-            // Register service in the subcontainer
-            // registred type should match type in RegisterFactoryFromSubScope
-            subcontainerBuilder
-                .RegisterType<Iinstance>()
-                .WithParameters(TypedParameter.From(parameter))
-                .SingleInstance();
+    .RegisterIFactoryExtended<Guid, Iinstance>()
+    .FromSubScope()
+    .ByFunction((subcontainerBuilder, parameter) =>
+    {
+        // Register service in the subcontainer
+        // registered type should match type in RegisterFactoryFromSubScope
+        subcontainerBuilder
+            .RegisterType<Iinstance>()
+            .WithParameters(TypedParameter.From(parameter))
+            .SingleInstance();
 
-            // Register dependencies in the subcontainer
-            // needed to run Iinstance
-            subcontainerBuilder
-                .RegisterType<SampleDependency>()
-                .SingleInstance();
-        })
+        // Register dependencies in the subcontainer
+        // needed to run Iinstance
+        subcontainerBuilder
+            .RegisterType<SampleDependency>()
+            .SingleInstance();
+    });
+```
+
+###### By Module
+Registration factories to resolve from module. All parameters will be passed to module's constructor.
+Module sample:
+
+```csharp
+class ServiceModule : Module
+{
+    private readonly string _data;
+
+    //pass all parameters to module's constructor as well as extra parameters or dependencies
+    //from parent DI container(s)
+    public ServiceModule(string data)
+    {
+        _data = data;
+    }
+
+    protected override void Load(ContainerBuilder builder)
+    {
+        //do IService registration here
+    }
+}
+```
+Registration sample:
+```csharp
+builder
+    .RegisterIFactoryExtended<string, IService>()
+    .FromSubScope()
+    .ByModule<ServiceModule>();
+```
+
+Registration sample with extra parameters via [service provider](#icomponentcontextcreateinstance):
+```csharp
+builder
+    .RegisterIFactoryExtended<string, IService>()
+    .FromSubScope()
+    .ByModule<ServiceModule>(
+        (scope, arg3)
+            => scope.CreateInstance<ServiceModule>(arg3, extraParameter));
 ```
 
 #### Placeholders Factories
 
-Used to register type distincted from interface IFactory<T>, and/or modify factory `Create` behavior, like some instance
+Used for registration of type distinct from interface IFactory<T>, and/or modify factory `Create` behavior, like some instance
 initialization:
 Create new class and inherit from PlaceholderFactory<T>:
 
 ```csharp
 class MyCustomFactory : PlaceholderFactory<Iinstance>
 {
+    public MyCustomFactory(SomeDependency dependency)
+    {
+        //...
+    }
+
     //you can override Create method
     public override Iinstance Create()
     {
@@ -225,44 +394,107 @@ class MyCustomFactory : PlaceholderFactory<Iinstance>
 }
 ```
 
-Placeholders Factories registration is available only for SubScope factories:
+##### From Functions
+
+Placeholders Factories registration is available from function:
 
 ```csharp
 builder
-    .RegisterFactoryFromSubScope<Iinstance, MyCustomFactory>(
-        (subcontainerBuilder) =>
-        {
-            // Register service in the subcontainer
-            // registred type should match type in RegisterFactoryFromSubScope
-            subcontainerBuilder
-                .RegisterType<Iinstance>()
-                .SingleInstance();
-
-            // Register dependencies in the subcontainer
-            // needed to run Iinstance
-            subcontainerBuilder
-                .RegisterType<SampleDependency>()
-                .SingleInstance();
-        })
-```
-
-and for Function factories:
-
-```csharp
-builder
-    .RegisterFactoryFromFunction<Iinstance, MyCustomFactory>(
+    .RegisterPlaceholderFactoryExtended<Iinstance, MyCustomFactory>()
+    .FromFunction(
         scope => new Instance
         {
             Data = Guid.NewGuid()
-        })
+        });
+```
+
+##### From Subcontainers
+
+and for subcontainers, new subcontainer will be created and installer called to register all content in subcontainer
+
+###### By Function
+
+via function
+
+```csharp
+builder
+    .RegisterPlaceholderFactoryExtended<
+        Guid,
+        Iinstance,
+        MyCustomFactory>()
+    .FromSubScope()
+    .ByFunction((subcontainerBuilder, parameter) =>
+    {
+        // Register service in the subcontainer
+        // registered type should match type in RegisterPlaceholderFactoryExtended
+        subcontainerBuilder
+            .RegisterType<Iinstance>()
+            .WithParameters(TypedParameter.From(parameter))
+            .SingleInstance();
+
+        // Register dependencies in the subcontainer
+        // needed to run Iinstance
+        subcontainerBuilder
+            .RegisterType<SampleDependency>()
+            .SingleInstance();
+    });
+```
+
+###### By Module
+For module sample see [by module section in `IFactory` registration](#by-module-1).
+The registration is similar to `IFactory` registration. And could reuse same modules.
+
+Registration sample:
+```csharp
+builder
+    .RegisterPlaceholderFactoryExtended<string, IService, MyCustomServiceFactory>()
+    .FromSubScope()
+    .ByModule<ServiceModule>();
+```
+
+Registration sample with extra parameters via [service provider](#icomponentcontextcreateinstance):
+```csharp
+builder
+    .RegisterPlaceholderFactoryExtended<string, IService, MyCustomServiceFactory>()
+    .FromSubScope()
+    .ByModule<ServiceModule>(
+        (scope, arg3)
+            => scope.CreateInstance<ServiceModule>(arg3, extraParameter));
+```
+where placeholder factory type is
+```csharp
+class MyCustomServiceFactory : PlaceholderFactory<string, IService>
+{
+    public MyCustomServiceFactory(SomeDependency dependency)
+    {
+        //...
+    }
+
+    //you can override Create method
+    public override IService Create(string arg)
+    {
+        return base.Create(arg);
+    }
+}
 ```
 
 ### Other Helpers
 
-#### BaseCompositeDisposable
+#### CompositeDisposable
 
-Inherit from `BaseCompositeDisposable` for services or from `BaseCompositeDisposable<T>` for decorators to comply with
-`IDisposable` and `ICollection<IDisposable>` interfaces.
+Use `CompositeDisposable` for services and decorators to manage multiple disposables and comply with `IDisposable` and `ICollection<IDisposable>`. `CompositeDisposable` will dispose all disposables, added to it, when disposed.
+
+Example:
+
+```csharp
+var composite = new CompositeDisposable();
+
+_disposable1.AddTo(composite);
+_disposable2.AddTo(composite);
+
+//_disposable1 & _disposable2 will be disposed here
+composite.Dispose();
+```
 
 #### IComponentContext.CreateInstance
 

@@ -1,6 +1,6 @@
 ﻿using System;
 using Autofac;
-using Autofac2ZenjectLikeBridge.Interfaces;
+using Autofac.Core;
 using Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator;
 using JetBrains.Annotations;
 
@@ -17,63 +17,63 @@ namespace Autofac2ZenjectLikeBridge.Builders.Decorator
             Builder = builder ?? throw new ArgumentNullException(nameof(builder));
         }
 
-        public void ByFunction(Action<ContainerBuilder, TService> subScopeInstaller)
+        public void ByFunction(Action<ContainerBuilder, TService> subScopeLoader)
         {
             Builder
                 .RegisterDecorator<TService>(
-                    (context, _, nestedService) => ResolveFromSubScope<TDecorator>(subScopeInstaller, context, nestedService));
+                    (context, _, nestedService) => ResolveFromSubScope<TDecorator>(subScopeLoader, context, nestedService));
         }
 
-        public void ByInstaller<TInstaller>(
-            Func<ILifetimeScope, ContainerBuilder, TService, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller
+        public void ByModule<TModule>(
+            Func<ILifetimeScope, TService, TModule> moduleFactory = null)
+            where TModule : class, IModule
         {
             Builder
                 .RegisterDecorator<TService>(
-                    (context, _, nestedService) => ResolveFromSubScopeInstaller<TDecorator, TInstaller>(context, nestedService, installerFactory));
+                    (context, _, nestedService) => ResolveFromSubScopeModule<TDecorator, TModule>(context, nestedService, moduleFactory));
         }
 
-        public void ByFunction(Action<ContainerBuilder, TService> subScopeInstaller, object fromKey, object toKey = null)
+        public void ByFunction(Action<ContainerBuilder, TService> subScopeLoader, object fromKey, object toKey = null)
         {
             Builder
                 .RegisterDecorator<TService>(
-                    (context, _, nestedService) => ResolveFromSubScope<TDecorator>(subScopeInstaller, context, nestedService),
+                    (context, _, nestedService) => ResolveFromSubScope<TDecorator>(subScopeLoader, context, nestedService),
                     fromKey,
                     toKey);
         }
 
-        public void ByInstaller<TInstaller>(
+        public void ByModule<TModule>(
             object fromKey,
             object toKey = null,
-            Func<ILifetimeScope, ContainerBuilder, TService, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller
+            Func<ILifetimeScope, TService, TModule> moduleFactory = null)
+            where TModule : class, IModule
         {
             Builder
                 .RegisterDecorator<TService>(
-                    (context, _, nestedService) => ResolveFromSubScopeInstaller<TDecorator, TInstaller>(context, nestedService, installerFactory),
+                    (context, _, nestedService) => ResolveFromSubScopeModule<TDecorator, TModule>(context, nestedService, moduleFactory),
                     fromKey,
                     toKey);
         }
 
         private static TComponent ResolveFromSubScope<TComponent>(
-            Action<ContainerBuilder, TService> subScopeInstaller,
+            Action<ContainerBuilder, TService> subScopeLoader,
             IComponentContext context,
             TService nestedService)
             where TComponent : IDisposable
         {
             var scope = context.Resolve<ILifetimeScope>();
-            return scope.ResolveFromSubScope<TService, TComponent>(subScopeInstaller, nestedService);
+            return scope.ResolveFromSubScope<TService, TComponent>(subScopeLoader, nestedService);
         }
 
-        private static TComponent ResolveFromSubScopeInstaller<TComponent, TInstaller>(
+        private static TComponent ResolveFromSubScopeModule<TComponent, TModule>(
             IComponentContext context,
             TService nestedService,
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TService, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller
+            [CanBeNull] Func<ILifetimeScope, TService, TModule> moduleFactory = null)
+            where TModule : class, IModule
             where TComponent : IDisposable
         {
             var scope = context.Resolve<ILifetimeScope>();
-            return scope.ResolveFromSubScope<TService, TComponent, TInstaller>(nestedService, installerFactory);
+            return scope.ResolveFromSubScope<TService, TComponent, TModule>(nestedService, moduleFactory);
         }
     }
 }

@@ -111,9 +111,9 @@ public class DIExtensionDecoratorTests
         builder
             .RegisterDecoratorExtended<ServiceDecoratorDisposable, IService>()
             .FromSubScope()
-            .ByInstaller(
-                (scope, containerBuilder, arg3) => scope
-                    .CreateInstance<ServiceWithDependencyInstaller>(containerBuilder, arg3, mockSubContainerDisposable, data));
+            .ByModule(
+                (scope, arg3) => scope
+                    .CreateInstance<ServiceWithDependencyModule>(arg3, mockSubContainerDisposable, data));
 
         using (var container = builder.Build())
         {
@@ -129,37 +129,35 @@ public class DIExtensionDecoratorTests
         mockExternalDisposable.Received(1).Dispose();
     }
 
-    internal class ServiceWithDependencyInstaller : AutofacInstallerBase
+    internal class ServiceWithDependencyModule : Module
     {
         private readonly Guid _data;
         private readonly IDisposable _containerDisposable;
         private readonly IService _service;
 
-        public ServiceWithDependencyInstaller(
+        public ServiceWithDependencyModule(
             Guid data,
-            ContainerBuilder builder,
             IDisposable containerDisposable,
             IService service)
-            : base(builder)
         {
             _data = data;
             _containerDisposable = containerDisposable ?? throw new ArgumentNullException(nameof(containerDisposable));
             _service = service ?? throw new ArgumentNullException(nameof(service));
         }
 
-        public override void Install()
+        protected override void Load(ContainerBuilder builder)
         {
-            Builder
+            builder
                 .RegisterType<ServiceDecoratorDisposable>()
                 .WithParameters(TypedParameter.From(_service))
                 .SingleInstance();
 
-            Builder
+            builder
                 .RegisterInstance(_data.ToString("N"))
                 .As<string>()
                 .SingleInstance();
 
-            Builder
+            builder
                 .RegisterInstance(_containerDisposable)
                 .SingleInstance();
         }

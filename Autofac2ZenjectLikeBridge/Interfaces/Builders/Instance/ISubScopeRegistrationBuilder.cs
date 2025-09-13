@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using Autofac.Builder;
+using Autofac.Core;
 using JetBrains.Annotations;
 
 namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance
@@ -11,13 +12,13 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance
         IRegistrationBuilder<
             TComponent,
             SimpleActivatorData,
-            SingleRegistrationStyle> ByFunction(Action<ContainerBuilder> subScopeInstaller);
+            SingleRegistrationStyle> ByFunction(Action<ContainerBuilder> subScopeLoader);
 
         IRegistrationBuilder<
             TComponent,
             SimpleActivatorData,
-            SingleRegistrationStyle> ByInstaller<TInstaller>(
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller;
+            SingleRegistrationStyle> ByModule<TModule>(
+            [CanBeNull] Func<ILifetimeScope, TModule> moduleFactory = null)
+            where TModule : class, IModule;
     }
 }

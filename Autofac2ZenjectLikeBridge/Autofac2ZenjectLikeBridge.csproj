@@ -24,9 +24,15 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <TargetFrameworks>net6.0;net8.0;netstandard2.0;netstandard2.1</TargetFrameworks>
+        <PackageIcon>icon.ico</PackageIcon>
     </PropertyGroup>
 
     <ItemGroup>
+        <None Include="..\icon.ico">
+          <Pack>True</Pack>
+          <PackagePath></PackagePath>
+          <Link>icon.ico</Link>
+        </None>
         <None Include="..\README.md">
             <Pack>True</Pack>
             <PackagePath>\</PackagePath>

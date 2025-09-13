@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac;
+using Autofac.Core;
 using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
 using Autofac2ZenjectLikeBridge.Interfaces;
 using JetBrains.Annotations;
@@ -12,7 +13,7 @@ namespace Autofac2ZenjectLikeBridge
 
         public static TComponent ResolveFromSubScope<TComponent>(
             this ILifetimeScope scope,
-            Action<ContainerBuilder> subScopeInstaller)
+            Action<ContainerBuilder> subScopeLoader)
             where TComponent : IDisposable
         {
             var guid = Guid.NewGuid();
@@ -23,7 +24,7 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        subScopeInstaller(scopeBuilder);
+                        subScopeLoader(scopeBuilder);
                     });
 
             var service = subScope.Resolve<TComponent>();
@@ -36,7 +37,7 @@ namespace Autofac2ZenjectLikeBridge
 
         public static TComponent ResolveFromSubScope<TP0, TComponent>(
             this ILifetimeScope scope,
-            Action<ContainerBuilder, TP0> subScopeInstaller,
+            Action<ContainerBuilder, TP0> subScopeLoader,
 			TP0 param0)
             where TComponent : IDisposable
         {
@@ -48,7 +49,7 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        subScopeInstaller(scopeBuilder,
+                        subScopeLoader(scopeBuilder,
 							param0);
                     });
 
@@ -62,7 +63,7 @@ namespace Autofac2ZenjectLikeBridge
 
         public static TComponent ResolveFromSubScope<TP0, TP1, TComponent>(
             this ILifetimeScope scope,
-            Action<ContainerBuilder, TP0, TP1> subScopeInstaller,
+            Action<ContainerBuilder, TP0, TP1> subScopeLoader,
 			TP0 param0,
 			TP1 param1)
             where TComponent : IDisposable
@@ -75,7 +76,7 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        subScopeInstaller(scopeBuilder,
+                        subScopeLoader(scopeBuilder,
 							param0,
 							param1);
                     });
@@ -90,7 +91,7 @@ namespace Autofac2ZenjectLikeBridge
 
         public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TComponent>(
             this ILifetimeScope scope,
-            Action<ContainerBuilder, TP0, TP1, TP2> subScopeInstaller,
+            Action<ContainerBuilder, TP0, TP1, TP2> subScopeLoader,
 			TP0 param0,
 			TP1 param1,
 			TP2 param2)
@@ -104,7 +105,7 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        subScopeInstaller(scopeBuilder,
+                        subScopeLoader(scopeBuilder,
 							param0,
 							param1,
 							param2);
@@ -120,7 +121,7 @@ namespace Autofac2ZenjectLikeBridge
 
         public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TComponent>(
             this ILifetimeScope scope,
-            Action<ContainerBuilder, TP0, TP1, TP2, TP3> subScopeInstaller,
+            Action<ContainerBuilder, TP0, TP1, TP2, TP3> subScopeLoader,
 			TP0 param0,
 			TP1 param1,
 			TP2 param2,
@@ -135,7 +136,7 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        subScopeInstaller(scopeBuilder,
+                        subScopeLoader(scopeBuilder,
 							param0,
 							param1,
 							param2,
@@ -152,7 +153,7 @@ namespace Autofac2ZenjectLikeBridge
 
         public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TComponent>(
             this ILifetimeScope scope,
-            Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4> subScopeInstaller,
+            Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4> subScopeLoader,
 			TP0 param0,
 			TP1 param1,
 			TP2 param2,
@@ -168,7 +169,7 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        subScopeInstaller(scopeBuilder,
+                        subScopeLoader(scopeBuilder,
 							param0,
 							param1,
 							param2,
@@ -186,7 +187,7 @@ namespace Autofac2ZenjectLikeBridge
 
         public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TComponent>(
             this ILifetimeScope scope,
-            Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5> subScopeInstaller,
+            Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5> subScopeLoader,
 			TP0 param0,
 			TP1 param1,
 			TP2 param2,
@@ -203,7 +204,7 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        subScopeInstaller(scopeBuilder,
+                        subScopeLoader(scopeBuilder,
 							param0,
 							param1,
 							param2,
@@ -222,7 +223,7 @@ namespace Autofac2ZenjectLikeBridge
 
         public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TComponent>(
             this ILifetimeScope scope,
-            Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6> subScopeInstaller,
+            Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6> subScopeLoader,
 			TP0 param0,
 			TP1 param1,
 			TP2 param2,
@@ -240,7 +241,7 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        subScopeInstaller(scopeBuilder,
+                        subScopeLoader(scopeBuilder,
 							param0,
 							param1,
 							param2,
@@ -260,7 +261,7 @@ namespace Autofac2ZenjectLikeBridge
 
         public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TComponent>(
             this ILifetimeScope scope,
-            Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7> subScopeInstaller,
+            Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7> subScopeLoader,
 			TP0 param0,
 			TP1 param1,
 			TP2 param2,
@@ -279,7 +280,7 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        subScopeInstaller(scopeBuilder,
+                        subScopeLoader(scopeBuilder,
 							param0,
 							param1,
 							param2,
@@ -300,7 +301,7 @@ namespace Autofac2ZenjectLikeBridge
 
         public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TComponent>(
             this ILifetimeScope scope,
-            Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8> subScopeInstaller,
+            Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8> subScopeLoader,
 			TP0 param0,
 			TP1 param1,
 			TP2 param2,
@@ -320,7 +321,7 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        subScopeInstaller(scopeBuilder,
+                        subScopeLoader(scopeBuilder,
 							param0,
 							param1,
 							param2,
@@ -342,7 +343,7 @@ namespace Autofac2ZenjectLikeBridge
 
         public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TComponent>(
             this ILifetimeScope scope,
-            Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9> subScopeInstaller,
+            Action<ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9> subScopeLoader,
 			TP0 param0,
 			TP1 param1,
 			TP2 param2,
@@ -363,7 +364,7 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        subScopeInstaller(scopeBuilder,
+                        subScopeLoader(scopeBuilder,
 							param0,
 							param1,
 							param2,
@@ -385,12 +386,11 @@ namespace Autofac2ZenjectLikeBridge
         }
 
 
-
-        public static TComponent ResolveFromSubScope<TComponent, TInstaller>(
+        public static TComponent ResolveFromSubScope<TComponent, TModule>(
             this ILifetimeScope scope,
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, TModule> moduleFactory = null)
             where TComponent : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             var guid = Guid.NewGuid();
 
@@ -400,10 +400,10 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        var installerInstance = installerFactory == null
-                            ? scope.CreateInstance<TInstaller>(scopeBuilder)
-                            : installerFactory.Invoke(scope, scopeBuilder);
-                        installerInstance.Install();
+                        var module = moduleFactory == null
+                            ? scope.CreateInstance<TModule>()
+                            : moduleFactory.Invoke(scope);
+                        scopeBuilder.RegisterModule(module);
                     });
 
             var service = subScope.Resolve<TComponent>();
@@ -413,14 +413,12 @@ namespace Autofac2ZenjectLikeBridge
 
             return service;
         }
-
-
-        public static TComponent ResolveFromSubScope<TP0, TComponent, TInstaller>(
+        public static TComponent ResolveFromSubScope<TP0, TComponent, TModule>(
             this ILifetimeScope scope,
 			TP0 param0,
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, TP0, TModule> moduleFactory = null)
             where TComponent : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             var guid = Guid.NewGuid();
 
@@ -430,11 +428,10 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        var installerInstance = installerFactory == null
-                            ? scope.CreateInstance<TInstaller>(scopeBuilder,
-							param0)
-                            : installerFactory.Invoke(scope, scopeBuilder, param0);
-                        installerInstance.Install();
+                        var module = moduleFactory == null
+                            ? scope.CreateInstance<TModule>(param0)
+                            : moduleFactory.Invoke(scope, param0);
+                        scopeBuilder.RegisterModule(module);
                     });
 
             var service = subScope.Resolve<TComponent>();
@@ -444,15 +441,13 @@ namespace Autofac2ZenjectLikeBridge
 
             return service;
         }
-
-
-        public static TComponent ResolveFromSubScope<TP0, TP1, TComponent, TInstaller>(
+        public static TComponent ResolveFromSubScope<TP0, TP1, TComponent, TModule>(
             this ILifetimeScope scope,
 			TP0 param0,
 			TP1 param1,
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, TP0, TP1, TModule> moduleFactory = null)
             where TComponent : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             var guid = Guid.NewGuid();
 
@@ -462,12 +457,11 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        var installerInstance = installerFactory == null
-                            ? scope.CreateInstance<TInstaller>(scopeBuilder,
-							param0,
+                        var module = moduleFactory == null
+                            ? scope.CreateInstance<TModule>(param0,
 							param1)
-                            : installerFactory.Invoke(scope, scopeBuilder, param0, param1);
-                        installerInstance.Install();
+                            : moduleFactory.Invoke(scope, param0, param1);
+                        scopeBuilder.RegisterModule(module);
                     });
 
             var service = subScope.Resolve<TComponent>();
@@ -477,16 +471,14 @@ namespace Autofac2ZenjectLikeBridge
 
             return service;
         }
-
-
-        public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TComponent, TInstaller>(
+        public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TComponent, TModule>(
             this ILifetimeScope scope,
 			TP0 param0,
 			TP1 param1,
 			TP2 param2,
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, TP0, TP1, TP2, TModule> moduleFactory = null)
             where TComponent : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             var guid = Guid.NewGuid();
 
@@ -496,13 +488,12 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        var installerInstance = installerFactory == null
-                            ? scope.CreateInstance<TInstaller>(scopeBuilder,
-							param0,
+                        var module = moduleFactory == null
+                            ? scope.CreateInstance<TModule>(param0,
 							param1,
 							param2)
-                            : installerFactory.Invoke(scope, scopeBuilder, param0, param1, param2);
-                        installerInstance.Install();
+                            : moduleFactory.Invoke(scope, param0, param1, param2);
+                        scopeBuilder.RegisterModule(module);
                     });
 
             var service = subScope.Resolve<TComponent>();
@@ -512,17 +503,15 @@ namespace Autofac2ZenjectLikeBridge
 
             return service;
         }
-
-
-        public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TComponent, TInstaller>(
+        public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TComponent, TModule>(
             this ILifetimeScope scope,
 			TP0 param0,
 			TP1 param1,
 			TP2 param2,
 			TP3 param3,
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, TP0, TP1, TP2, TP3, TModule> moduleFactory = null)
             where TComponent : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             var guid = Guid.NewGuid();
 
@@ -532,14 +521,13 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        var installerInstance = installerFactory == null
-                            ? scope.CreateInstance<TInstaller>(scopeBuilder,
-							param0,
+                        var module = moduleFactory == null
+                            ? scope.CreateInstance<TModule>(param0,
 							param1,
 							param2,
 							param3)
-                            : installerFactory.Invoke(scope, scopeBuilder, param0, param1, param2, param3);
-                        installerInstance.Install();
+                            : moduleFactory.Invoke(scope, param0, param1, param2, param3);
+                        scopeBuilder.RegisterModule(module);
                     });
 
             var service = subScope.Resolve<TComponent>();
@@ -549,18 +537,16 @@ namespace Autofac2ZenjectLikeBridge
 
             return service;
         }
-
-
-        public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TComponent, TInstaller>(
+        public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TComponent, TModule>(
             this ILifetimeScope scope,
 			TP0 param0,
 			TP1 param1,
 			TP2 param2,
 			TP3 param3,
 			TP4 param4,
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TModule> moduleFactory = null)
             where TComponent : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             var guid = Guid.NewGuid();
 
@@ -570,15 +556,14 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        var installerInstance = installerFactory == null
-                            ? scope.CreateInstance<TInstaller>(scopeBuilder,
-							param0,
+                        var module = moduleFactory == null
+                            ? scope.CreateInstance<TModule>(param0,
 							param1,
 							param2,
 							param3,
 							param4)
-                            : installerFactory.Invoke(scope, scopeBuilder, param0, param1, param2, param3, param4);
-                        installerInstance.Install();
+                            : moduleFactory.Invoke(scope, param0, param1, param2, param3, param4);
+                        scopeBuilder.RegisterModule(module);
                     });
 
             var service = subScope.Resolve<TComponent>();
@@ -588,9 +573,7 @@ namespace Autofac2ZenjectLikeBridge
 
             return service;
         }
-
-
-        public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TComponent, TInstaller>(
+        public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TComponent, TModule>(
             this ILifetimeScope scope,
 			TP0 param0,
 			TP1 param1,
@@ -598,9 +581,9 @@ namespace Autofac2ZenjectLikeBridge
 			TP3 param3,
 			TP4 param4,
 			TP5 param5,
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TModule> moduleFactory = null)
             where TComponent : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             var guid = Guid.NewGuid();
 
@@ -610,16 +593,15 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        var installerInstance = installerFactory == null
-                            ? scope.CreateInstance<TInstaller>(scopeBuilder,
-							param0,
+                        var module = moduleFactory == null
+                            ? scope.CreateInstance<TModule>(param0,
 							param1,
 							param2,
 							param3,
 							param4,
 							param5)
-                            : installerFactory.Invoke(scope, scopeBuilder, param0, param1, param2, param3, param4, param5);
-                        installerInstance.Install();
+                            : moduleFactory.Invoke(scope, param0, param1, param2, param3, param4, param5);
+                        scopeBuilder.RegisterModule(module);
                     });
 
             var service = subScope.Resolve<TComponent>();
@@ -629,9 +611,7 @@ namespace Autofac2ZenjectLikeBridge
 
             return service;
         }
-
-
-        public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TComponent, TInstaller>(
+        public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TComponent, TModule>(
             this ILifetimeScope scope,
 			TP0 param0,
 			TP1 param1,
@@ -640,9 +620,9 @@ namespace Autofac2ZenjectLikeBridge
 			TP4 param4,
 			TP5 param5,
 			TP6 param6,
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TModule> moduleFactory = null)
             where TComponent : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             var guid = Guid.NewGuid();
 
@@ -652,17 +632,16 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        var installerInstance = installerFactory == null
-                            ? scope.CreateInstance<TInstaller>(scopeBuilder,
-							param0,
+                        var module = moduleFactory == null
+                            ? scope.CreateInstance<TModule>(param0,
 							param1,
 							param2,
 							param3,
 							param4,
 							param5,
 							param6)
-                            : installerFactory.Invoke(scope, scopeBuilder, param0, param1, param2, param3, param4, param5, param6);
-                        installerInstance.Install();
+                            : moduleFactory.Invoke(scope, param0, param1, param2, param3, param4, param5, param6);
+                        scopeBuilder.RegisterModule(module);
                     });
 
             var service = subScope.Resolve<TComponent>();
@@ -672,9 +651,7 @@ namespace Autofac2ZenjectLikeBridge
 
             return service;
         }
-
-
-        public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TComponent, TInstaller>(
+        public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TComponent, TModule>(
             this ILifetimeScope scope,
 			TP0 param0,
 			TP1 param1,
@@ -684,9 +661,9 @@ namespace Autofac2ZenjectLikeBridge
 			TP5 param5,
 			TP6 param6,
 			TP7 param7,
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TModule> moduleFactory = null)
             where TComponent : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             var guid = Guid.NewGuid();
 
@@ -696,9 +673,8 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        var installerInstance = installerFactory == null
-                            ? scope.CreateInstance<TInstaller>(scopeBuilder,
-							param0,
+                        var module = moduleFactory == null
+                            ? scope.CreateInstance<TModule>(param0,
 							param1,
 							param2,
 							param3,
@@ -706,8 +682,8 @@ namespace Autofac2ZenjectLikeBridge
 							param5,
 							param6,
 							param7)
-                            : installerFactory.Invoke(scope, scopeBuilder, param0, param1, param2, param3, param4, param5, param6, param7);
-                        installerInstance.Install();
+                            : moduleFactory.Invoke(scope, param0, param1, param2, param3, param4, param5, param6, param7);
+                        scopeBuilder.RegisterModule(module);
                     });
 
             var service = subScope.Resolve<TComponent>();
@@ -717,9 +693,7 @@ namespace Autofac2ZenjectLikeBridge
 
             return service;
         }
-
-
-        public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TComponent, TInstaller>(
+        public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TComponent, TModule>(
             this ILifetimeScope scope,
 			TP0 param0,
 			TP1 param1,
@@ -730,9 +704,9 @@ namespace Autofac2ZenjectLikeBridge
 			TP6 param6,
 			TP7 param7,
 			TP8 param8,
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TModule> moduleFactory = null)
             where TComponent : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             var guid = Guid.NewGuid();
 
@@ -742,9 +716,8 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        var installerInstance = installerFactory == null
-                            ? scope.CreateInstance<TInstaller>(scopeBuilder,
-							param0,
+                        var module = moduleFactory == null
+                            ? scope.CreateInstance<TModule>(param0,
 							param1,
 							param2,
 							param3,
@@ -753,8 +726,8 @@ namespace Autofac2ZenjectLikeBridge
 							param6,
 							param7,
 							param8)
-                            : installerFactory.Invoke(scope, scopeBuilder, param0, param1, param2, param3, param4, param5, param6, param7, param8);
-                        installerInstance.Install();
+                            : moduleFactory.Invoke(scope, param0, param1, param2, param3, param4, param5, param6, param7, param8);
+                        scopeBuilder.RegisterModule(module);
                     });
 
             var service = subScope.Resolve<TComponent>();
@@ -764,9 +737,7 @@ namespace Autofac2ZenjectLikeBridge
 
             return service;
         }
-
-
-        public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TComponent, TInstaller>(
+        public static TComponent ResolveFromSubScope<TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TComponent, TModule>(
             this ILifetimeScope scope,
 			TP0 param0,
 			TP1 param1,
@@ -778,9 +749,9 @@ namespace Autofac2ZenjectLikeBridge
 			TP7 param7,
 			TP8 param8,
 			TP9 param9,
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstaller> installerFactory = null)
+            [CanBeNull] Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TModule> moduleFactory = null)
             where TComponent : IDisposable
-            where TInstaller : class, IInstaller
+            where TModule : class, IModule
         {
             var guid = Guid.NewGuid();
 
@@ -790,9 +761,8 @@ namespace Autofac2ZenjectLikeBridge
                     scopeBuilder =>
                     {
                         scopeBuilder.OverrideExternallyOwnedInScope<TComponent>(guid);
-                        var installerInstance = installerFactory == null
-                            ? scope.CreateInstance<TInstaller>(scopeBuilder,
-							param0,
+                        var module = moduleFactory == null
+                            ? scope.CreateInstance<TModule>(param0,
 							param1,
 							param2,
 							param3,
@@ -802,8 +772,8 @@ namespace Autofac2ZenjectLikeBridge
 							param7,
 							param8,
 							param9)
-                            : installerFactory.Invoke(scope, scopeBuilder, param0, param1, param2, param3, param4, param5, param6, param7, param8, param9);
-                        installerInstance.Install();
+                            : moduleFactory.Invoke(scope, param0, param1, param2, param3, param4, param5, param6, param7, param8, param9);
+                        scopeBuilder.RegisterModule(module);
                     });
 
             var service = subScope.Resolve<TComponent>();
@@ -813,7 +783,6 @@ namespace Autofac2ZenjectLikeBridge
 
             return service;
         }
-
 
     }
 }

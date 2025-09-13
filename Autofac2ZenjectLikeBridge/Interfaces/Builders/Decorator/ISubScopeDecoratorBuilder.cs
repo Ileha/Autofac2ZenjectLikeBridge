@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac;
+using Autofac.Core;
 using JetBrains.Annotations;
 
 namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator
@@ -7,21 +8,21 @@ namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator
     public interface ISubScopeDecoratorBuilder<in TDecorator, out TService> : IExtendedBuilderBase
         where TDecorator : TService, IDisposable
     {
-        void ByFunction(Action<ContainerBuilder, TService> subScopeInstaller);
+        void ByFunction(Action<ContainerBuilder, TService> subScopeLoader);
 
-        void ByInstaller<TInstaller>(
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TService, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller;
+        void ByModule<TModule>(
+            [CanBeNull] Func<ILifetimeScope, TService, TModule> moduleFactory = null)
+            where TModule : class, IModule;
 
         void ByFunction(
-            Action<ContainerBuilder, TService> subScopeInstaller,
+            Action<ContainerBuilder, TService> subScopeLoader,
             object fromKey,
             [CanBeNull] object toKey = null);
 
-        void ByInstaller<TInstaller>(
+        void ByModule<TModule>(
             object fromKey,
             [CanBeNull] object toKey = null,
-            [CanBeNull] Func<ILifetimeScope, ContainerBuilder, TService, TInstaller> installerFactory = null)
-            where TInstaller : class, IInstaller;
+            [CanBeNull] Func<ILifetimeScope, TService, TModule> moduleFactory = null)
+            where TModule : class, IModule;
     }
 }

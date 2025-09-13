@@ -13,19 +13,19 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TInstance> _subScopeLoader;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TInstance> subScopeLoader)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
-                _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
+                _subScopeLoader = subScopeLoader ?? throw new ArgumentNullException(nameof(subScopeLoader));
             }
 
             public TInstance Create()
             {
-                return _subScopeInstaller(_scope);
+                return _subScopeLoader(_scope);
             }
         }
 
@@ -34,19 +34,19 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, TP0, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TInstance> _subScopeLoader;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, TP0, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TInstance> subScopeLoader)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
-                _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
+                _subScopeLoader = subScopeLoader ?? throw new ArgumentNullException(nameof(subScopeLoader));
             }
 
             public TInstance Create(TP0 param0)
             {
-                return _subScopeInstaller(_scope, param0);
+                return _subScopeLoader(_scope, param0);
             }
         }
 
@@ -55,19 +55,19 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, TP0, TP1, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TP1, TInstance> _subScopeLoader;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, TP0, TP1, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TP1, TInstance> subScopeLoader)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
-                _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
+                _subScopeLoader = subScopeLoader ?? throw new ArgumentNullException(nameof(subScopeLoader));
             }
 
             public TInstance Create(TP0 param0, TP1 param1)
             {
-                return _subScopeInstaller(_scope, param0, param1);
+                return _subScopeLoader(_scope, param0, param1);
             }
         }
 
@@ -76,19 +76,19 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TInstance> _subScopeLoader;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, TP0, TP1, TP2, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TP1, TP2, TInstance> subScopeLoader)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
-                _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
+                _subScopeLoader = subScopeLoader ?? throw new ArgumentNullException(nameof(subScopeLoader));
             }
 
             public TInstance Create(TP0 param0, TP1 param1, TP2 param2)
             {
-                return _subScopeInstaller(_scope, param0, param1, param2);
+                return _subScopeLoader(_scope, param0, param1, param2);
             }
         }
 
@@ -97,19 +97,19 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TInstance> _subScopeLoader;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TInstance> subScopeLoader)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
-                _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
+                _subScopeLoader = subScopeLoader ?? throw new ArgumentNullException(nameof(subScopeLoader));
             }
 
             public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3)
             {
-                return _subScopeInstaller(_scope, param0, param1, param2, param3);
+                return _subScopeLoader(_scope, param0, param1, param2, param3);
             }
         }
 
@@ -118,19 +118,19 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TInstance> _subScopeLoader;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TInstance> subScopeLoader)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
-                _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
+                _subScopeLoader = subScopeLoader ?? throw new ArgumentNullException(nameof(subScopeLoader));
             }
 
             public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4)
             {
-                return _subScopeInstaller(_scope, param0, param1, param2, param3, param4);
+                return _subScopeLoader(_scope, param0, param1, param2, param3, param4);
             }
         }
 
@@ -139,19 +139,19 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TInstance> _subScopeLoader;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TInstance> subScopeLoader)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
-                _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
+                _subScopeLoader = subScopeLoader ?? throw new ArgumentNullException(nameof(subScopeLoader));
             }
 
             public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5)
             {
-                return _subScopeInstaller(_scope, param0, param1, param2, param3, param4, param5);
+                return _subScopeLoader(_scope, param0, param1, param2, param3, param4, param5);
             }
         }
 
@@ -160,19 +160,19 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance> _subScopeLoader;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TInstance> subScopeLoader)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
-                _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
+                _subScopeLoader = subScopeLoader ?? throw new ArgumentNullException(nameof(subScopeLoader));
             }
 
             public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6)
             {
-                return _subScopeInstaller(_scope, param0, param1, param2, param3, param4, param5, param6);
+                return _subScopeLoader(_scope, param0, param1, param2, param3, param4, param5, param6);
             }
         }
 
@@ -181,19 +181,19 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance> _subScopeLoader;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TInstance> subScopeLoader)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
-                _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
+                _subScopeLoader = subScopeLoader ?? throw new ArgumentNullException(nameof(subScopeLoader));
             }
 
             public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7)
             {
-                return _subScopeInstaller(_scope, param0, param1, param2, param3, param4, param5, param6, param7);
+                return _subScopeLoader(_scope, param0, param1, param2, param3, param4, param5, param6, param7);
             }
         }
 
@@ -202,19 +202,19 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance> _subScopeLoader;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TInstance> subScopeLoader)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
-                _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
+                _subScopeLoader = subScopeLoader ?? throw new ArgumentNullException(nameof(subScopeLoader));
             }
 
             public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7, TP8 param8)
             {
-                return _subScopeInstaller(_scope, param0, param1, param2, param3, param4, param5, param6, param7, param8);
+                return _subScopeLoader(_scope, param0, param1, param2, param3, param4, param5, param6, param7, param8);
             }
         }
 
@@ -223,19 +223,19 @@ namespace Autofac2ZenjectLikeBridge.Entities.Factories
             where TInstance : class
         {
             private readonly ILifetimeScope _scope;
-            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance> _subScopeInstaller;
+            private readonly Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance> _subScopeLoader;
 
             public AutofacFunctionFactory(
                 ILifetimeScope scope,
-                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance> subScopeInstaller)
+                Func<ILifetimeScope, TP0, TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TInstance> subScopeLoader)
             {
                 _scope = scope ?? throw new ArgumentNullException(nameof(scope));
-                _subScopeInstaller = subScopeInstaller ?? throw new ArgumentNullException(nameof(subScopeInstaller));
+                _subScopeLoader = subScopeLoader ?? throw new ArgumentNullException(nameof(subScopeLoader));
             }
 
             public TInstance Create(TP0 param0, TP1 param1, TP2 param2, TP3 param3, TP4 param4, TP5 param5, TP6 param6, TP7 param7, TP8 param8, TP9 param9)
             {
-                return _subScopeInstaller(_scope, param0, param1, param2, param3, param4, param5, param6, param7, param8, param9);
+                return _subScopeLoader(_scope, param0, param1, param2, param3, param4, param5, param6, param7, param8, param9);
             }
         }
 

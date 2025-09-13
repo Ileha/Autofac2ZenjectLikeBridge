@@ -68,32 +68,30 @@ public class DIExtensionsFactoryTests
         public string Data { get; }
     }
 
-    internal class ServiceWithDependencyAndParameterInstaller : AutofacInstallerBase
+    internal class ServiceWithDependencyAndParameterInstaller : Module
     {
         private readonly string _data;
         private readonly IDisposable _containerDisposable;
 
         public ServiceWithDependencyAndParameterInstaller(
             string data,
-            ContainerBuilder builder,
             IDisposable containerDisposable)
-            : base(builder)
         {
             _data = data;
             _containerDisposable = containerDisposable ?? throw new ArgumentNullException(nameof(containerDisposable));
         }
 
-        public override void Install()
+        protected override void Load(ContainerBuilder builder)
         {
-            Builder
+            builder
                 .RegisterInstance(_containerDisposable)
                 .SingleInstance();
 
-            Builder
+            builder
                 .RegisterType<SimpleService>()
                 .SingleInstance();
 
-            Builder
+            builder
                 .RegisterType<ServiceWithDependencyAndParameterDisposable>()
                 .WithParameter(new NamedParameter("data", _data))
                 .SingleInstance();
@@ -217,10 +215,10 @@ public class DIExtensionsFactoryTests
         builder
             .RegisterIFactoryExtended<string, ServiceWithDependencyAndParameterDisposable>()
             .FromSubScope()
-            .ByInstaller<ServiceWithDependencyAndParameterInstaller>(
-                (scope, containerBuilder, arg3)
+            .ByModule<ServiceWithDependencyAndParameterInstaller>(
+                (scope, arg3)
                     => scope
-                        .CreateInstance<ServiceWithDependencyAndParameterInstaller>(containerBuilder, arg3, disposable))
+                        .CreateInstance<ServiceWithDependencyAndParameterInstaller>(arg3, disposable))
             .SingleInstance();
 
         using var container = builder.Build();
@@ -362,10 +360,10 @@ public class DIExtensionsFactoryTests
                 string, ServiceWithDependencyAndParameterDisposable,
                 Factory<string, ServiceWithDependencyAndParameterDisposable>>()
             .FromSubScope()
-            .ByInstaller<ServiceWithDependencyAndParameterInstaller>(
-                (scope, containerBuilder, arg3)
+            .ByModule<ServiceWithDependencyAndParameterInstaller>(
+                (scope, arg3)
                     => scope
-                        .CreateInstance<ServiceWithDependencyAndParameterInstaller>(containerBuilder, arg3, disposable))
+                        .CreateInstance<ServiceWithDependencyAndParameterInstaller>(arg3, disposable))
             .SingleInstance();
 
         using var container = builder.Build();
