@@ -75,20 +75,14 @@ container.Resolve<ISampleService>();
 
 ## 📚 Documentation
 
-> ℹ️ **Info**: All instances resolved from subcontainers have to be implement `IDisposable` interface. This needed limit subcontainers lifetime. When instance is disposed, it's subcontainer will be disposed too. Instance's `Dispose` method will be called patched via [Harmony](https://github.com/pardeike/Harmony) library
+> ℹ️ **Info**: All instances resolved from subcontainers have to implement `IDisposable` interface. This needed to limit subcontainers lifetime. When instance is disposed, it's subcontainer will be disposed too. Instance's `Dispose` method will be called patched via [Harmony](https://github.com/pardeike/Harmony) library
 
 ### Creating Subcontainers
 
 Create isolated subcontainers for instance. Based on Autofac's lifetime scope. Scope will inherit all dependencies from
 parent scope(s). In the same time scope could have own dependencies, that will be available only in this scope.
 See [Quick Start](#-quick-start) for code sample.
-When `FromSubScope()` called it supposed to create new nested `ILifetimeScope` register required type and all it dependencies and resolve that type form created subcontainer. In other words target type have to be registred in subcontainer installer and implements `IDisposable`
-
-### Installer
-
-Installer is a special entity to register some dependencies to builder. It could be responsible for some independent part of the program like debug, statistic.
-Installers have to implement `IInstaller` interface. The `AutofacInstallerBase` is available for inheritance as a preferred way.
-
+When `FromSubScope()` called it supposed to create new nested `ILifetimeScope` register required type and all it dependencies and resolve that type form created subcontainer. In other words target type have to be registered in subcontainer installer and implements `IDisposable`
 
 ### Overall structure
 
@@ -96,14 +90,14 @@ Installers have to implement `IInstaller` interface. The `AutofacInstallerBase` 
 
     - from subScope:
         - [by function](#-quick-start)
-        - by installer
+        - [by module](#simple-registrations)
 
  - [Decorators:](#decorators)
 
     - [from function](#from-function)
     - [from subScope](#with-subcontainer):
         - [by function](#byfunction)
-        - by installer
+        - [by module](#by-module)
 
  - [Factories:](#factories)
 
@@ -112,14 +106,33 @@ Installers have to implement `IInstaller` interface. The `AutofacInstallerBase` 
         - [from function](#from-functions)
         - [from subScope](#from-subcontainers):
             - [by function](#by-function)
-            - by installer
+            - by module
 
     - [PlaceholderFactory<P0, P1, ... , PN, TInstance>](#placeholders-factories)
         - from new instance
         - [from function](#from-functions-1)
         - [from subScope](#from-subcontainers-1):
             - [by function](#by-function-1)
-            - by installer
+            - by module
+
+### Modules
+
+[Autofac's modules](https://autofac.readthedocs.io/en/latest/configuration/modules.html) could be used to register types in subcontainers.
+
+#### Simple registrations:
+```csharp
+builder
+    .RegisterExtended<ISampleService>()
+    .FromSubScope()
+    .ByModule<SampleServiceModule>();
+```
+or even create module with using [service provider](#icomponentcontextcreateinstance). In that case module will be created in subcontainer and all dependencies from current scope will be available in the module.
+```csharp
+builder
+    .RegisterExtended<ISampleService>()
+    .FromSubScope()
+    .ByModule<SampleServiceModule>((scope) => scope.CreateInstance<SampleServiceModule>(parameter));
+```
 
 ### Decorators
 
@@ -174,6 +187,23 @@ builder
                 .RegisterType<SampleDependency>()
                 .SingleInstance();
         });
+```
+
+##### By Module
+As well instances could be created from module, decorator could also be created from module:
+In that case decoratable service will be passed to module constructor.
+```csharp
+builder
+    .RegisterDecoratorExtended<ServiceDecorator, IService>()
+    .FromSubScope()
+    .ByModule<ServiceDecoratorModule>();
+```
+registration via [service provider](#icomponentcontextcreateinstance):
+```csharp
+builder
+    .RegisterDecoratorExtended<ServiceDecorator, IService>()
+    .FromSubScope()
+    .ByModule((scope, service) => scope.CreateInstance<ServiceDecoratorModule>(service, parameter));
 ```
 
 ### Factories

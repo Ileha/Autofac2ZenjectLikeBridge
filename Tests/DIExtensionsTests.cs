@@ -185,6 +185,7 @@ public class DIExtensionsTests
             builder
                 .RegisterType<ServiceWithDependencyDisposable>()
                 .SingleInstance();
+
             builder
                 .RegisterInstance(_service)
                 .As<SimpleService>()
