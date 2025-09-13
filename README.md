@@ -106,18 +106,38 @@ When `FromSubScope()` called it supposed to create new nested `ILifetimeScope` r
         - [from function](#from-functions)
         - [from subScope](#from-subcontainers):
             - [by function](#by-function)
-            - by module
+            - [by module](#by-module-1)
 
     - [PlaceholderFactory<P0, P1, ... , PN, TInstance>](#placeholders-factories)
         - from new instance
         - [from function](#from-functions-1)
         - [from subScope](#from-subcontainers-1):
             - [by function](#by-function-1)
-            - by module
+            - [by module](#by-module-2)
 
 ### Modules
 
-[Autofac's modules](https://autofac.readthedocs.io/en/latest/configuration/modules.html) could be used to register types in subcontainers.
+[Autofac's modules](https://autofac.readthedocs.io/en/latest/configuration/modules.html) could be used to register types in subcontainers.  
+Module sample:  
+
+```csharp
+class SampleServiceModule : Module
+{
+    private readonly object _data;
+
+    //pass all parameters to module's constructor as well as extra parameters or dependencies
+    //from parent DI container(s)
+    public SampleServiceModule(object data)
+    {
+        _data = data;
+    }
+
+    protected override void Load(ContainerBuilder builder)
+    {
+        //do ISampleService registration here
+    }
+}
+```
 
 #### Simple registrations:
 ```csharp
@@ -191,7 +211,30 @@ builder
 
 ##### By Module
 As well instances could be created from module, decorator could also be created from module:
-In that case decoratable service will be passed to module constructor.
+In that case decoratable service will be passed to module constructor.  
+Module sample:  
+
+```csharp
+class ServiceDecoratorModule : Module
+{
+    private readonly object _data;
+    private readonly IService _service;
+
+    //pass all parameters and decoratable service to module's constructor as well as extra parameters or dependencies
+    //from parent DI container(s)
+    public ServiceDecoratorModule(IService service, object data)
+    {
+        _data = data;
+        _service = service;
+    }
+
+    protected override void Load(ContainerBuilder builder)
+    {
+        //do ServiceDecorator registration here
+    }
+}
+```
+registration sample:
 ```csharp
 builder
     .RegisterDecoratorExtended<ServiceDecorator, IService>()
@@ -289,6 +332,48 @@ builder
     })
 ```
 
+###### By Module
+Registration factories to resolve from module. All parameters will be passed to module's constructor.  
+Module sample:
+
+```csharp
+class ServiceModule : Module
+{
+    private readonly string _data;
+
+    //pass all parameters to module's constructor as well as extra parameters or dependencies
+    //from parent DI container(s)
+    public ServiceModule(string data)
+    {
+        _data = data;
+    }
+
+    protected override void Load(ContainerBuilder builder)
+    {
+        //do IService registration here
+    }
+}
+```
+Registration sample:
+```csharp
+builder
+    .RegisterIFactoryExtended<string, IService>()
+    .FromSubScope()
+    .ByModule<ServiceModule>()
+    .SingleInstance();
+```
+
+Registration sample with extra parameters via [service provider](#icomponentcontextcreateinstance):
+```csharp
+builder
+    .RegisterIFactoryExtended<string, IService>()
+    .FromSubScope()
+    .ByModule<ServiceModule>(
+        (scope, arg3)
+            => scope.CreateInstance<ServiceModule>(arg3, extraParameter))
+    .SingleInstance();
+```
+
 #### Placeholders Factories
 
 Used for registration of type distinct from interface IFactory<T>, and/or modify factory `Create` behavior, like some instance
@@ -355,6 +440,46 @@ builder
             .RegisterType<SampleDependency>()
             .SingleInstance();
     })
+```
+
+###### By Module
+For module sample see [by module section in `IFactory` registration](#by-module-1).  
+The registration is similar to `IFactory` registration. And could reuse same modules.  
+
+Registration sample:
+```csharp
+builder
+    .RegisterPlaceholderFactoryExtended<string, IService, MyCustomServiceFactory>()
+    .FromSubScope()
+    .ByModule<ServiceModule>()
+    .SingleInstance();
+```
+
+Registration sample with extra parameters via [service provider](#icomponentcontextcreateinstance):
+```csharp
+builder
+    .RegisterPlaceholderFactoryExtended<string, IService, MyCustomServiceFactory>()
+    .FromSubScope()
+    .ByModule<ServiceModule>(
+        (scope, arg3)
+            => scope.CreateInstance<ServiceModule>(arg3, extraParameter))
+    .SingleInstance();
+```
+where placeholder factory type is
+```csharp
+class MyCustomServiceFactory : PlaceholderFactory<string, IService>
+{
+    public MyCustomServiceFactory(SomeDependency dependency)
+    {
+        //...
+    }
+
+    //you can override Create method
+    public override IService Create(string arg)
+    {
+        return base.Create(arg);
+    }
+}
 ```
 
 ### Other Helpers
