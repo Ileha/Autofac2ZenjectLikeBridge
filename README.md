@@ -75,7 +75,7 @@ container.Resolve<ISampleService>();
 
 ## 📚 Documentation
 
-> ℹ️ **Info**: All instances resolved from subcontainers have to implement `IDisposable` interface. This needed to limit subcontainers lifetime. When instance is disposed, it's subcontainer will be disposed too. Instance's `Dispose` method will be called patched via [Harmony](https://github.com/pardeike/Harmony) library
+> ℹ️ **Info**: All instances resolved from subcontainers have to implement `IDisposable` interface. This needed to limit subcontainers lifetime. When instance is disposed, it's subcontainer will be disposed too. Instance's `Dispose` method will be called patched via [Harmony](https://github.com/pardeike/Harmony) library, more information [here](#harmonypatch-related).
 
 ### Creating Subcontainers
 
@@ -513,6 +513,12 @@ builder
     .As<ISampleService>()
     .SingleInstance();
 ```
+
+#### HarmonyPatch Related
+As mentioned before each instance resolved from subcontainer have to implement `IDisposable` interface. And subcontainer will be disposed when instance is disposed. To achieve this behavior `HarmonyPatch` is used.  
+It can add a finalizer to the instance A and set a reference to the instance B. When instance B will be disposed A will be disposed too.  
+That behavior is accessible via `A.AddToHarmony(B)` method. In that case `B` will be patched if not patched yet.  
+To force patch, in order to improve performance, use `HarmonyPatch.EnsurePatched(typeof(B))` when program starts. Or use `HarmonyPatch.PatchNonLazy()` method to patch all types (in that case generic will not be patched).
 
 ## 🤝 Contributing
 
