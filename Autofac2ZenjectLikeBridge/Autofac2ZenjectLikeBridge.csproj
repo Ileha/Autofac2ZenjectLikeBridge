@@ -22,15 +22,21 @@ and subcontainers but want to leverage Autofac's robust dependency injection cap
             - Simplified decorator registration with isolated scopes
             - Full compatibility with existing Autofac applications
 - `IFactory&lt;...&gt;` and `PlaceholderFactory&lt;...&gt;` for factory registration with subcontainer support</Description>
-        <PackageReleaseNotes>version 2.0
+        <PackageReleaseNotes>version 1.0.0
+initial implementation
+---
+version 2.0.0
 simplified reqirements for subcontainer resolve
 added builders
-move from installers to Autofac's modules</PackageReleaseNotes>
+move from installers to Autofac's modules
+---
+version 2.0.1
+bugfix wrong order of IDisposables execution when harmony patched</PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <TargetFrameworks>net6.0;net8.0;netstandard2.0;netstandard2.1</TargetFrameworks>
         <PackageIcon>icon.png</PackageIcon>
-        <Version>2.0.0</Version>
+        <Version>2.0.1</Version>
     </PropertyGroup>
 
     <ItemGroup>
