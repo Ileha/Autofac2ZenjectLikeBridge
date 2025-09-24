@@ -80,6 +80,74 @@ public class HarmonyPatchTests
         // Assert
         Assert.DoesNotThrow(() => HarmonyPatch.EnsurePatched(typeof(AbstractDisposable)));
     }
+
+    [Test]
+    public void HarmonyDisposeCallsLast_When_Dispose()
+    {
+        // Arrange
+        var disposablesOrder = new List<IDisposable>();
+
+        var instance = Substitute.For<IDisposable>();
+        var childDisposable = Substitute.For<IDisposable>();
+
+        CollectDisposableOrder(instance);
+        CollectDisposableOrder(childDisposable);
+
+        // Act
+        childDisposable.AddToHarmony(instance);
+        instance.Dispose();
+
+        // Assert
+        childDisposable.Received(1).Dispose();
+        CollectionAssert.AreEqual(new [] { instance, childDisposable }, disposablesOrder);
+
+        void CollectDisposableOrder(IDisposable disposable)
+        {
+            disposable
+                .When(x => x.Dispose())
+                .Do(x => disposablesOrder.Add(disposable));
+        }
+    }
+
+    [TestCase(10)]
+    [TestCase(20)]
+    public void HarmonyDisposeInOrderAdded_When_Dispose(int childCount)
+    {
+        // Arrange
+        var disposablesOrder = new List<IDisposable>();
+
+        var instance = Substitute.For<IDisposable>();
+        CollectDisposableOrder(instance);
+
+        var childDisposables = new IDisposable[childCount];
+
+        for (var i = 0; i < childDisposables.Length; i++)
+        {
+            childDisposables[i] = Substitute.For<IDisposable>();
+            CollectDisposableOrder(childDisposables[i]);
+            childDisposables[i].AddToHarmony(instance);
+        }
+
+
+        // Act
+        instance.Dispose();
+
+        // Assert
+        Assert.Multiple(() =>
+        {
+            for (var i = 0; i < childDisposables.Length; i++)
+                childDisposables[i].Received(1).Dispose();
+        });
+
+        CollectionAssert.AreEqual(new [] { instance }.Concat(childDisposables), disposablesOrder);
+
+        void CollectDisposableOrder(IDisposable disposable)
+        {
+            disposable
+                .When(x => x.Dispose())
+                .Do(x => disposablesOrder.Add(disposable));
+        }
+    }
 }
 
 // Test Classes

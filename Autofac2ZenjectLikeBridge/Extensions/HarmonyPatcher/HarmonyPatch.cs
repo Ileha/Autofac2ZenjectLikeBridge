@@ -20,7 +20,7 @@ namespace Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher
         private static readonly object PatchLocker = new object();
         private static readonly Harmony Harmony = new Harmony(PatchId);
 
-        private static readonly HarmonyMethod PrefixMethod =
+        private static readonly HarmonyMethod PostfixMethod =
             new HarmonyMethod(typeof(HarmonyPatch).GetMethod(nameof(DisposePrefix)));
 
         public static void PatchNonLazy()
@@ -54,7 +54,7 @@ namespace Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher
                     .ToArray();
 
                 foreach (var method in methods2Patch)
-                    PatchMethodLockFree(method, PrefixMethod);
+                    PatchMethodLockFree(method, PostfixMethod);
             }
         }
 
@@ -72,17 +72,17 @@ namespace Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher
                     throw new InvalidOperationException(
                         $"can't find {nameof(IDisposable)}.{nameof(IDisposable.Dispose)} method in {type}");
 
-                PatchMethodLockFree(disposeMethod, PrefixMethod);
+                PatchMethodLockFree(disposeMethod, PostfixMethod);
             }
         }
 
         public static void PatchMethod([CanBeNull] MethodBase method)
         {
             lock (PatchLocker)
-                PatchMethodLockFree(method, PrefixMethod);
+                PatchMethodLockFree(method, PostfixMethod);
         }
 
-        private static void PatchMethodLockFree([CanBeNull] MethodBase method, HarmonyMethod prefix)
+        private static void PatchMethodLockFree([CanBeNull] MethodBase method, HarmonyMethod postfix)
         {
             if (method == null)
                 return;
@@ -97,7 +97,7 @@ namespace Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher
 
             Harmony.Patch(
                 declaredMethod,
-                prefix: prefix
+                postfix: postfix
             );
 
             PatchedTypes.Add(method.DeclaringType);
