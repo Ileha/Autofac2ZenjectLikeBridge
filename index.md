@@ -1,5 +1,5 @@
 ---
-layout: home
+layout: default
 title: Autofac2ZenjectLikeBridge
 ---
 
