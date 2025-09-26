@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Autofac2ZenjectLikeBridge
+title: ZenAutofac
 ---
 
 <!-- This page reuses the repository README as the site homepage -->

@@ -1,6 +1,6 @@
 using Autofac;
-using Autofac2ZenjectLikeBridge;
 using NSubstitute;
+using ZenAutofac;
 
 namespace Tests;
 

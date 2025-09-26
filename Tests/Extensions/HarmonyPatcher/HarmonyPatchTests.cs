@@ -1,6 +1,6 @@
 using System.Reflection;
-using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
 using NSubstitute;
+using ZenAutofac.Extensions.HarmonyPatcher;
 
 namespace Tests.Extensions.HarmonyPatcher;
 
