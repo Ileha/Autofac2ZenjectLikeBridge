@@ -3,8 +3,8 @@
     <PropertyGroup>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>disable</Nullable>
-        <PackageId>com.alexey-developer89.Autofac2ZenjectLikeBridge</PackageId>
-        <Title>Autofac2ZenjectLikeBridge</Title>
+        <PackageId>ZenAutofac</PackageId>
+        <Title>ZenAutofac</Title>
         <Authors>alexeydeveloper1030@gmail.com</Authors>
         <PackageProjectUrl>https://github.com/Ileha/Autofac2ZenjectLikeBridge</PackageProjectUrl>
         <RepositoryUrl>https://github.com/Ileha/Autofac2ZenjectLikeBridge</RepositoryUrl>
@@ -37,6 +37,9 @@ bugfix wrong order of IDisposables execution when harmony patched</PackageReleas
         <TargetFrameworks>net6.0;net8.0;netstandard2.0;netstandard2.1</TargetFrameworks>
         <PackageIcon>icon.png</PackageIcon>
         <Version>2.0.1</Version>
+        <AssemblyName>ZenAutofac</AssemblyName>
+        <RootNamespace>ZenAutofac</RootNamespace>
+        <Product>ZenAutofac</Product>
     </PropertyGroup>
 
     <ItemGroup>
