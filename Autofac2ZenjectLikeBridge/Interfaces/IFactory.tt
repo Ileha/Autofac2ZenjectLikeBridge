@@ -2,7 +2,7 @@
 <#@ assembly name="System.Core" #>
 <#@ output extension=".cs" #>
 <#@ import namespace="System.Linq" #>
-namespace Autofac2ZenjectLikeBridge.Interfaces
+namespace ZenAutofac.Interfaces
 {
     //generated amount <#@ include file="../Constants.ttinclude" #><#= Constants.GenericParametersCount #>
 

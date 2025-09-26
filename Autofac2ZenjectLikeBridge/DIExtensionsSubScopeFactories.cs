@@ -1,12 +1,12 @@
 ﻿using System;
 using Autofac;
 using Autofac.Builder;
-using Autofac2ZenjectLikeBridge.Builders.Factory;
-using Autofac2ZenjectLikeBridge.Entities.Factories;
-using Autofac2ZenjectLikeBridge.Interfaces;
-using Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory;
+using ZenAutofac.Builders.Factory;
+using ZenAutofac.Entities.Factories;
+using ZenAutofac.Interfaces;
+using ZenAutofac.Interfaces.Builders.Factory;
 
-namespace Autofac2ZenjectLikeBridge
+namespace ZenAutofac
 {
     public static partial class DIExtensions
     {

@@ -6,7 +6,7 @@ using System;
 using Autofac;
 using Autofac.Builder;
 
-namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
+namespace ZenAutofac.Interfaces.Builders.Factory
 {
     //generated amount <#@ include file="../../../Constants.ttinclude" #><#= Constants.GenericParametersCount #>
 

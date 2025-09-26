@@ -1,11 +1,10 @@
 ﻿using System;
 using Autofac;
 using Autofac.Core;
-using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
-using Autofac2ZenjectLikeBridge.Interfaces;
 using JetBrains.Annotations;
+using ZenAutofac.Extensions.HarmonyPatcher;
 
-namespace Autofac2ZenjectLikeBridge
+namespace ZenAutofac
 {
     public static partial class DIExtensions
     {
