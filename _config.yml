@@ -1,11 +1,11 @@
-title: Autofac2ZenjectLikeBridge
+title: ZenAutofac
 description: "Bridge library to use Autofac in a Zenject-like style"
 url: "https://ileha.github.io"
-baseurl: "/Autofac2ZenjectLikeBridge"
+baseurl: "/ZenAutofac"
 github:
-    zip_url: https://github.com/ileha/Autofac2ZenjectLikeBridge/archive/refs/heads/main.zip
-    repository_url: https://github.com/ileha/Autofac2ZenjectLikeBridge
-    tar_url: https://github.com/ileha/Autofac2ZenjectLikeBridge/archive/refs/heads/main.tar.gz
+    zip_url: https://github.com/ileha/ZenAutofac/archive/refs/heads/main.zip
+    repository_url: https://github.com/ileha/ZenAutofac
+    tar_url: https://github.com/ileha/ZenAutofac/archive/refs/heads/main.tar.gz
 logo: "{{ site.baseurl }}/icon.png"
 
 show_downloads: true
@@ -29,9 +29,9 @@ exclude:
     - .vs/
     - nupkgs/
     - Tests/
-    - Autofac2ZenjectLikeBridge/
-    - Autofac2ZenjectLikeBridge.sln
-    - Autofac2ZenjectLikeBridge.sln.*
+    - ZenAutofac/
+    - ZenAutofac.sln
+    - ZenAutofac.sln.*
 
 defaults:
     - scope:

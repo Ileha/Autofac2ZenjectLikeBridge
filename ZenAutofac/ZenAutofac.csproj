@@ -6,8 +6,8 @@
         <PackageId>ZenAutofac</PackageId>
         <Title>ZenAutofac</Title>
         <Authors>alexeydeveloper1030@gmail.com</Authors>
-        <PackageProjectUrl>https://github.com/Ileha/Autofac2ZenjectLikeBridge</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/Ileha/Autofac2ZenjectLikeBridge</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/Ileha/ZenAutofac</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/Ileha/ZenAutofac</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>DI, Autofac, Zenject, Extenject</PackageTags>
         <Description>Brings the power of Zenject's subcontainers syntax to Autofac, enabling Zenject-style dependency injection patterns in

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-dotnet pack ./Autofac2ZenjectLikeBridge/Autofac2ZenjectLikeBridge.csproj -c Release -o ./nupkgs
+dotnet pack ./ZenAutofac/ZenAutofac.csproj -c Release -o ./nupkgs
