@@ -1,0 +1,52 @@
+# Site settings
+# Update 'url' to your GitHub Pages domain (e.g., https://<user>.github.io) and
+# 'baseurl' to the repository name if you publish as a project site (e.g., /Autofac2ZenjectLikeBridge)
+
+# Basic
+ title: Autofac2ZenjectLikeBridge
+ description: "Bridge library to use Autofac in a Zenject-like style"
+ url: "https://ileha.github.io"
+ baseurl: "/Autofac2ZenjectLikeBridge"
+
+# Theme (built-in to GitHub Pages)
+#theme: jekyll-theme-cayman
+remote_theme: pages-themes/cayman@v0.2.0
+
+# Plugins supported by GitHub Pages
+ plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+  - jekyll-remote-theme
+
+# Logo for social previews (optional)
+ logo: /icon.png
+
+# Build
+ markdown: kramdown
+ kramdown:
+  input: GFM
+ permalink: pretty
+
+# Exclude non-site files from build
+ exclude:
+  - .github/
+  - .gitignore
+  - .idea/
+  - .vs/
+  - nupkgs/
+  - Tests/
+  - Autofac2ZenjectLikeBridge/
+  - Autofac2ZenjectLikeBridge.sln
+  - Autofac2ZenjectLikeBridge.sln.*
+  - generate-coverage.sh
+  - generate-nuget-package.sh
+
+# Defaults (Cayman uses a single default layout; no special page/post layouts needed)
+defaults:
+  - scope:
+     path: ""
+    values:
+     layout: "default"
+
+# Analytics (optional)
+google_analytics:
