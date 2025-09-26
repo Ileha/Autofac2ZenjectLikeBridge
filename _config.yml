@@ -6,7 +6,7 @@ github:
     zip_url: https://github.com/ileha/Autofac2ZenjectLikeBridge/archive/refs/heads/main.zip
     repository_url: https://github.com/ileha/Autofac2ZenjectLikeBridge
     tar_url: https://github.com/ileha/Autofac2ZenjectLikeBridge/archive/refs/heads/main.tar.gz
-logo: /icon.png
+logo: "{{ site.baseurl }}/icon.png"
 
 show_downloads: true
 
