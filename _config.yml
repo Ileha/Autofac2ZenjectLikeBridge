@@ -7,6 +7,10 @@
  description: "Bridge library to use Autofac in a Zenject-like style"
  url: "https://ileha.github.io"
  baseurl: "/Autofac2ZenjectLikeBridge"
+ github:
+  zip_url: https://github.com/ileha/Autofac2ZenjectLikeBridge/archive/refs/heads/main.zip
+  repository_url: https://github.com/ileha/Autofac2ZenjectLikeBridge
+  tar_url: https://github.com/ileha/Autofac2ZenjectLikeBridge/archive/refs/heads/main.tar.gz
 
 # Theme (built-in to GitHub Pages)
 #theme: jekyll-theme-cayman
