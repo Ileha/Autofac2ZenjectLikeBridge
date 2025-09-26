@@ -1,10 +1,10 @@
 ﻿using System;
 using Autofac;
 using Autofac.Core;
-using Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator;
 using JetBrains.Annotations;
+using ZenAutofac.Interfaces.Builders.Decorator;
 
-namespace Autofac2ZenjectLikeBridge.Builders.Decorator
+namespace ZenAutofac.Builders.Decorator
 {
     public class SubScopeDecoratorBuilder<TDecorator, TService> : ISubScopeDecoratorBuilder<TDecorator, TService>
         where TDecorator : TService, IDisposable

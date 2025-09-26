@@ -2,7 +2,7 @@
 using Autofac;
 using Autofac.Builder;
 
-namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
+namespace ZenAutofac.Interfaces.Builders.Factory
 {
     //generated amount 10
 

@@ -2,12 +2,12 @@
 using Autofac;
 using Autofac.Builder;
 using Autofac.Core;
-using Autofac2ZenjectLikeBridge.Entities.Factories;
-using Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher;
-using Autofac2ZenjectLikeBridge.Interfaces;
-using Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory;
+using ZenAutofac.Entities.Factories;
+using ZenAutofac.Extensions.HarmonyPatcher;
+using ZenAutofac.Interfaces;
+using ZenAutofac.Interfaces.Builders.Factory;
 
-namespace Autofac2ZenjectLikeBridge.Builders.Factory
+namespace ZenAutofac.Builders.Factory
 {
     //generated amount 10
 

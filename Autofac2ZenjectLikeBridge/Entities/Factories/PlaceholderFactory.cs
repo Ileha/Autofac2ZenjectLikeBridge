@@ -1,7 +1,7 @@
 ﻿using System;
-using Autofac2ZenjectLikeBridge.Interfaces;
+using ZenAutofac.Interfaces;
 
-namespace Autofac2ZenjectLikeBridge.Entities.Factories
+namespace ZenAutofac.Entities.Factories
 {
     //generated amount 10
 

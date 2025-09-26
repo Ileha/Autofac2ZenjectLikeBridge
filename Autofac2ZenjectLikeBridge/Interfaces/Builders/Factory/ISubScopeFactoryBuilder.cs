@@ -4,7 +4,7 @@ using Autofac.Builder;
 using Autofac.Core;
 using JetBrains.Annotations;
 
-namespace Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory
+namespace ZenAutofac.Interfaces.Builders.Factory
 {
     //generated amount 10
 

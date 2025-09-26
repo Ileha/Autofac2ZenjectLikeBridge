@@ -2,9 +2,9 @@
 using Autofac;
 using Autofac.Builder;
 using Autofac.Core;
-using Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance;
+using ZenAutofac.Interfaces.Builders.Instance;
 
-namespace Autofac2ZenjectLikeBridge.Builders.Instance
+namespace ZenAutofac.Builders.Instance
 {
     public class SubScopeRegistrationBuilder<TComponent>
         : ISubScopeRegistrationBuilder<TComponent>

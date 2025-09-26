@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Autofac2ZenjectLikeBridge.Entities
+namespace ZenAutofac.Entities
 {
     public sealed class CompositeDisposable : ICollection<IDisposable>, IDisposable
     {

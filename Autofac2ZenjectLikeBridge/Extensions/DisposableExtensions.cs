@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Autofac.Core;
 
-namespace Autofac2ZenjectLikeBridge.Extensions
+namespace ZenAutofac.Extensions
 {
     public static class DisposableExtensions
     {

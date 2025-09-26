@@ -1,10 +1,10 @@
 ﻿using System;
 using Autofac;
 using Autofac.Core;
-using Autofac2ZenjectLikeBridge.Interfaces;
 using JetBrains.Annotations;
+using ZenAutofac.Interfaces;
 
-namespace Autofac2ZenjectLikeBridge.Entities.Factories
+namespace ZenAutofac.Entities.Factories
 {
     public static partial class DIExtensions
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 using Autofac;
-using Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator;
+using ZenAutofac.Interfaces.Builders.Decorator;
 
-namespace Autofac2ZenjectLikeBridge.Builders.Decorator
+namespace ZenAutofac.Builders.Decorator
 {
     public class ExtendedDecoratorBuilder<TDecorator, TService>
         : IExtendedDecoratorBuilder<TDecorator, TService>

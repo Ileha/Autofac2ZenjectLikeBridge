@@ -1,10 +1,10 @@
 ﻿using System;
 using Autofac;
 using Autofac.Builder;
-using Autofac2ZenjectLikeBridge.Interfaces;
-using Autofac2ZenjectLikeBridge.Interfaces.Builders.Factory;
+using ZenAutofac.Interfaces;
+using ZenAutofac.Interfaces.Builders.Factory;
 
-namespace Autofac2ZenjectLikeBridge.Builders.Factory
+namespace ZenAutofac.Builders.Factory
 {
     //generated amount 10
 

@@ -1,4 +1,4 @@
-﻿namespace Autofac2ZenjectLikeBridge.Interfaces
+﻿namespace ZenAutofac.Interfaces
 {
     //generated amount 10
 

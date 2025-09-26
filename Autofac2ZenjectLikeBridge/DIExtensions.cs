@@ -4,15 +4,15 @@ using Autofac;
 using Autofac.Builder;
 using Autofac.Core;
 using Autofac.Core.Registration;
-using Autofac2ZenjectLikeBridge.Builders.Decorator;
-using Autofac2ZenjectLikeBridge.Builders.Instance;
-using Autofac2ZenjectLikeBridge.Interfaces.Builders.Decorator;
-using Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using ZenAutofac.Builders.Decorator;
+using ZenAutofac.Builders.Instance;
+using ZenAutofac.Interfaces.Builders.Decorator;
+using ZenAutofac.Interfaces.Builders.Instance;
 using Module = Autofac.Module;
 
-namespace Autofac2ZenjectLikeBridge
+namespace ZenAutofac
 {
     public static partial class DIExtensions
     {

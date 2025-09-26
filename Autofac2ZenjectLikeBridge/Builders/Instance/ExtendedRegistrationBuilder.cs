@@ -1,8 +1,8 @@
 ﻿using System;
 using Autofac;
-using Autofac2ZenjectLikeBridge.Interfaces.Builders.Instance;
+using ZenAutofac.Interfaces.Builders.Instance;
 
-namespace Autofac2ZenjectLikeBridge.Builders.Instance
+namespace ZenAutofac.Builders.Instance
 {
     public class ExtendedRegistrationBuilder<TComponent> : IExtendedRegistrationBuilder<TComponent>
         where TComponent : class

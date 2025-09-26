@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Autofac2ZenjectLikeBridge.Entities;
 using HarmonyLib;
 using JetBrains.Annotations;
+using ZenAutofac.Entities;
 
-namespace Autofac2ZenjectLikeBridge.Extensions.HarmonyPatcher
+namespace ZenAutofac.Extensions.HarmonyPatcher
 {
     public static class HarmonyPatch
     {
-        private static readonly string PatchId = $"{nameof(Autofac2ZenjectLikeBridge)}.{nameof(HarmonyPatch)}";
+        private static readonly string PatchId = $"{nameof(ZenAutofac)}.{nameof(HarmonyPatch)}";
 
         private static readonly ConditionalWeakTable<IDisposable, CompositeDisposable> DisposeData =
             new ConditionalWeakTable<IDisposable, CompositeDisposable>();
