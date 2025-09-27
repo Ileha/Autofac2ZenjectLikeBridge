@@ -1,8 +1,8 @@
 ﻿using Autofac;
-using Autofac2ZenjectLikeBridge;
-using Autofac2ZenjectLikeBridge.Entities.Factories;
-using Autofac2ZenjectLikeBridge.Interfaces;
 using NSubstitute;
+using ZenAutofac;
+using ZenAutofac.Entities.Factories;
+using ZenAutofac.Interfaces;
 
 namespace Tests;
 

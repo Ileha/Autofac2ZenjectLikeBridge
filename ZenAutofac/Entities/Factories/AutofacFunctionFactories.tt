@@ -1,0 +1,48 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ output extension=".cs" #>
+<#@ import namespace="System.Linq" #>
+using System;
+using Autofac;
+using ZenAutofac.Interfaces;
+
+namespace ZenAutofac.Entities.Factories
+{
+    public static partial class DIExtensions
+    {
+        //generated amount <#@ include file="../../Constants.ttinclude" #><#= Constants.GenericParametersCount #>
+
+<#
+    for (var i = 0; i <= Constants.GenericParametersCount; i++)
+    {
+#>
+        internal class AutofacFunctionFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>
+            : IFactory<<#=string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance>
+            where TInstance : class
+        {
+            private readonly ILifetimeScope _scope;
+            private readonly Func<ILifetimeScope, <#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance> _subScopeLoader;
+
+            public AutofacFunctionFactory(
+                ILifetimeScope scope,
+                Func<ILifetimeScope, <#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j}")) #><#= i == 0 ? "" : ", " #>TInstance> subScopeLoader)
+            {
+                _scope = scope ?? throw new ArgumentNullException(nameof(scope));
+                _subScopeLoader = subScopeLoader ?? throw new ArgumentNullException(nameof(subScopeLoader));
+            }
+
+            public TInstance Create(<#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"TP{j} param{j}")) #>)
+            {
+                return _subScopeLoader(_scope<#= i == 0 ? "" : ", " #><#=
+            string.Join(", ", Enumerable.Repeat(0, i).Select((_, j) => $"param{j}")) #>);
+            }
+        }
+
+<#
+    }
+#>
+    }
+}
