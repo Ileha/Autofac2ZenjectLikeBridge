@@ -1,6 +1,6 @@
 # ZenAutofac
 
-[![NuGet Version](https://img.shields.io/nuget/v/com.alexey-developer89.ZenAutofac.svg)](https://www.nuget.org/packages/com.alexey-developer89.ZenAutofac)
+[![NuGet Version](https://img.shields.io/nuget/v/ZenAutofac.svg)](https://www.nuget.org/packages/ZenAutofac)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/Ileha/ZenAutofac?tab=MIT-1-ov-file#MIT-1-ov-file)
 
 Brings the power of Zenject's subcontainers syntax to Autofac, enabling Zenject-style dependency injection patterns in
@@ -30,13 +30,13 @@ This library is ideal for:
 Install the package from NuGet:
 
 ```bash
-Install-Package com.alexey-developer89.ZenAutofac
+Install-Package ZenAutofac
 ```
 
 Or via the .NET CLI:
 
 ```bash
-dotnet add package com.alexey-developer89.ZenAutofac
+dotnet add package ZenAutofac
 ```
 
 ## 🛠️ Quick Start
