@@ -1,6 +1,6 @@
-using Autofac2ZenjectLikeBridge.Extensions;
 using NSubstitute;
-using CustomCompositeDisposable = Autofac2ZenjectLikeBridge.Entities.CompositeDisposable;
+using ZenAutofac.Extensions;
+using CustomCompositeDisposable = ZenAutofac.Entities.CompositeDisposable;
 using ReferencedCompositeDisposable = System.Reactive.Disposables.CompositeDisposable;
 
 namespace Tests.Entities;

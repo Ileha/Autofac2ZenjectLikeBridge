@@ -1,7 +1,7 @@
 ﻿using Autofac;
-using Autofac2ZenjectLikeBridge;
-using Autofac2ZenjectLikeBridge.Interfaces;
 using NSubstitute;
+using ZenAutofac;
+using ZenAutofac.Interfaces;
 
 namespace Tests.Integration;
 
