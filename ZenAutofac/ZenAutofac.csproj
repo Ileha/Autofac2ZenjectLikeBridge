@@ -6,7 +6,7 @@
         <PackageId>ZenAutofac</PackageId>
         <Title>ZenAutofac</Title>
         <Authors>alexeydeveloper1030@gmail.com</Authors>
-        <PackageProjectUrl>https://github.com/Ileha/ZenAutofac</PackageProjectUrl>
+        <PackageProjectUrl>https://ileha.github.io/ZenAutofac/</PackageProjectUrl>
         <RepositoryUrl>https://github.com/Ileha/ZenAutofac</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <PackageTags>DI, Autofac, Zenject, Extenject</PackageTags>
